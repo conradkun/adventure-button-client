@@ -88,6 +88,7 @@ module.exports = {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
+      api: "../baremio-api"
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -97,6 +98,13 @@ module.exports = {
       // Make sure your source files are compiled, as they will not be processed in any way.
       new ModuleScopePlugin(paths.appSrc),
     ],
+  },
+  externals: function (context, request, callback) {
+    var match = request.match(/^meteor\/(.+)$/);
+    var pack = match && match[1];
+    if (pack) {
+      callback(null, 'Package["' + pack + '"]');
+    }
   },
   module: {
     strictExportPresence: true,

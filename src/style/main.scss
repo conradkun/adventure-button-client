@@ -1,0 +1,44 @@
+/* SCSS declarations go here */
+@import "main/index";
+
+html{
+    overflow-x: hidden;
+}
+
+.logo-svg-wrapper {
+    text-align: center;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    top: 50%;
+
+    margin: 0 auto;
+    width: 320px;
+}
+
+
+.logo-shape {
+    stroke-dasharray: 180 540;
+    stroke-dashoffset: -454;
+    stroke-width: 8px;
+    fill: transparent;
+    stroke: $brand-color;
+    border-bottom: 5px solid rgba(0, 0, 0, 0.08);
+    transition: stroke-width 1s, stroke-dashoffset 1s, stroke-dasharray 1s;
+}
+
+.logo-text {
+    transform: translateX(-1%);
+    font-size: 25px;
+    line-height: 32px;
+    color: $brand-color;
+    top: -55px;
+    position: relative;
+}
+
+.logo-svg-wrapper:hover .logo-shape {
+    stroke-width: 2px;
+    stroke-dashoffset: 0;
+    stroke-dasharray: 760;
+}
+
