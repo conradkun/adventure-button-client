@@ -14,9 +14,6 @@ import Footer from 'grommet/components/Footer';
 import User from 'grommet/components/icons/base/User'
 import AppSettings from './utils/app_settings';
 
-
-import TestApp from './screen/test';
-
 import CardList from './screen/card_list';
 import MiniAppContainer from './screen/mini_app';
 /**
@@ -28,9 +25,7 @@ import SettingsAdmin from './screen/settings_admin'
 
 import {
     Switch,
-    BrowserRouter as Router,
     Route,
-    Link,
     withRouter
 } from 'react-router-dom'
 
@@ -56,7 +51,17 @@ class Container extends Component {
     componentDidMount(){
       const client = this.props.client;
       client.authenticate().then(() => {
-          console.log("Authenticated");
+        console.log("Authenticated");
+        return client.passport.getJWT()
+      })
+      .then(token => {
+        return client.passport.verifyJWT(token);
+      })
+      .then(payload => {
+        return client.service('users').get(payload.userId);
+      })
+      .then(user => {
+        client.set('user', user);
       })
       .catch(error => {
         if (error.code === 401) {

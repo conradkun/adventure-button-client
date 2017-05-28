@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import {withRouter} from "react-router-dom";
 import LoginForm from '../components/login/login_form'
 import Box from 'grommet/components/Box'
-import Spinner from 'react-spinkit';
 import Logo from '../components/common/logo';
 import Fade from 'react-fade';
 
@@ -15,7 +14,7 @@ class LoginPage extends Component {
         };
         this._handleSubmit = this._handleSubmit.bind(this);
     }
-    
+
     componentDidMount(){
       const client = this.props.client;
       client.authenticate().then(() => {
