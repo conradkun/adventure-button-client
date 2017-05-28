@@ -8,7 +8,7 @@ export default class Logo extends Component{
                 <rect className="logo-shape" height="60" width="320" />
 
             </svg>
-            <div className="logo-text">Projet Barème</div>
+            <div className="logo-text">BAREMIO</div>
         </div>
         )
     }

@@ -25,7 +25,7 @@ function dotProduct(a,b) {
 function newDotProduct(a,b) {
     let acc = 0;
     for (let i=0;i<a.length;i++){
-        if (i==0) {
+        if (i===0) {
             acc = a[0]*b[0];
         }
         else {

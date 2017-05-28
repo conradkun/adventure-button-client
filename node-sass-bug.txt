@@ -1,0 +1,10 @@
+Just to update from my end. I found that for some reason no matter what I did even after the permissions issue was resolved, it still wouldn't always run the install.js script. I also noticed it tends to happen when its only part of a large set of downloads.
+
+As a safe guard, I just started running the install.js file after NPM Install command part of my build. This ensured that the vendor folder was always present.
+
+Can't explain why the install file doesn't always get ran on each build. So my build script looks like this:
+
+npm update
+npm install
+nodejs node_modules/node-sass/scripts/install.js
+npm rebuild node-sass

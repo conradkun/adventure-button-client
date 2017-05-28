@@ -1,5 +1,5 @@
 let AppSettings = {
-    mainColor: 'neutral-1',
+    mainColor: 'brand',
     backgroundColor: 'light-2',
     cardColor: 'light-1',
     currencyOptionFormater: {

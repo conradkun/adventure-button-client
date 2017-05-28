@@ -16,9 +16,10 @@ import AppSettings from './utils/app_settings';
 
 
 import TestApp from './screen/test';
-/**
+
 import CardList from './screen/card_list';
 import MiniAppContainer from './screen/mini_app';
+/**
 import Admin from './screen/admin'
 import OrganisationAdmin from './screen/organisation_admin'
 import UsersAdmin from './screen/users_admin'
@@ -29,10 +30,11 @@ import {
     Switch,
     BrowserRouter as Router,
     Route,
-    Link
+    Link,
+    withRouter
 } from 'react-router-dom'
 
-export default class Container extends Component {
+class Container extends Component {
 
     constructor () {
         super();
@@ -46,9 +48,23 @@ export default class Container extends Component {
         }
     }
     _logout(){
-
+      const client = this.props.client;
+      client.logout();
+      this.props.history.push('/');
     }
 
+    componentDidMount(){
+      const client = this.props.client;
+      client.authenticate().then(() => {
+          console.log("Authenticated");
+      })
+      .catch(error => {
+        if (error.code === 401) {
+          this.props.history.push('/');
+        }
+        console.error(error);
+      });
+    }
 
     _onResponsive (responsive) {
         this.setState({responsive: responsive});
@@ -151,29 +167,36 @@ export default class Container extends Component {
     }
 
     render () {
-        const FadingRoute = ({ component: Component, ...rest }) => (
-            <Route {...rest} render={matchProps => (
-                <Fade duration={2}>
-                    <Component {...matchProps}/>
-                </Fade>
-            )}/>
-        );
+        let routeProps = {
+            responsive:this.state.responsive,
+            onMenuOpen: this._onMenuOpen,
+            onLogout: this._logout
+        };
 
         let priority = ('single' === this.state.responsive && this.state.showMenu ?
             'left' : 'right');
 
-        //let children = React.cloneElement(this.props.children, { responsive:this.state.responsive, onMenuOpen: this._onMenuOpen, onLogout: this._logout});
+        const FadingRoute = ({ component: Component, ...rest }) => (
+            <Route {...rest} render={matchProps => (
+                <Fade duration={0.5}>
+                    <Component {...matchProps} {...routeProps}/>
+                </Fade>
+            )}/>
+        );
+
+
         return (
                 <Split flex='right' priority={priority} fixed={true}
                    onResponsive={this._onResponsive}>
                     {this._renderNav()}
                     <Switch>
-                        <FadingRoute exact path='/' component={TestApp} />
+                        <FadingRoute exact path='/app' component={CardList} />
+                        <FadingRoute path="/app/b/:miniApp" component={MiniAppContainer}/>
                     </Switch>
                 </Split>
         );
         /**
-         <FadingRoute path="b/:miniApp" component={MiniAppContainer}/>
+
          <FadingRoute path="settings" component={SettingsAdmin}/>
          <FadingRoute path="admin" component={Admin}/>
          <FadingRoute path="organisation" component={OrganisationAdmin}/>
@@ -181,3 +204,4 @@ export default class Container extends Component {
          */
     }
 };
+export default withRouter(Container);
