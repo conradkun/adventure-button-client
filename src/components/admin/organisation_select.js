@@ -1,18 +1,13 @@
-import TrackerReact from 'meteor/ultimatejs:tracker-react';
+
 import React, {Component} from 'react';
-import { Meteor } from 'meteor-client';
 import FormField from 'grommet/components/FormField';
 import Select from 'grommet/components/Select';
 
-import {Organisation} from '../../../imports/api/organisation';
 
-export default class OrganisationSelect extends TrackerReact(React.Component){
+export default class OrganisationSelect extends Component{
     constructor(props){
         super(props);
         this.state = {
-            subscription: {
-                organisation: Meteor.subscribe('organisation')
-            },
             error: undefined,
             selected: {
                 value: props.organisationId,
@@ -22,12 +17,9 @@ export default class OrganisationSelect extends TrackerReact(React.Component){
             organisationList: undefined
         };
     }
-    componentWillUnmount() {
-        this.state.subscription.organisation.stop();
-    }
 
     organisations() {
-        return Organisation.find({}).fetch(); //fetch must be called to trigger reactivity
+        //return Organisation.find({}).fetch(); //fetch must be called to trigger reactivity
     }
 
     componentWillMount(){
@@ -57,7 +49,7 @@ export default class OrganisationSelect extends TrackerReact(React.Component){
                             let tempOrganisationList = this.state.organisationList.slice();
                             let searchString = e.target.value;
                             let options = tempOrganisationList.filter((organisation) => {
-                                return organisation.label.toLowerCase().indexOf(searchString.toLowerCase())!=-1
+                                return organisation.label.toLowerCase().indexOf(searchString.toLowerCase())!==-1
                             });
                             this.setState({options});
                         }}

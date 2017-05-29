@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import FormField from 'grommet/components/FormField';
 import NumberInput from 'grommet/components/NumberInput';
 
-export default class NumberOfUsers extends Component{
+export default class Seats extends Component{
     constructor(props){
         super(props);
         this.state = {error: undefined};
@@ -15,7 +15,7 @@ export default class NumberOfUsers extends Component{
                     step={1}
                     onChange={(e) => {
                         let value = e.target.value;
-                        if (!(value < 1 || value=='')){
+                        if (!(value < 1 || value==='')){
                             this.props.onChange( parseFloat(value));
                             this.setState({ error: undefined });
                         } else {
@@ -28,6 +28,6 @@ export default class NumberOfUsers extends Component{
     }
 }
 
-NumberOfUsers.defaultProps = {
+Seats.defaultProps = {
     defaultValue: 1
 };

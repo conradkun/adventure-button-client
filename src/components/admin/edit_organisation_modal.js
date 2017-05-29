@@ -11,7 +11,7 @@ import Footer from 'grommet/components/Footer';
 import Layer from 'grommet/components/Layer';
 import Label from 'grommet/components/Label';
 
-import NumberOfUsers from './number_of_users';
+import Seats from './seats';
 
 
 export default class EditOrganisationModal extends Component {
@@ -63,7 +63,7 @@ export default class EditOrganisationModal extends Component {
                                     <input name="organisation" type="text" defaultValue={this.state.name}
                                            onChange={this._onNameChange} />
                                 </FormField>
-                                    <NumberOfUsers defaultValue={this.props.maximumNumberOfUsers}
+                                    <Seats defaultValue={this.props.maximumNumberOfUsers}
                                                    onChange={(value)=> {
                                         this.setState({maximumNumberOfUsers: value})
                                     }}/>

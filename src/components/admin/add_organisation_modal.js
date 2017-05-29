@@ -9,7 +9,7 @@ import FormField from 'grommet/components/FormField';
 import FormFields from 'grommet/components/FormFields';
 import Footer from 'grommet/components/Footer';
 import Layer from 'grommet/components/Layer';
-import NumberOfUsers from './number_of_users';
+import Seats from './seats';
 
 export default class AddOrganisationModal extends Component {
     constructor () {
@@ -20,16 +20,16 @@ export default class AddOrganisationModal extends Component {
 
         this.state = {
             name: undefined,
-            maximumNumberOfUsers: 1,
+            seats: 1,
         };
     }
 
     _onSubmit (event){
         event.preventDefault();
-        if ((this.state.name !== "") && (this.state.maximumNumberOfUsers >= 1)) {
+        if ((this.state.name !== "") && (this.state.seats >= 1)) {
             this.props.onSubmit({
                 name: this.state.name,
-                maximumNumberOfUsers: this.state.maximumNumberOfUsers
+                seats: this.state.seats
             });
         }
         else {
@@ -51,13 +51,12 @@ export default class AddOrganisationModal extends Component {
                         <header><h1>Ajouter une organisation</h1></header>
                         <FormFields>
                             <fieldset>
-                                <FormField label="Name"
-                                           >
-                                    <input name="name" type="text"
+                                <FormField label="Nom">
+                                    <input name="Nom" type="text"
                                            onChange={this._onNameChange} />
                                 </FormField>
-                                <NumberOfUsers onChange={(value)=> {
-                                    this.setState({maximumNumberOfUsers: value})
+                                <Seats onChange={(value)=> {
+                                    this.setState({seats: value})
                                 }}/>
                             </fieldset>
                         </FormFields>

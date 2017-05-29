@@ -31,7 +31,10 @@ class LoginPage extends Component {
         client.set('user', user);
         this.props.history.push('/app');
       }).catch(error => {
-        console.log(error);
+        if (error.code === 401 || error.code === 404) {
+          client.logout();
+        }
+        console.error(error);
       });
     }
 
@@ -53,7 +56,13 @@ class LoginPage extends Component {
           this.props.history.push('/app');
         })
         .catch(error => {
-          this.setState({errors : ["Une erreur est survenue, veuillez vérifier vos informations de connection"]});
+          if(error.code === 404){
+            client.logout();
+            this.setState({errors : ["Cet utilisateur n'existe pas (ou plus)"]});
+          }
+          else{
+            this.setState({errors : ["Une erreur est survenue, veuillez vérifier vos informations de connection"]});
+          }
         });
     }
 

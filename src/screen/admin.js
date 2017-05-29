@@ -1,8 +1,5 @@
-import { createContainer } from 'meteor/react-meteor-data';
-import React, {Component} from 'react';
-import {browserHistory} from 'react-router-dom';
-import { Meteor } from 'meteor-client';
 
+import React, {Component} from 'react';
 import Box from 'grommet/components/Box';
 import Search from 'grommet/components/Search';
 import Header from 'grommet/components/Header';
@@ -21,115 +18,197 @@ import AppSettings from '../utils/app_settings';
 import AddUserModal from '../components/admin/add_user_modal';
 import EditUserModal from '../components/admin/edit_user_modal';
 import DeleteUserModal from '../components/admin/delete_user_modal';
+import AddOrganisationModal from '../components/admin/add_organisation_modal';
+import EditOrganisationModal from '../components/admin/edit_organisation_modal';
+import DeleteOrganisationModal from '../components/admin/delete_organisation_modal';
 import Spinner from 'react-spinkit';
 
-import {Organisation} from '../../imports/api/organisation';
+
 
 class Admin extends Component {
 
     constructor() {
         super();
 
-        this._onRequestForAdd = this._onRequestForAdd.bind(this);
-        this._onRequestForAddClose = this._onRequestForAddClose.bind(this);
-        this._onRequestForEdit = this._onRequestForEdit.bind(this);
-        this._onRequestForEditClose = this._onRequestForEditClose.bind(this);
-        this._onRequestForDelete = this._onRequestForDelete.bind(this);
-        this._onRequestForDeleteClose = this._onRequestForDeleteClose.bind(this);
-        //this._onRequestForDelete = this._onRequestForDelete.bind(this);
+        this._onRequestForAddUser = this._onRequestForAddUser.bind(this);
+        this._onRequestForAddUserClose = this._onRequestForAddUserClose.bind(this);
+        this._onRequestForEditUser = this._onRequestForEditUser.bind(this);
+        this._onRequestForEditUserClose = this._onRequestForEditUserClose.bind(this);
+        this._onRequestForDeleteUser = this._onRequestForDeleteUser.bind(this);
+        this._onRequestForDeleteUserClose = this._onRequestForDeleteUserClose.bind(this);
+
         this._onAddUser = this._onAddUser.bind(this);
         this._onEditUser = this._onEditUser.bind(this);
         this._onDeleteUser = this._onDeleteUser.bind(this);
+
+        this._onRequestForAddOrganisation = this._onRequestForAddOrganisation.bind(this);
+        this._onRequestForAddOrganisationClose = this._onRequestForAddOrganisationClose.bind(this);
+        this._onRequestForEditOrganisation = this._onRequestForEditOrganisation.bind(this);
+        this._onRequestForEditOrganisationClose = this._onRequestForEditOrganisationClose.bind(this);
+        this._onRequestForDeleteOrganisation = this._onRequestForDeleteOrganisation.bind(this);
+        this._onRequestForDeleteOrganisationClose = this._onRequestForDeleteOrganisationClose.bind(this);
+
+        this._onAddOrganisation = this._onAddOrganisation.bind(this);
+        this._onEditOrganisation = this._onEditOrganisation.bind(this);
+        this._onDeleteOrganisation = this._onDeleteOrganisation.bind(this);
+
+
+
         this._search = this._search.bind(this);
+        this._load = this._load.bind(this);
         this._renderHeader = this._renderHeader.bind(this);
         this._renderContent = this._renderContent.bind(this);
         this._renderTitle = this._renderTitle.bind(this);
 
         this.state = {
+            isLoading: true,
+            organisations: undefined,
+            users: undefined,
             searchString: "",
             addUser: false,
             editUser: false,
             deleteUser: false,
-            edit: {
+            editUserOption: {
+                id: undefined,
                 email: undefined,
-                organisation: undefined,
                 role: undefined
             },
-            delete :{
+            deleteUserOption:{
+                id: undefined,
                 email: undefined
+            },
+            addOrganisation: false,
+            editOrganisation: false,
+            deleteOrganisation: false,
+            editOrganisationOption: {
+                id: undefined,
+                name: undefined,
+                seats: undefined
+            },
+            deleteOrganisationOption:{
+                id: undefined,
+                name: undefined
             }
         }
     }
 
-    _onRequestForAdd () {
+    _onRequestForAddUser () {
         this.setState({addUser: true});
     }
 
-    _onRequestForAddClose () {
+    _onRequestForAddUserClose () {
         this.setState({addUser: false});
     }
 
-    _onAddUser (user) {
-        Meteor.call('admin.addUser', user, function (error) {
-            // identify the error
-            if (error) {
-                // show a nice error message
-                //Bert.alert(error.reason, 'danger', 'fixed-top', 'fa-remove' );
-            }
-        });
+    _onAddUser (User) {
+        //TODO Implement user add
         this.setState({addUser: false});
     }
 
-    _onRequestForEdit () {
+    _onRequestForEditUser () {
         this.setState({editUser: true});
     }
 
-    _onRequestForEditClose () {
+    _onRequestForEditUserClose () {
         this.setState({editUser: false});
     }
 
-    _onEditUser (user) {
-        Meteor.call('admin.editUser', user, function (error) {
-            // identify the error
-            if (error) {
-                // show a nice error message
-                //Bert.alert(error.reason, 'danger', 'fixed-top', 'fa-remove' );
-            }
-        });
+    _onEditUser (id, User) {
+        //TODO Implement user edit
         this.setState({editUser: false});
     }
 
-    _onRequestForDelete () {
+    _onRequestForDeleteUser () {
         this.setState({deleteUser: true});
     }
 
-    _onRequestForDeleteClose () {
+    _onRequestForDeleteUserClose () {
         this.setState({deleteUser: false});
     }
 
-    _onDeleteUser (user) {
-        Meteor.call('admin.deleteUser', user, function (error) {
-            // identify the error
-            if (error) {
-                // show a nice error message
-                //Bert.alert(error.reason, 'danger', 'fixed-top', 'fa-remove' );
-            }
-        });
+    _onDeleteUser (id) {
+        //TODO Implement user delete
         this.setState({deleteUser: false});
     }
 
-    _search(user){
-        let email = user.emails[0].address;
-        return email.toLowerCase().indexOf(this.state.searchString.toLowerCase()) != -1;
+    _onRequestForAddOrganisation () {
+        this.setState({addOrganisation: true});
+    }
+
+    _onRequestForAddOrganisationClose () {
+        this.setState({addOrganisation: false});
+    }
+
+    _onAddOrganisation (Organisation) {
+        const client = this.props.client;
+        const organisation = client.service('organisation');
+        organisation.create({
+          name: Organisation.name,
+          seats: Organisation.seats
+        }).then(
+        this.setState({addOrganisation: false}))
+    }
+
+    _onRequestForEditOrganisation () {
+        this.setState({editOrganisation: true});
+    }
+
+    _onRequestForEditOrganisationClose () {
+        this.setState({editOrganisation: false});
+    }
+
+    _onEditOrganisation (id, Organisation) {
+        //TODO Implement Organisation edit
+        this.setState({editOrganisation: false});
+    }
+
+    _onRequestForDeleteOrganisation () {
+        this.setState({deleteOrganisation: true});
+    }
+
+    _onRequestForDeleteOrganisationClose () {
+        this.setState({deleteOrganisation: false});
+    }
+
+    _onDeleteOrganisation (id) {
+        //TODO Implement Organisation delete
+        this.setState({deleteOrganisation: false});
+    }
+    _search(organisation){
+        let name = organisation.name;
+        return name.toLowerCase().indexOf(this.state.searchString.toLowerCase()) !== -1;
+    }
+    _load(){
+      console.log("hey pello")
+      //TODO FIND RETURNS TIME OUT
+      const client = this.props.client;
+      const organisation = client.service('organisation');
+      const users = client.service('users');
+      console.log(0);
+      organisation.find().then(organisations => {
+        this.setState({organisations : organisations})
+        console.log('1');
+      })
+      .then(() => {
+        return users.find()
+      })
+      .then((users) => {
+        this.setState({users: users});
+        this.setState({isLoading: false});
+        console.log(this.state.organisations);
+        console.log(this.state.users);
+      })
     }
 
     _renderContent() {
-        let organisationList = {
-            noOrg: {
-                id: undefined,
-                name: "Pas d'organisation"
-            }
-        };
+      /**
+      this.state.organisations.map((org) => {
+        return(
+          <p>{org.name}</p>
+        )
+      })
+      **/
+        /**
         this.props.organisation.map((organisation) => {
             organisationList[organisation._id] = organisation;
         });
@@ -181,7 +260,7 @@ class Admin extends Component {
                                             role: user.roles[0],
                                         }
                                     });
-                                    this._onRequestForEdit()
+                                    this._onRequestForEditUser()
                                 }}
                                 animateIcon={true}
                                 primary={true}/>
@@ -193,7 +272,7 @@ class Admin extends Component {
                                             email: user.emails[0].address,
                                         }
                                     });
-                                    this._onRequestForDelete()
+                                    this._onRequestForDeleteUser()
                                 }}
                                 animateIcon={true}
                                 primary={true}/>
@@ -216,32 +295,44 @@ class Admin extends Component {
                 </TableRow>
             )
         });
-
+        **/
+        /**
+        * Modal Generation
+        **/
         let modal;
         if (this.state.addUser) {
-            modal = (
-                <AddUserModal onClose={this._onRequestForAddClose}
-                              onSubmit={this._onAddUser} />
-            );
+            modal = <AddUserModal onClose={this._onRequestForAddUserClose}
+                                  onSubmit={this._onAddUser} />
+
         } else if (this.state.editUser){
-            modal = <EditUserModal email={this.state.edit.email}
-                                   organisation={this.state.edit.organisation}
-                                   organisationName={this.state.edit.organisationName}
-                                   role={this.state.edit.role}
-                                   onClose={this._onRequestForEditClose}
+            modal = <EditUserModal id={this.state.editUserOption.id}
+                                   email={this.state.editUserOption.email}
+                                   role={this.state.editUserOption.role}
+                                   onClose={this._onRequestForEditUserClose}
                                    onSubmit={this._onEditUser}/>
         } else if (this.state.deleteUser){
-            modal = <DeleteUserModal onClose={this._onRequestForDeleteClose}
-                                     email={this.state.delete.email}
+            modal = <DeleteUserModal onClose={this._onRequestForDeleteUserClose}
+                                     id={this.state.deleteUserOption.id}
+                                     email={this.state.deleteUserOption.email}
                                      onSubmit={this._onDeleteUser} />
+        } else if (this.state.addOrganisation) {
+          modal = <AddOrganisationModal onClose={this._onRequestForAddOrganisationClose}
+                                        onSubmit={this._onAddOrganisation} />
+
+        } else if (this.state.editOrganisation) {
+          modal = <EditOrganisationModal id={this.state.editOrganisationOption.id}
+                                         name={this.state.editOrganisationOption.name}
+                                         seats={this.state.editOrganisationOption.seats}
+                                         onClose={this._onRequestForEditOrganisationClose}
+                                         onSubmit={this._onEditOrganisation}/>
+        } else if (this.state.deleteOrganisation) {
+          modal = <DeleteOrganisationModal onClose={this._onRequestForDeleteOrganisationClose}
+                                           id={this.state.deleteOrganisationOption.id}
+                                           name={this.state.deleteOrganisationOption.name}
+                                           onSubmit={this._onDeleteOrganisation} />
         }
-        /**
-         * Responsive for the header (fixed or not)
-         */
-        let scrollableList = true;
-        if (this.props.responsive == "single"){
-            scrollableList = false;
-        }
+
+
         return (
             <Box colorIndex={AppSettings.cardColor} margin='small'>
                 <Header size='small' colorIndex='light-2' fixed={true}>
@@ -253,30 +344,10 @@ class Admin extends Component {
                          pad="small"
                          direction='row'
                          responsive={false}>
-                        <Anchor icon={<UserAdd/>} onClick={this._onRequestForAdd} />
+                        <Anchor icon={<UserAdd/>} onClick={this._onRequestForAddOrganisation} />
                     </Box>
                 </Header>
-                <Table scrollable={scrollableList}>
-                    <thead>
-                    <tr>
-                        <th>
-                            Email
-                        </th>
-                        <th>
-                            Organisation
-                        </th>
-                        <th>
-                            Role
-                        </th>
-                        <th>
-                            Actions
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {users}
-                    </tbody>
-                </Table>
+                Content
                 {modal}
             </Box>
         )
@@ -345,21 +416,18 @@ class Admin extends Component {
     }
 
     render() {
+        this._load();
+        let loader = (
+          <Box margin='large' direction='column' align='center' justify='center' alignContent='center'>
+            <Spinner spinnerName="double-bounce" />
+          </Box>);
         return(
             <Box full='vertical' colorIndex={AppSettings.backgroundColor}>
                 {this._renderHeader()}
-                {this._renderContent()}
+                {this.state.isLoading ? loader : this._renderContent()}
             </Box>
         )
     }
 }
 
-export default createContainer(() => {
-    Meteor.subscribe('userList');
-    Meteor.subscribe('organisation');
-    Meteor.subscribe('settings');
-    return {
-        users: Meteor.users.find({}).fetch(),
-        organisation: Organisation.find({}).fetch()
-    }
-}, Admin);
+export default Admin
