@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import {withRouter} from "react-router-dom";
 import LoginForm from '../components/login/login_form'
 import Box from 'grommet/components/Box'

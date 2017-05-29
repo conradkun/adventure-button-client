@@ -1,7 +1,7 @@
-import React from 'react';
 import ReactDOM from 'react-dom';
 import registerServiceWorker from './registerServiceWorker';
 import './style/main.css';
+//import '../node_modules/grommet/grommet.min.css'
 import Routes from './routes';
 
 const render = (Component) => {

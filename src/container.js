@@ -39,7 +39,12 @@ class Container extends Component {
         this._logout = this._logout.bind(this);
         this.state = {
             showMenu: true, responsive: 'multiple',
-            searchString: ''
+            searchString: '',
+            me: {
+              email: 'Loading...',
+              role: undefined,
+              organisation: undefined,
+            }
         }
     }
     _logout(){
@@ -51,7 +56,6 @@ class Container extends Component {
     componentDidMount(){
       const client = this.props.client;
       client.authenticate().then(() => {
-        console.log("Authenticated");
         return client.passport.getJWT()
       })
       .then(token => {
@@ -62,6 +66,11 @@ class Container extends Component {
       })
       .then(user => {
         client.set('user', user);
+        this.setState({me: {
+          email: user.email,
+          role: user.role,
+          organisation: user.organisation
+        }})
       })
       .catch(error => {
         if (error.code === 401) {
@@ -121,6 +130,7 @@ class Container extends Component {
         let usersLink;
         let adminLink;
         let organisationLink;
+        let createTestUser;
         if ('single' === this.state.responsive) {
             closer = (
                 <Button icon={<CloseIcon />} onClick={this._onMenuClick}/>
@@ -148,6 +158,15 @@ class Container extends Component {
             </Anchor>
         );
 
+        createTestUser = (
+            <Anchor path='/app/settings' onClick={() => {
+              const app = this.props.client;
+              const users = app.service('/users');
+              users.create({ email: 'test5@test.com', password: '1111', role: 'admin' , organisation: 'org2'});
+            }}>
+                Create Test User
+            </Anchor>
+        );
         return (
             <Sidebar ref='sidebar' size='small' separator='right' colorIndex={AppSettings.mainColor}
                      fixed={true}>
@@ -157,9 +176,15 @@ class Container extends Component {
                 </Header>
                 <Box flex='grow'
                      justify='start'>
+                     <h5>{this.state.me.email}</h5>
+                     <h5>{this.state.me.role}</h5>
+                     <h5>{this.state.me.organisation}</h5>
                     <Menu primary={true}>
                         {baremeLink}
-
+                        {createTestUser}
+                        {this.state.me.role === 'admin' ? adminLink : undefined}
+                        {this.state.me.role === 'manager' ? usersLink : undefined}
+                        {this.state.me.role === 'manager' ? settingsLink : undefined}
                     </Menu>
                 </Box>
                 <Footer pad='medium'>
