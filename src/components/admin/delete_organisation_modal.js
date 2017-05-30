@@ -22,9 +22,7 @@ export default class DeleteOrganisationModal extends Component {
 
     _onSubmit (event){
         event.preventDefault();
-        this.props.onSubmit({
-            id: this.state.id
-        });
+        this.props.onSubmit(this.state.id);
     }
 
 

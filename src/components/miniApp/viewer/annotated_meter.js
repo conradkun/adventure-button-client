@@ -89,7 +89,7 @@ export default class AnnotatedMeter extends Component {
             }
             value = parseFloat(Math.round(value * 100) / 100).toFixed(2);
             value = currencyFormatter.format(value, AppSettings.currencyOptionFormater);
-            label = <FormattedMessage id='Total' defaultMessage='Total'/>;
+            label = <FormattedMessage id='Total' defaultMessage='Provision'/>;
         }
 
         let top, middle, bottom, alignLegend;

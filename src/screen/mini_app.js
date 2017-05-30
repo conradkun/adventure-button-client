@@ -33,27 +33,19 @@ export default class MiniAppContainer extends Component{
         });
         return component;
     }
-    _renderTitle () {
-        return (
-            <Title pad='small' responsive={false}>
-                <Box align='center' direction='row'>
-                    <Title>Projet Bareme</Title>
-                </Box>
-            </Title>
-        );
-    }
+
     _renderHeader () {
         /**
          * First create the header and add some button if the user is mobile
          */
-        let title;
+        let appLogo;
         let mobileButton;
         let goBack;
         let colorIndex = 'light-1';
         let justify='between';
         if ('single' === this.props.responsive) {
             justify='end';
-            title = this._renderTitle();
+            appLogo = this.props.renderAppLogo();
             colorIndex = AppSettings.mainColor;
             mobileButton = (
                 <Anchor icon={<MenuIcon />} onClick={this.props.onMenuOpen}>
@@ -65,8 +57,8 @@ export default class MiniAppContainer extends Component{
             </Anchor>
         );
         return (
-            <Header size='small' colorIndex={colorIndex} fixed={true}>
-                {title}
+            <Header size='small' className="drop-shadow-bottom" colorIndex={colorIndex} fixed={true}>
+                {appLogo}
                 <Box flex={true}
                      justify={justify}
                      pad="small"

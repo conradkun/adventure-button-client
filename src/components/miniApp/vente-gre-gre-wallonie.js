@@ -28,7 +28,7 @@ export default class VenteGreGreWallonie extends Component {
         this.state = {
             value: {
                 montant: 0,
-                droitEnregistrement: 12.5,
+                droitEnregistrement: 12,
                 bareme: "J",
                 annexe: false,
                 reductionHonoraire: 0
@@ -111,7 +111,8 @@ export default class VenteGreGreWallonie extends Component {
                 <Section align='center' alignContent='center'>
                     <Columns justify='center' size='large'>
                         <Box align='center'
-                             pad='medium'
+                             className="drop-shadow"
+                             pad='large'
                              margin='small'
                              colorIndex={AppSettings.cardColor}>
                             <Form>

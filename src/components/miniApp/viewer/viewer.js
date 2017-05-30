@@ -14,7 +14,8 @@ export default class Viewer extends Component{
         let { series } = this.props;
         return (
             <Box align='center'
-                 pad='medium'
+                 className="drop-shadow"
+                 pad='large'
                  margin='small'
                  colorIndex={AppSettings.cardColor}>
                 <AnnotatedMeter
@@ -29,4 +30,3 @@ export default class Viewer extends Component{
         )
     }
 }
-

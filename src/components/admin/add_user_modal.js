@@ -1,4 +1,3 @@
-// (C) Copyright 2014-2015 Hewlett-Packard Development Company, L.P.
 
 import React, { Component } from 'react';
 
@@ -10,30 +9,26 @@ import FormFields from 'grommet/components/FormFields';
 import Footer from 'grommet/components/Footer';
 import Layer from 'grommet/components/Layer';
 
-import OrganisationSelect from './organisation_select';
 
 export default class AddUserModal extends Component {
-    constructor () {
-        super();
+    constructor(props) {
+        super(props);
 
         this._onSubmit = this._onSubmit.bind(this);
         this._onEmailChange = this._onEmailChange.bind(this);
         this._onPasswordChange = this._onPasswordChange.bind(this);
-        this._onOrganisationChange = this._onOrganisationChange.bind(this);
         this._onRoleChange = this._onRoleChange.bind(this);
 
         this.state = {
-
             email: undefined,
             password: undefined,
-            organisation: undefined,
+            organisation: props.organisation,
             role: 'user',
         };
     }
 
     _onSubmit (event){
         event.preventDefault();
-        console.log(this.state);
         if (this.state.email && this.state.organisation && this.state.password && (this.state.password.length >= 6)) {
             this.props.onSubmit({
                 email: this.state.email,
@@ -43,7 +38,7 @@ export default class AddUserModal extends Component {
             });
         }
         else {
-            //Bert.alert("Certaines de ces informations ne sont pas correctes!", 'danger', 'fixed-top', 'fa-remove' );
+            this.props.msg.error("Certaines de ces informations ne sont pas correctes!");
         }
     }
 
@@ -55,18 +50,16 @@ export default class AddUserModal extends Component {
         this.setState({password: event.target.value});
     }
 
-    _onOrganisationChange (organisation) {
-        this.setState({organisation});
-    }
-
     _onRoleChange (event) {
         this.setState({role: event.target.value});
     }
 
     render () {
         return (
+          <div>
             <Layer onClose={this.props.onClose} closer={true} align="center"
                    >
+
                 <Box pad={{vertical: 'large', horizontal: 'small'}}>
                     <Form onSubmit={this._onSubmit}>
                         <header><h1>Ajouter un utilisateur</h1></header>
@@ -82,8 +75,6 @@ export default class AddUserModal extends Component {
                                     <input name="password" type="password"
                                            onChange={this._onPasswordChange} />
                                 </FormField>
-                                <OrganisationSelect onChange={this._onOrganisationChange}
-                                />
                                 <FormField label="Role">
                                     <select name="Role"
                                             onChange={this._onRoleChange}>
@@ -101,6 +92,7 @@ export default class AddUserModal extends Component {
                     </Form>
                 </Box>
             </Layer>
+            </div>
         );
     }
 }

@@ -10070,7 +10070,8 @@ section:not(.grommetux-section) {
   border-radius: 0; }
 
 html {
-  overflow-x: hidden; }
+  overflow-x: hidden;
+  overflow-y: auto; }
 
 .logo-svg-wrapper {
   text-align: center;
@@ -10102,3 +10103,10 @@ html {
   stroke-width: 2px;
   stroke-dashoffset: 0;
   stroke-dasharray: 760; }
+
+.drop-shadow {
+  filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.2));
+  border-radius: 12px; }
+
+.drop-shadow-bottom {
+  filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.2)); }

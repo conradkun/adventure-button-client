@@ -21,9 +21,7 @@ export default class DeleteUserModal extends Component {
 
     _onSubmit (event){
         event.preventDefault();
-        this.props.onSubmit({
-            email: this.state.email,
-        });
+        this.props.onSubmit(this.props.id);
     }
 
 

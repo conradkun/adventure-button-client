@@ -12,7 +12,7 @@ export default class Prix extends Component{
             <FormField label="Prix" error={this.state.error}>
                 <NumberInput
                     defaultValue={0}
-                    step={10}
+                    step={1000}
                     onChange={(e) => {
                         let value = e.target.value;
                         if (!(value < 0 || value=='')){

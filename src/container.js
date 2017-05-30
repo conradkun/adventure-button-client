@@ -28,11 +28,19 @@ import {
     Route,
     withRouter
 } from 'react-router-dom'
-
+import AlertContainer from 'react-alert';
 class Container extends Component {
 
     constructor(props) {
         super(props);
+        this.alertOptions = {
+          offset: 20,
+          position: 'bottom right',
+          theme: 'dark',
+          time: 5000,
+          transition: 'scale'
+        };
+
         this._onResponsive = this._onResponsive.bind(this);
         this._onMenuOpen = this._onMenuOpen.bind(this);
         this._onMenuClick = this._onMenuClick.bind(this);
@@ -72,12 +80,22 @@ class Container extends Component {
 
     _renderTitle () {
         return (
-            <Title pad='small' responsive={false}>
+            <Title pad='small' responsive={true}>
                     <Box align='center' direction='row'>
                         <Title>Projet Bareme</Title>
                     </Box>
             </Title>
         );
+    }
+
+    _renderAppLogo () {
+      return (
+          <Title pad='small' responsive={false}>
+                  <Box align='center' direction='row'>
+                      <Title>IO</Title>
+                  </Box>
+          </Title>
+      );
     }
 
     _renderNav () {
@@ -146,10 +164,10 @@ class Container extends Component {
                     {closer}
                 </Header>
                 <Box flex='grow'
-                     justify='start'>
-                     <h5>{this.state.me.email}</h5>
-                     <h5>{this.state.me.role}</h5>
-                     <h5>{this.state.me.organisation}</h5>
+                     justify='start'
+                     align='center'
+                     alignContent='center'
+                     >
                     <Menu primary={true}>
                         {baremeLink}
                         {this.state.me.role === 'admin' ? adminLink : undefined}
@@ -158,17 +176,24 @@ class Container extends Component {
                     </Menu>
                 </Box>
                 <Footer pad='medium'>
-                    <Button icon={<User />} onClick={() => {
+                <Box flex={true}
+                     justify="between"
+                     pad="small"
+                     direction='row'
+                     responsive={false}>
 
-                      const client = this.props.client;
-                      const users = client.service('users');
-
-                      users.patch('9m1vjDTGFSri3Qnu', {
-                        password: '1111'
-                      });
-
-                      //TODO: Popup to change own password
-                    }}/>
+                  <Menu icon={<User />}
+                      dropAlign={{"bottom": "bottom"}}>
+                    <Anchor onClick={this._logout}>
+                        Déconnexion
+                    </Anchor>
+                    <Anchor href='#'>
+                        Aide
+                    </Anchor>
+                  </Menu>
+                  <h5>{this.state.me.email}</h5>
+                  <h5>{this.state.me.organisation}</h5>
+                </Box>
                 </Footer>
             </Sidebar>
         );
@@ -181,7 +206,9 @@ class Container extends Component {
             responsive:this.state.responsive,
             onMenuOpen: this._onMenuOpen,
             onLogout: this._logout,
-            client: this.props.client
+            client: this.props.client,
+            renderAppLogo: this._renderAppLogo,
+            msg: this.msg
         };
 
         let priority = ('single' === this.state.responsive && this.state.showMenu ?
@@ -199,11 +226,14 @@ class Container extends Component {
                   <Split flex='right' priority={priority} fixed={true}
                     onResponsive={this._onResponsive}>
                       {this._renderNav()}
-                      <Switch>
-                          <FadingRoute exact path='/app' component={CardList} />
-                          <FadingRoute path="/app/b/:miniApp" component={MiniAppContainer}/>
-                          <FadingRoute path="/app/admin" component={Admin}/>
-                      </Switch>
+                      <div>
+                        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
+                        <Switch>
+                            <FadingRoute exact path='/app' component={CardList} />
+                            <FadingRoute path="/app/b/:miniApp" component={MiniAppContainer}/>
+                            <FadingRoute path="/app/admin" component={Admin}/>
+                        </Switch>
+                      </div>
                     </Split>
               );
         }

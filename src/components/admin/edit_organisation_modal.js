@@ -25,16 +25,15 @@ export default class EditOrganisationModal extends Component {
         this.state = {
             id: props.id,
             name: props.name,
-            maximumNumberOfUsers: props.maximumNumberOfUsers,
+            seats: props.seats,
         };
     }
     _onSubmit (event){
         event.preventDefault();
-        if ((this.state.name !== "") && (this.state.maximumNumberOfUsers >= 1)) {
-            this.props.onSubmit({
-                id: this.state.id,
+        if ((this.state.name !== "") && (this.state.seats >= 1)) {
+            this.props.onSubmit(this.state.id, {
                 name: this.state.name,
-                maximumNumberOfUsers: this.state.maximumNumberOfUsers
+                seats: this.state.seats
             });
         }
         else {
@@ -63,9 +62,9 @@ export default class EditOrganisationModal extends Component {
                                     <input name="organisation" type="text" defaultValue={this.state.name}
                                            onChange={this._onNameChange} />
                                 </FormField>
-                                    <Seats defaultValue={this.props.maximumNumberOfUsers}
+                                    <Seats defaultValue={this.props.seats}
                                                    onChange={(value)=> {
-                                        this.setState({maximumNumberOfUsers: value})
+                                        this.setState({seats: value})
                                     }}/>
                             </fieldset>
                         </FormFields>

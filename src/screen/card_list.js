@@ -32,43 +32,50 @@ class CardList extends Component{
             //Check if the name of the MiniApp match the Search String
             if(type.name.toLowerCase().indexOf(this.state.searchString.toLowerCase())!==-1){
                 let link = `app/b/${type.code}`;
+                let basis = 'medium';
+                let margin = {
+                  top: 'large'
+                }
+                if(this.props.responsive === 'single'){
+                  basis = 'full'
+                  margin = {
+                    ...margin,
+                    horizontal: 'large'
+                  }
+                }
                 return (
-                    <Tile align='start' key={type.name} colorIndex={AppSettings.cardColor}>
+
                         <Card
+                              margin={margin}
+                              basis={basis}
+                              responsive={false}
+                              key={type.name}
+                              className="drop-shadow"
                               heading={type.name}
-                              description={type.description}
+                              colorIndex={AppSettings.cardColor}
                               link={<Anchor onClick={() => {
                                   this.props.history.push(link);
                               }}
                                             icon={<LinkNext />}
                                             label='Go'/>}/>
-                    </Tile>
+
                 );
             }
         });
     }
 
-    _renderTitle () {
-        return (
-            <Title pad='small' responsive={false}>
-                <Box align='center' direction='row'>
-                    <Title>Projet Bareme</Title>
-                </Box>
-            </Title>
-        );
-    }
     _renderHeader () {
         /**
          * First create the header and add some button if the user is mobile
          */
-        let title;
+        let appLogo;
         let mobileButton;
         let search;
         let colorIndex = 'light-1';
         let justify='between';
         if ('single' === this.props.responsive) {
             justify='end';
-            title = this._renderTitle();
+            appLogo = this.props.renderAppLogo();
             colorIndex = AppSettings.mainColor;
             mobileButton = (
                 <Anchor icon={<MenuIcon />} onClick={this.props.onMenuOpen}>
@@ -86,23 +93,14 @@ class CardList extends Component{
                 />
         );
         return (
-            <Header size='small' colorIndex={colorIndex} fixed={true}>
-                {title}
+            <Header size='small' className="drop-shadow-bottom" colorIndex={colorIndex} fixed={true}>
+                {appLogo}
                 <Box flex={true}
                      justify={justify}
                      pad="small"
                      direction='row'
                      responsive={false}>
                     {search}
-                    <Menu icon={<Actions />}
-                          dropAlign={{"right": "right"}}>
-                        <Anchor href='#' onClick={this.props.onLogout}>
-                            Déconnexion
-                        </Anchor>
-                        <Anchor href='#'>
-                            Aide
-                        </Anchor>
-                    </Menu>
                     {mobileButton}
                 </Box>
             </Header>
@@ -113,8 +111,8 @@ class CardList extends Component{
         return(
         <Box full='vertical' colorIndex={AppSettings.backgroundColor}>
             {this._renderHeader()}
-            <Tiles fill={true}
-                   flush={false} colorIndex={AppSettings.backgroundColor}>
+            <Tiles fill={true} responsive={false}
+                    >
                 {card}
             </Tiles>
         </Box>

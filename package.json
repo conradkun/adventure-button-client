@@ -24,6 +24,7 @@
     "react": "^15.5.4",
     "react-addons-css-transition-group": "^15.4.2",
     "react-addons-pure-render-mixin": "^15.4.2",
+    "react-alert": "^2.0.1",
     "react-dom": "^15.5.4",
     "react-fade": "^1.1.1",
     "react-mailto": "^0.4.0",
@@ -35,7 +36,8 @@
     "react-spinkit": "^2.0.0",
     "sass-loader": "^6.0.5",
     "socket.io-client": "^2.0.1",
-    "validator": "^6.2.1"
+    "validator": "^6.2.1",
+    "wait-promise": "^0.4.1"
   },
   "devDependencies": {
     "autoprefixer": "7.1.0",
