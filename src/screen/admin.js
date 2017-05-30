@@ -179,15 +179,12 @@ class Admin extends Component {
         return name.toLowerCase().indexOf(this.state.searchString.toLowerCase()) !== -1;
     }
     _load(){
-      console.log("hey pello")
       //TODO FIND RETURNS TIME OUT
       const client = this.props.client;
       const organisation = client.service('organisation');
       const users = client.service('users');
-      console.log(0);
       organisation.find().then(organisations => {
         this.setState({organisations : organisations})
-        console.log('1');
       })
       .then(() => {
         return users.find()
@@ -195,8 +192,6 @@ class Admin extends Component {
       .then((users) => {
         this.setState({users: users});
         this.setState({isLoading: false});
-        console.log(this.state.organisations);
-        console.log(this.state.users);
       })
     }
 
@@ -414,9 +409,10 @@ class Admin extends Component {
             </Header>
         );
     }
-
+    componentDidMount(){
+      this._load();
+    }
     render() {
-        this._load();
         let loader = (
           <Box margin='large' direction='column' align='center' justify='center' alignContent='center'>
             <Spinner spinnerName="double-bounce" />

@@ -1,5 +1,5 @@
 // (C) Copyright 2014-2016 Hewlett Packard Enterprise Development LP
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import Fade from 'react-fade';
 import Split from 'grommet/components/Split';
 import Sidebar from 'grommet/components/Sidebar';
@@ -29,13 +29,10 @@ import {
     withRouter
 } from 'react-router-dom'
 
-
-import Spinner from 'react-spinkit';
-
 class Container extends Component {
 
-    constructor () {
-        super();
+    constructor(props) {
+        super(props);
         this._onResponsive = this._onResponsive.bind(this);
         this._onMenuOpen = this._onMenuOpen.bind(this);
         this._onMenuClick = this._onMenuClick.bind(this);
@@ -44,47 +41,13 @@ class Container extends Component {
             isLoading: true,
             showMenu: true, responsive: 'multiple',
             searchString: '',
-            me: {
-              email: 'Loading...',
-              role: undefined,
-              organisation: undefined,
-            }
+            me: props.client.get('user')
         }
     }
     _logout(){
       const client = this.props.client;
       client.logout();
       this.props.history.push('/');
-    }
-
-    componentDidMount(){
-      const client = this.props.client;
-      client.authenticate().then(() => {
-        return client.passport.getJWT()
-      })
-      .then(token => {
-        return client.passport.verifyJWT(token);
-      })
-      .then(payload => {
-        return client.service('users').get(payload.userId);
-      })
-      .then(user => {
-        client.set('user', user);
-        this.setState({
-          isLoading: false,
-          me: {
-          email: user.email,
-          role: user.role,
-          organisation: user.organisation
-        }})
-      })
-      .catch(error => {
-        if (error.code === 401 || error.code === 404) {
-          client.logout();
-          this.props.history.push('/');
-        }
-        console.error(error);
-      });
     }
 
     _onResponsive (responsive) {
@@ -232,16 +195,7 @@ class Container extends Component {
             )}/>
         );
 
-        let content;
-        if(this.state.isLoading){
-          content = (
-            <Box full={true} direction='column' align='center' justify='center' alignContent='center'>
-              <Spinner spinnerName="double-bounce" noFadeIn={true} />
-            </Box>
-          );
-        }
-        else {
-          content =  (
+        return (
                   <Split flex='right' priority={priority} fixed={true}
                     onResponsive={this._onResponsive}>
                       {this._renderNav()}
@@ -251,10 +205,8 @@ class Container extends Component {
                           <FadingRoute path="/app/admin" component={Admin}/>
                       </Switch>
                     </Split>
-                  );
-          }
-
-          return content;
+              );
+        }
         /**
 
          <FadingRoute path="settings" component={SettingsAdmin}/>
@@ -262,6 +214,5 @@ class Container extends Component {
          <FadingRoute path="organisation" component={OrganisationAdmin}/>
          <FadingRoute path="users" component={UsersAdmin}/>
          */
-    }
-};
+}
 export default withRouter(Container);
