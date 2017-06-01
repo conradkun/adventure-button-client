@@ -30,6 +30,7 @@ export default class AddUserModal extends Component {
     _onSubmit (event){
         event.preventDefault();
         if (this.state.email && this.state.organisation && this.state.password && (this.state.password.length >= 6)) {
+            this.props.msg.success("Cet utilisateur va être ajouté à la base de donnée, veuillez patienter");
             this.props.onSubmit({
                 email: this.state.email,
                 password: this.state.password,

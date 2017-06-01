@@ -30,14 +30,29 @@ class Admin extends Component {
     const client = props.client;
     const organisation = client.service('organisation');
     const users = client.service('users');
-    organisation.on('updated', message => this._load());
-    organisation.on('patched', message => this._load());
-    organisation.on('created', message => this._load());
-    organisation.on('removed', message => this._load());
-    users.on('updated', message => this._load());
-    users.on('patched', message => this._load());
-    users.on('created', message => this._load());
-    users.on('removed', message => this._load());
+    //TODO Write the updated and patched method for users and org
+    //organisation.on('updated', message => this._load());
+    //organisation.on('patched', message => this._load());
+    organisation.on('created', org => this.setState({
+      organisations:  [...this.state.organisations, org]
+    }))
+    organisation.on('removed', org => {
+      const newOrgnisationList = this.state.organisations.filter((o) => {return o._id !== org._id});
+      this.setState({
+        organisations: newOrgnisationList
+      })
+    });
+    //users.on('updated', message => this._load());
+    //users.on('patched', message => this._load());
+    users.on('created', user => this.setState({
+      users:  [...this.state.users, user]
+    }));
+    users.on('removed', user => {
+      const newUserList = this.state.users.filter((u) => {return u._id !== user._id});
+      this.setState({
+        users: newUserList
+      })
+    });
     this._onRequestForAddUser = this._onRequestForAddUser.bind(this);
     this._onRequestForAddUserClose = this._onRequestForAddUserClose.bind(this);
     this._onRequestForEditUser = this._onRequestForEditUser.bind(this);
@@ -256,20 +271,6 @@ class Admin extends Component {
         users: data[1].data
       })
     })
-
-    /**
-      organisation.find().then(organisations => {
-        this.setState({organisations : organisations.data})
-      })
-      .then(() => {
-        return users.find()
-      })
-      .then((users) => {
-        this.setState({users: users.data});
-        this.setState({isLoading: false});
-        console.log(this.state);
-      })
-      **/
   }
 
   _renderContent() {
