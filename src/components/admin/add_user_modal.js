@@ -111,7 +111,7 @@ export default class AddUserModal extends Component {
                                     <select name="Role"
                                             onChange={this._onRoleChange}>
                                         <option value="user">Collaborateur</option>
-                                        <option value="organisationManager">Manager d'organisation</option>
+                                        <option value="manager">Manager d'organisation</option>
                                         <option value="admin">Administrateur</option>
                                     </select>
                                 </FormField>

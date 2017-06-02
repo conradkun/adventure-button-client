@@ -5,7 +5,7 @@ import Anchor from 'grommet/components/Anchor';
 import UserAdd from 'grommet/components/icons/base/UserAdd';
 import Edit from 'grommet/components/icons/base/Edit';
 import Trash from 'grommet/components/icons/base/Trash';
-import Checkmark from 'grommet/components/icons/base/Checkmark';
+import UserAdmin from 'grommet/components/icons/base/UserAdmin';
 import Tiles from 'grommet/components/Tiles';
 import Heading from 'grommet/components/Heading';
 import Meter from 'grommet/components/Meter';
@@ -64,8 +64,11 @@ class OrganisationCard extends Component {
           <Box responsive={false} flex={true} justify='end' align="center" pad={{
             between: "small"
           }} direction='row'>
+            <Anchor icon={< UserAdmin size = 'xsmall' />} onClick={() => {
+              this.props.onPromoteUser(user._id, (user.role !== 'manager'))
+            }} animateIcon={true} primary={(user.role === 'manager')}/>
             <Anchor icon={< Trash size = 'xsmall' />} onClick={() => {
-              this.props.onDeleteUsers(user._id, user.email)
+              this.props.onDeleteUser(user._id, user.email)
             }} animateIcon={true} primary={false}/>
           </Box>
         </Header>

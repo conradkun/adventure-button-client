@@ -5,7 +5,7 @@ import Header from 'grommet/components/Header';
 import Anchor from 'grommet/components/Anchor';
 import Title from 'grommet/components/Title';
 import Add from 'grommet/components/icons/base/Add';
-import Edit from 'grommet/components/icons/base/Edit';
+import User from 'grommet/components/icons/base/Edit';
 import Close from 'grommet/components/icons/base/Close';
 import MenuIcon from 'grommet/components/icons/base/Menu';
 import LinkPrevious from 'grommet/components/icons/base/LinkPrevious';
@@ -77,7 +77,8 @@ class Admin extends Component {
     this._onRequestForEditUserClose = this._onRequestForEditUserClose.bind(this);
     this._onRequestForDeleteUser = this._onRequestForDeleteUser.bind(this);
     this._onRequestForDeleteUserClose = this._onRequestForDeleteUserClose.bind(this);
-    this._onRequestForPromoteUser = this._onRequestForPromoteUser.bind(this);
+
+    this._onPromoteUser = this._onPromoteUser.bind(this);
 
     this._onAddUser = this._onAddUser.bind(this);
     this._onEditUser = this._onEditUser.bind(this);
@@ -205,6 +206,21 @@ class Admin extends Component {
     users.remove(id).then(this.setState({deleteUser: false}));
   }
 
+  _onPromoteUser(id, promote) {
+    const client = this.props.client;
+    const users = client.service('users');
+    if(promote){
+      users.patch(id, {
+        role: 'manager'
+      });
+    }
+    else{
+      users.patch(id, {
+        role: 'user'
+      });
+    }
+  }
+
   _onRequestForAddOrganisation() {
     this.setState({addOrganisation: true});
   }
@@ -260,6 +276,7 @@ class Admin extends Component {
     const organisation = client.service('organisation');
     organisation.remove(id).then(this.setState({deleteOrganisation: false}))
   }
+
   _search(organisation) {
     let name = organisation.name;
     return name.toLowerCase().indexOf(this.state.searchString.toLowerCase()) !== -1;
@@ -293,13 +310,20 @@ class Admin extends Component {
     })
   }
 
+  _compareWithCreatedAt(a, b) {
+    return new Date(a.createdAt) < new Date(b.createdAt);
+  }
+
   _renderContent() {
     let cards;
-    cards = this.state.organisations.filter(this._search).map((org) => {
+    let organisations = this.state.organisations;
+    organisations.sort(this._compareWithCreatedAt);
+    cards = organisations.filter(this._search).map((org) => {
       let users = this.state.users.filter((u) => {return u.organisation === org._id});
+      users.sort(this._compareWithCreatedAt);
       let userCount = users.length;
       return (
-        <OrganisationCard users={users} key={org._id} id={org._id} name={org.name} seats={org.seats} userCount={userCount} onAddUser={this._onRequestForAddUser} onEditOrganisation={this._onRequestForEditOrganisation} onDeleteOrganisation={this._onRequestForDeleteOrganisation} onDeleteUsers={this._onRequestForDeleteUser}/>
+        <OrganisationCard users={users} key={org._id} id={org._id} name={org.name} seats={org.seats} userCount={userCount} onAddUser={this._onRequestForAddUser} onEditOrganisation={this._onRequestForEditOrganisation} onDeleteOrganisation={this._onRequestForDeleteOrganisation} onDeleteUser={this._onRequestForDeleteUser} onPromoteUser={this._onPromoteUser}/>
       )
     })
 
