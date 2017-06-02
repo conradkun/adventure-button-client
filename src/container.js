@@ -14,6 +14,8 @@ import Footer from 'grommet/components/Footer';
 import User from 'grommet/components/icons/base/User'
 import AppSettings from './utils/app_settings';
 
+import EditProfileModal from './components/common/edit_profile_modal'
+
 import CardList from './screen/card_list';
 import MiniAppContainer from './screen/mini_app';
 import Admin from './screen/admin'
@@ -38,7 +40,7 @@ class Container extends Component {
           offset: 20,
           position: 'bottom right',
           theme: 'dark',
-          time: 2000,
+          time: 4000,
           transition: 'scale'
         };
 
@@ -46,7 +48,11 @@ class Container extends Component {
         this._onMenuOpen = this._onMenuOpen.bind(this);
         this._onMenuClick = this._onMenuClick.bind(this);
         this._logout = this._logout.bind(this);
+        this._onRequestForEditProfile = this._onRequestForEditProfile.bind(this);
+        this._onRequestForEditProfileClose = this._onRequestForEditProfileClose.bind(this);
+
         this.state = {
+            editProfile: false,
             isLoading: true,
             showMenu: true, responsive: 'multiple',
             searchString: '',
@@ -68,7 +74,16 @@ class Container extends Component {
             this.setState({showMenu: false});
         }
     }
-
+    _onRequestForEditProfile() {
+      this.setState({
+        editProfile: true
+      })
+    }
+    _onRequestForEditProfileClose() {
+      this.setState({
+        editProfile: false
+      })
+    }
     _onMenuOpen () {
         this.setState({showMenu: true});
     }
@@ -136,11 +151,11 @@ class Container extends Component {
         );
         settingsLink = (
             <Anchor path='/app/settings' onClick={this._onMenuClick}>
-                Paramètres de l´étude
+                Paramètres
             </Anchor>
         );
         return (
-            <Sidebar ref='sidebar' size='medium' separator='right' colorIndex={AppSettings.mainColor}
+            <Sidebar ref='sidebar' size='small' separator='right' colorIndex={AppSettings.mainColor}
                      fixed={true}>
                 <Header justify='between' size='large' pad={{horizontal: 'medium'}}>
                     {title}
@@ -159,23 +174,18 @@ class Container extends Component {
                     </Menu>
                 </Box>
                 <Footer pad='medium'>
-                <Box flex={true}
-                     justify="between"
-                     pad="small"
-                     direction='row'
-                     responsive={false}>
-
                   <Menu icon={<User />}
                       dropAlign={{"bottom": "bottom"}}>
                     <Anchor onClick={this._logout}>
                         Déconnexion
                     </Anchor>
+                    <Anchor onClick={this._onRequestForEditProfile}>
+                        Mon profil
+                    </Anchor>
                     <Anchor href='#'>
                         Aide
                     </Anchor>
                   </Menu>
-                  <h5>{this.state.me.email}</h5>
-                </Box>
                 </Footer>
             </Sidebar>
         );
@@ -203,7 +213,10 @@ class Container extends Component {
                 </Fade>
             )}/>
         );
-
+        let modal;
+        if(this.state.editProfile){
+          modal = <EditProfileModal client={this.props.client} msg={this.msg} onClose={this._onRequestForEditProfileClose} onSubmit={this._onRequestForEditProfileClose}/>
+        }
         return (
                   <Split flex='right' priority={priority} fixed={true}
                     onResponsive={this._onResponsive}>
@@ -216,6 +229,7 @@ class Container extends Component {
                             <FadingRoute path="/app/admin" component={Admin}/>
                             <FadingRoute path="/app/users" component={UsersAdmin}/>
                         </Switch>
+                        {modal}
                       </div>
                     </Split>
               );
