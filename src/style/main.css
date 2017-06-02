@@ -10106,7 +10106,7 @@ html {
 
 .drop-shadow {
   filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.2));
-  border-radius: 12px; }
+  border-radius: 3px; }
 
 .drop-shadow-bottom {
   filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.2)); }

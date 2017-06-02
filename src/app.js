@@ -55,12 +55,24 @@ class App extends Component{
       })
       .then(user => {
         client.set('user', user);
-        this.setState({
-          isLoading: false,
-        })
+        if(user.role !== 'admin'){
+          const organisation = client.service('organisation');
+          organisation.get(user.organisation)
+          .then((o)=>{
+              client.set('organisation', o);
+              this.setState({
+                isLoading: false,
+              })
+          })
+        }
+        else {
+          this.setState({
+            isLoading: false,
+          })
+        }
       })
+      .then()
       .catch(error => {
-        console.log(error)
         if (error.code === 401 || error.code === 404) {
           client.logout();
           this.props.history.push('/');
@@ -68,7 +80,6 @@ class App extends Component{
             isLoading: false,
           });
         }
-        console.error(error);
       });
     }
 

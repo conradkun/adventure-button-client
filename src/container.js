@@ -17,9 +17,10 @@ import AppSettings from './utils/app_settings';
 import CardList from './screen/card_list';
 import MiniAppContainer from './screen/mini_app';
 import Admin from './screen/admin'
+import UsersAdmin from './screen/users_admin'
 /**
 import OrganisationAdmin from './screen/organisation_admin'
-import UsersAdmin from './screen/users_admin'
+
 import SettingsAdmin from './screen/settings_admin'
 **/
 
@@ -117,8 +118,6 @@ class Container extends Component {
         let settingsLink;
         let usersLink;
         let adminLink;
-        let organisationLink;
-        let createTestUser;
         if ('single' === this.state.responsive) {
             closer = (
                 <Button icon={<CloseIcon />} onClick={this._onMenuClick}/>
@@ -128,11 +127,6 @@ class Container extends Component {
         adminLink = (
             <Anchor path="/app/admin" onClick={this._onMenuClick}>
                 Administration
-            </Anchor>);
-
-        organisationLink = (
-            <Anchor path="/app/organisation" onClick={this._onMenuClick}>
-                Organisation
             </Anchor>);
 
         usersLink = (
@@ -145,19 +139,8 @@ class Container extends Component {
                 Paramètres de l´étude
             </Anchor>
         );
-
-        createTestUser = (
-            <Anchor path='/app/settings' onClick={() => {
-              const app = this.props.client;
-              const users = app.service('/users');
-              users.create({ email: 'test7@test.com', password: '1111', role: 'admin' , organisation: 'org2'});
-            }}>
-                Create Test User
-            </Anchor>
-        );
-
         return (
-            <Sidebar ref='sidebar' size='small' separator='right' colorIndex={AppSettings.mainColor}
+            <Sidebar ref='sidebar' size='medium' separator='right' colorIndex={AppSettings.mainColor}
                      fixed={true}>
                 <Header justify='between' size='large' pad={{horizontal: 'medium'}}>
                     {title}
@@ -192,7 +175,6 @@ class Container extends Component {
                     </Anchor>
                   </Menu>
                   <h5>{this.state.me.email}</h5>
-                  <h5>{this.state.me.organisation}</h5>
                 </Box>
                 </Footer>
             </Sidebar>
@@ -232,6 +214,7 @@ class Container extends Component {
                             <FadingRoute exact path='/app' component={CardList} />
                             <FadingRoute path="/app/b/:miniApp" component={MiniAppContainer}/>
                             <FadingRoute path="/app/admin" component={Admin}/>
+                            <FadingRoute path="/app/users" component={UsersAdmin}/>
                         </Switch>
                       </div>
                     </Split>

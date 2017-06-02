@@ -161,8 +161,12 @@ class Admin extends Component {
   _onAddUser(User) {
     const client = this.props.client;
     const users = client.service('users');
-    users.create({email: User.email, password: User.password, role: User.role, organisation: User.organisation}).then(this.setState({addUser: false}));
-    this.setState({addUser: false});
+    if(User.password){
+      users.create({email: User.email, password: User.password, role: User.role, organisation: User.organisation}).then(this.setState({addUser: false}));
+    }
+    else{
+      users.create({email: User.email, role: User.role, organisation: User.organisation}).then(this.setState({addUser: false}));
+    }
   }
 
   _onRequestForPromoteUser(id, newRole){
@@ -325,7 +329,7 @@ class Admin extends Component {
       return (
         <OrganisationCard users={users} key={org._id} id={org._id} name={org.name} seats={org.seats} userCount={userCount} onAddUser={this._onRequestForAddUser} onEditOrganisation={this._onRequestForEditOrganisation} onDeleteOrganisation={this._onRequestForDeleteOrganisation} onDeleteUser={this._onRequestForDeleteUser} onPromoteUser={this._onPromoteUser}/>
       )
-    })
+    });
 
 
     let modal;

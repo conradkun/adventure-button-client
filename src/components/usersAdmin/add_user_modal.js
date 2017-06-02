@@ -19,7 +19,6 @@ export default class AddUserModal extends Component {
         this._onSubmit = this._onSubmit.bind(this);
         this._onEmailChange = this._onEmailChange.bind(this);
         this._onPasswordChange = this._onPasswordChange.bind(this);
-        this._onRoleChange = this._onRoleChange.bind(this);
         this._onRandomPasswordChange = this._onRandomPasswordChange.bind(this);
 
         this.state = {
@@ -29,29 +28,23 @@ export default class AddUserModal extends Component {
             },
             email: '',
             randomPassword: true,
-            password: '',
-            organisation: props.organisation,
-            role: 'user',
+            password: ''
         };
     }
 
     _onSubmit (event){
         event.preventDefault();
-        if ((isEmail(this.state.email)) && (this.state.email.length !== 0) && this.state.organisation && ((this.state.password && (this.state.password.length >= 6)) || this.state.randomPassword)) {
+        if ((isEmail(this.state.email)) && (this.state.email.length !== 0) && ((this.state.password && (this.state.password.length >= 6)) || this.state.randomPassword)) {
             this.props.msg.success("Cet utilisateur va être ajouté à la base de donnée, veuillez patienter");
             if(this.state.randomPassword){
               this.props.onSubmit({
                   email: this.state.email,
-                  organisation: this.state.organisation,
-                  role: this.state.role
               });
             }
             else {
               this.props.onSubmit({
                   email: this.state.email,
-                  password: this.state.password,
-                  organisation: this.state.organisation,
-                  role: this.state.role
+                  password: this.state.password
                 });
             }
         }
@@ -92,9 +85,6 @@ export default class AddUserModal extends Component {
         this.setState({password: event.target.value});
     }
 
-    _onRoleChange (event) {
-        this.setState({role: event.target.value});
-    }
     _onRandomPasswordChange(event) {
         this.setState({
           randomPassword: event.target.checked
@@ -133,13 +123,6 @@ export default class AddUserModal extends Component {
                                     <input name="password" type="password"
                                            disabled={this.state.randomPassword}
                                            onChange={this._onPasswordChange} />
-                                </FormField>
-                                <FormField label="Role">
-                                    <select name="Role"
-                                            onChange={this._onRoleChange}>
-                                        <option value="user">Collaborateur</option>
-                                        <option value="manager">Manager d'organisation</option>
-                                    </select>
                                 </FormField>
                             </fieldset>
                         </FormFields>

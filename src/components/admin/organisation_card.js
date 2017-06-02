@@ -10,7 +10,6 @@ import Tiles from 'grommet/components/Tiles';
 import Heading from 'grommet/components/Heading';
 import Meter from 'grommet/components/Meter';
 import Value from 'grommet/components/Value';
-import Label from 'grommet/components/Label';
 
 
 import Card from 'grommet/components/Card';
@@ -32,7 +31,7 @@ class OrganisationCard extends Component {
           {this.props.name}
         </Heading>
         <Box>
-          <Value value={this.props.userCount} units={'/' + this.props.seats + ' U'} size='small' align='start' responsive={true}/>
+          <Value value={`${this.props.userCount}/${this.props.seats}`} units={'Utilisateur(s)'} size='small' align='start' responsive={true}/>
           <Meter vertical={false} size='small' value={this.props.userCount} max={this.props.seats} responsive={true}/>
         </Box>
       </Box>
