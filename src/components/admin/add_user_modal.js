@@ -1,5 +1,6 @@
 
 import React, { Component } from 'react';
+import isEmail from 'validator/lib/isEmail';
 
 import Box from 'grommet/components/Box';
 import Button from 'grommet/components/Button';
@@ -20,8 +21,12 @@ export default class AddUserModal extends Component {
         this._onRoleChange = this._onRoleChange.bind(this);
 
         this.state = {
-            email: undefined,
-            password: undefined,
+            error: {
+              password: undefined,
+              email: undefined
+            },
+            email: '',
+            password: '',
             organisation: props.organisation,
             role: 'user',
         };
@@ -29,7 +34,7 @@ export default class AddUserModal extends Component {
 
     _onSubmit (event){
         event.preventDefault();
-        if (this.state.email && this.state.organisation && this.state.password && (this.state.password.length >= 6)) {
+        if ((isEmail(this.state.email)) && (this.state.email.length !== 0) && this.state.organisation && this.state.password && (this.state.password.length >= 6)) {
             this.props.msg.success("Cet utilisateur va être ajouté à la base de donnée, veuillez patienter");
             this.props.onSubmit({
                 email: this.state.email,
@@ -39,15 +44,39 @@ export default class AddUserModal extends Component {
             });
         }
         else {
-            this.props.msg.error("Certaines de ces informations ne sont pas correctes!");
+            this.props.msg.error("Certaines de ces informations ne sont pas valides!");
         }
     }
 
     _onEmailChange (event) {
+        if(!isEmail(event.target.value)){
+          this.setState({error: {
+            password: this.state.error.password,
+            email: 'Cette adresse email est invalide'
+          }})
+        }
+        else {
+          this.setState({error: {
+            password: this.state.error.password,
+            email: undefined
+          }})
+        }
         this.setState({email: event.target.value});
     }
 
     _onPasswordChange (event) {
+        if(event.target.value.length < 6){
+          this.setState({error: {
+            email: this.state.error.email,
+            password: 'Ce mot de passe est trop court'
+          }})
+        }
+        else {
+          this.setState({error: {
+            email: this.state.error.email,
+            password: undefined
+          }})
+        }
         this.setState({password: event.target.value});
     }
 
@@ -67,11 +96,13 @@ export default class AddUserModal extends Component {
                         <FormFields>
                             <fieldset>
                                 <FormField label="Email"
+                                           error={this.state.error.email}
                                            >
                                     <input name="email" type="text"
                                            onChange={this._onEmailChange} />
                                 </FormField>
                                 <FormField label="Mot de passe (Plus de 6 caractères)"
+                                           error={this.state.error.password}
                                            >
                                     <input name="password" type="password"
                                            onChange={this._onPasswordChange} />

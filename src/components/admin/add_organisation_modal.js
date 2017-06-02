@@ -19,25 +19,42 @@ export default class AddOrganisationModal extends Component {
         this._onNameChange = this._onNameChange.bind(this);
 
         this.state = {
-            name: undefined,
+            error: {
+              name: undefined
+            },
+            name: '',
             seats: 1,
         };
     }
 
     _onSubmit (event){
         event.preventDefault();
-        if ((this.state.name !== "") && (this.state.seats >= 1)) {
+        if ((this.state.name.length !== 0) && (this.state.seats >= 1)) {
+            this.props.msg.success("Cette organisation va être ajoutée à la base de donnée, veuillez patienter");
             this.props.onSubmit({
                 name: this.state.name,
                 seats: this.state.seats
             });
         }
         else {
-            //Bert.alert("Veuillez choisir un nom et un nombre d'utilisateurs valide", 'danger', 'fixed-top', 'fa-remove' );
+            this.props.msg.error("Certaines de ces informations ne sont pas valides!");
         }
     }
 
     _onNameChange (event) {
+        if(event.target.value.length === 0){
+          this.setState({
+            error: {
+              name: 'Ce nom est invalide'
+            }
+          });
+        } else {
+          this.setState({
+            error: {
+              name: undefined
+            }
+          });
+        }
         this.setState({name: event.target.value});
     }
 
@@ -51,7 +68,7 @@ export default class AddOrganisationModal extends Component {
                         <header><h1>Ajouter une organisation</h1></header>
                         <FormFields>
                             <fieldset>
-                                <FormField label="Nom">
+                                <FormField label="Nom" error={this.state.error.name}>
                                     <input name="Nom" type="text"
                                            onChange={this._onNameChange} />
                                 </FormField>

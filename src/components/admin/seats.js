@@ -15,13 +15,19 @@ export default class Seats extends Component{
                     step={1}
                     onChange={(e) => {
                         let value = e.target.value;
-                        if (!(value < 1 || value==='')){
+                        if (!(value < 1 || value==='' || value < this.props.minSeats)){
                             this.props.onChange( parseFloat(value));
                             this.setState({ error: undefined });
-                        } else {
-                            this.setState({ error: "Ce n'est pas un nombre d'utilisateur valide" });
                         }
-                    }}
+                        else if (value <= this.props.minSeats) {
+                            this.props.onChange( parseFloat(value));
+                            this.setState({ error: "Ce nombre d'utilisateurs n'est pas suffisant" });
+                        } else {
+                            this.props.onChange( parseFloat(value));
+                            this.setState({ error: "Ce n'est pas un nombre d'utilisateurs valide" });
+                        }
+                      }
+                    }
                 />
             </FormField>
         )

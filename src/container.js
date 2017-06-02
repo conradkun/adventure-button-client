@@ -37,7 +37,7 @@ class Container extends Component {
           offset: 20,
           position: 'bottom right',
           theme: 'dark',
-          time: 5000,
+          time: 2000,
           transition: 'scale'
         };
 

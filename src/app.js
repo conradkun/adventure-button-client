@@ -60,12 +60,13 @@ class App extends Component{
         })
       })
       .catch(error => {
+        console.log(error)
         if (error.code === 401 || error.code === 404) {
-          this.setState({
-            isLoading: false,
-          })
           client.logout();
           this.props.history.push('/');
+          this.setState({
+            isLoading: false,
+          });
         }
         console.error(error);
       });

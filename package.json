@@ -17,6 +17,7 @@
     "inline-style-prefixer": "^2.0.5",
     "intuit": "^0.0.22",
     "is-mobile": "^0.2.2",
+    "isemail": "^2.2.1",
     "meteor-node-stubs": "~0.2.0",
     "node-sass-chokidar": "^0.0.1",
     "npm-run-all": "^4.0.2",

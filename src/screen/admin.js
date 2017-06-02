@@ -21,18 +21,28 @@ import EditOrganisationModal from '../components/admin/edit_organisation_modal';
 import DeleteOrganisationModal from '../components/admin/delete_organisation_modal';
 import OrganisationCard from '../components/admin/organisation_card';
 import Spinner from 'react-spinkit';
-import {sleep} from 'wait-promise';
+//import {sleep} from 'wait-promise';
 
 class Admin extends Component {
 
   constructor(props) {
     super(props);
+
+
+    /**
+    * Event Listeners
+    **/
+
     const client = props.client;
     const organisation = client.service('organisation');
     const users = client.service('users');
-    //TODO Write the updated and patched method for users and org
-    //organisation.on('updated', message => this._load());
-    //organisation.on('patched', message => this._load());
+    organisation.on('patched', org => {
+      const newOrgnisationList = this.state.organisations.filter((o) => {return o._id !== org._id});
+      newOrgnisationList.push(org);
+      this.setState({
+        organisations: newOrgnisationList
+      })
+    });
     organisation.on('created', org => this.setState({
       organisations:  [...this.state.organisations, org]
     }))
@@ -42,8 +52,13 @@ class Admin extends Component {
         organisations: newOrgnisationList
       })
     });
-    //users.on('updated', message => this._load());
-    //users.on('patched', message => this._load());
+    users.on('patched',  user => {
+      const newUserList = this.state.users.filter((u) => {return u._id !== user._id});
+      newUserList.push(user);
+      this.setState({
+        users: newUserList
+      })
+    });
     users.on('created', user => this.setState({
       users:  [...this.state.users, user]
     }));
@@ -53,6 +68,9 @@ class Admin extends Component {
         users: newUserList
       })
     });
+
+
+
     this._onRequestForAddUser = this._onRequestForAddUser.bind(this);
     this._onRequestForAddUserClose = this._onRequestForAddUserClose.bind(this);
     this._onRequestForEditUser = this._onRequestForEditUser.bind(this);
@@ -111,7 +129,8 @@ class Admin extends Component {
       editOrganisationOption: {
         id: undefined,
         name: undefined,
-        seats: undefined
+        seats: undefined,
+        minSeats: undefined
       },
       deleteOrganisationOption: {
         id: undefined,
@@ -200,13 +219,14 @@ class Admin extends Component {
     organisation.create({name: Organisation.name, seats: Organisation.seats}).then(this.setState({addOrganisation: false}))
   }
 
-  _onRequestForEditOrganisation(id=this.state.editOrganisationOption.id, name=this.state.editOrganisationOption.name, seats=this.editOrganisationOption.seats) {
+  _onRequestForEditOrganisation(id=this.state.editOrganisationOption.id, name=this.state.editOrganisationOption.name, seats=this.state.editOrganisationOption.seats, minSeats=this.state.editOrganisationOption.minSeats) {
     this.setState({
       editOrganisation: true,
       editOrganisationOption: {
         id: id,
         name: name,
-        seats: seats
+        seats: seats,
+        minSeats: minSeats
       }
     });
   }
@@ -277,8 +297,9 @@ class Admin extends Component {
     let cards;
     cards = this.state.organisations.filter(this._search).map((org) => {
       let users = this.state.users.filter((u) => {return u.organisation === org._id});
+      let userCount = users.length;
       return (
-        <OrganisationCard users={users} key={org._id} id={org._id} name={org.name} seats={org.seats} onAddUser={this._onRequestForAddUser} onEditOrganisation={this._onRequestForEditOrganisation} onDeleteOrganisation={this._onRequestForDeleteOrganisation} onDeleteUsers={this._onRequestForDeleteUser}/>
+        <OrganisationCard users={users} key={org._id} id={org._id} name={org.name} seats={org.seats} userCount={userCount} onAddUser={this._onRequestForAddUser} onEditOrganisation={this._onRequestForEditOrganisation} onDeleteOrganisation={this._onRequestForDeleteOrganisation} onDeleteUsers={this._onRequestForDeleteUser}/>
       )
     })
 
@@ -292,10 +313,10 @@ class Admin extends Component {
     } else if (this.state.deleteUser) {
       modal = <DeleteUserModal onClose={this._onRequestForDeleteUserClose} id={this.state.deleteUserOption.id} email={this.state.deleteUserOption.email} onSubmit={this._onDeleteUser}/>
     } else if (this.state.addOrganisation) {
-      modal = <AddOrganisationModal onClose={this._onRequestForAddOrganisationClose} onSubmit={this._onAddOrganisation}/>
+      modal = <AddOrganisationModal msg={this.props.msg} onClose={this._onRequestForAddOrganisationClose} onSubmit={this._onAddOrganisation}/>
 
     } else if (this.state.editOrganisation) {
-      modal = <EditOrganisationModal id={this.state.editOrganisationOption.id} name={this.state.editOrganisationOption.name} seats={this.state.editOrganisationOption.seats} onClose={this._onRequestForEditOrganisationClose} onSubmit={this._onEditOrganisation}/>
+      modal = <EditOrganisationModal msg={this.props.msg} id={this.state.editOrganisationOption.id} name={this.state.editOrganisationOption.name} seats={this.state.editOrganisationOption.seats} minSeats={this.state.editOrganisationOption.minSeats} onClose={this._onRequestForEditOrganisationClose} onSubmit={this._onEditOrganisation}/>
     } else if (this.state.deleteOrganisation) {
       modal = <DeleteOrganisationModal onClose={this._onRequestForDeleteOrganisationClose} id={this.state.deleteOrganisationOption.id} name={this.state.deleteOrganisationOption.name} onSubmit={this._onDeleteOrganisation}/>
     }

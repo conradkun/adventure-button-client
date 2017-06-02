@@ -23,6 +23,9 @@ export default class EditOrganisationModal extends Component {
 
 
         this.state = {
+            error: {
+              name: undefined
+            },
             id: props.id,
             name: props.name,
             seats: props.seats,
@@ -30,19 +33,33 @@ export default class EditOrganisationModal extends Component {
     }
     _onSubmit (event){
         event.preventDefault();
-        if ((this.state.name !== "") && (this.state.seats >= 1)) {
+        if ((this.state.name.length !== 0) && (this.state.seats >= 1) && (this.state.seats >= this.props.minSeats)) {
+          this.props.msg.success("Cette organisation va être mise à jour, veuillez patienter");
             this.props.onSubmit(this.state.id, {
                 name: this.state.name,
                 seats: this.state.seats
             });
         }
         else {
-            //Bert.alert("Veuillez choisir un nom et un nombre d'utilisateurs valide", 'danger', 'fixed-top', 'fa-remove' );
+            this.props.msg.error("Certaines de ces informations ne sont pas valides!");
         }
     }
 
     _onNameChange (event) {
-        this.setState({name: event.target.value});
+      if(event.target.value.length === 0){
+        this.setState({
+          error: {
+            name: 'Ce nom est invalide'
+          }
+        });
+      } else {
+        this.setState({
+          error: {
+            name: undefined
+          }
+        });
+      }
+      this.setState({name: event.target.value});
     }
 
     render () {
@@ -57,12 +74,13 @@ export default class EditOrganisationModal extends Component {
                                     <Label>
                                         Organisation : <b>{this.state.name}</b>
                                     </Label>
-                                <FormField label="Organisation"
+                                <FormField label="Organisation" error={this.state.error.name}
                                 >
                                     <input name="organisation" type="text" defaultValue={this.state.name}
                                            onChange={this._onNameChange} />
                                 </FormField>
                                     <Seats defaultValue={this.props.seats}
+                                           minSeats={this.props.minSeats}
                                                    onChange={(value)=> {
                                         this.setState({seats: value})
                                     }}/>
