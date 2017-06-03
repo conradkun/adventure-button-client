@@ -66,11 +66,6 @@ export default class AnnotatedMeter extends Component {
             size = 'small'
         }
 
-        if (value > 9999) {
-            console.log("true");
-            sizeLabel = 'small';
-        }
-
         let value, label;
         if (index >= 0) {
             value = 0;

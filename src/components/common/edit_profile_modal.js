@@ -98,7 +98,12 @@ export default class EditProfileModal extends Component {
 
     render () {
         const me = this.props.client.get('user');
-        const org = this.props.client.get('organisation');
+        let org = {
+          name: "Pas d'organisation"
+        };
+        if(me.role !== 'admin'){
+          org = this.props.client.get('organisation');
+        }
         let permissionLevel;
         if(me.role === 'admin'){
           permissionLevel = 'Administrateur';
@@ -131,7 +136,6 @@ export default class EditProfileModal extends Component {
                             <FormField label="Changer votre mot de passe"
                                        >
                                   <CheckBox
-                                    label='Je veux changer mon mot de passe'
                                     defaultChecked={false}
                                     toggle={true}
                                     onChange={this._onWantToChangePasswordChange}

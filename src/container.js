@@ -62,6 +62,9 @@ class Container extends Component {
     _logout(){
       const client = this.props.client;
       client.logout();
+      //Now we have to destroy the localStorage items
+      window.localStorage.removeItem('user');
+      window.localStorage.removeItem('organisation');
       this.props.history.push('/');
     }
 
@@ -202,13 +205,16 @@ class Container extends Component {
             renderAppLogo: this._renderAppLogo,
             msg: this.msg
         };
-
+        let fadeDuration = 0.5;
+        if(this.state.responsive === 'single'){
+          fadeDuration = 0;
+        }
         let priority = ('single' === this.state.responsive && this.state.showMenu ?
             'left' : 'right');
 
         const FadingRoute = ({ component: Component, ...rest }) => (
             <Route {...rest} render={matchProps => (
-                <Fade duration={0.5}>
+                <Fade duration={fadeDuration}>
                     <Component {...matchProps} {...routeProps}/>
                 </Fade>
             )}/>

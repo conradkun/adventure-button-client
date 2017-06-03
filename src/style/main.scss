@@ -2,7 +2,6 @@
 @import "main/index.scss";
 
 html{
-    overflow-x: hidden;
     overflow-y: auto;
 }
 
@@ -15,13 +14,13 @@ html{
     top: 50%;
 
     margin: 0 auto;
-    width: 320px;
+    width: 220px;
 }
 
 
 .logo-shape {
     stroke-dasharray: 180 540;
-    stroke-dashoffset: -454;
+    stroke-dashoffset: -305;
     stroke-width: 8px;
     fill: transparent;
     stroke: $brand-color;

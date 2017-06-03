@@ -65,15 +65,6 @@ export default class MiniAppContainer extends Component{
                      direction='row'
                      responsive={false}>
                     {goBack}
-                    <Menu icon={<Actions />}
-                          dropAlign={{"right": "right"}}>
-                        <Anchor href='#' onClick={this.props.onLogout}>
-                            Déconnexion
-                        </Anchor>
-                        <Anchor href='#'>
-                            Aide
-                        </Anchor>
-                    </Menu>
                     {mobileButton}
                 </Box>
             </Header>
