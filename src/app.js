@@ -85,21 +85,14 @@ class App extends Component {
         this.props.history.push('/');
         this.setState({isLoading: false});
       } else {
+        console.log("hello")
         let user = JSON.parse(userUnparsed);
-
         let organisationUnparsed = window.localStorage.getItem("organisation");
         let organisation = JSON.parse(organisationUnparsed);
         console.log('user: ' + user.email);
-        client.set('user', {
-          email: user.email,
-          role: user.role,
-          organisation: user.organisation
-        });
+        client.set('user', user);
         if (user.role !== 'admin') {
-          client.set('organisation', {
-            name: organisation.name,
-            seats: organisation.seats
-          })
+          client.set('organisation', organisation);
         }
         //TODO: OFFLINE FEATURES
         this.props.history.push('/app');
