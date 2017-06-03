@@ -37,6 +37,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    console.log(window.navigator.onLine);
     if (window.navigator.onLine) {
       const client = this.state.client;
       client.authenticate().then(() => {
@@ -79,7 +80,6 @@ class App extends Component {
       console.log('Offline');
       //Get user from localStorage
       let userUnparsed = window.localStorage.getItem("user");
-      console.log(userUnparsed);
       if (!userUnparsed) {
         //The user has never been logged in, redirecting to the Login page
         this.props.history.push('/');

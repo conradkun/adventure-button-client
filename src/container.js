@@ -157,6 +157,7 @@ class Container extends Component {
                 Paramètres
             </Anchor>
         );
+        console.log(this.props.offline);
         return (
             <Sidebar ref='sidebar' size='small' separator='right' colorIndex={AppSettings.mainColor}
                      fixed={true}>
@@ -171,9 +172,9 @@ class Container extends Component {
                      >
                     <Menu primary={true}>
                         {baremeLink}
-                        {this.state.me.role === 'admin' ? adminLink : undefined}
-                        {this.state.me.role === 'manager' ? usersLink : undefined}
-                        {this.state.me.role === 'manager' ? settingsLink : undefined}
+                        {this.state.me.role === 'admin' && !this.props.offline ? adminLink : undefined}
+                        {this.state.me.role === 'manager' && !this.props.offline ? usersLink : undefined}
+                        {this.state.me.role === 'manager' && !this.props.offline ? settingsLink : undefined}
                     </Menu>
                 </Box>
                 <Footer pad='medium'>
@@ -221,7 +222,7 @@ class Container extends Component {
         );
         let modal;
         if(this.state.editProfile){
-          modal = <EditProfileModal client={this.props.client} msg={this.msg} onClose={this._onRequestForEditProfileClose} onSubmit={this._onRequestForEditProfileClose}/>
+          modal = <EditProfileModal offline={this.props.offline} client={this.props.client} msg={this.msg} onClose={this._onRequestForEditProfileClose} onSubmit={this._onRequestForEditProfileClose}/>
         }
         return (
                   <Split flex='right' priority={priority} fixed={true}
