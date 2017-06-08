@@ -20,9 +20,41 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Baremio</title>
+    <!-- Loader Style -->
+    <style>
+    @font-face {
+      font-family: 'Work Sans';
+      font-style: normal;
+      font-weight: 300;
+      src: local("Work Sans Light"), local("WorkSans-Light"), url("https://fonts.gstatic.com/s/worksans/v2/FD_Udbezj8EHXbdsqLUplxampu5_7CjHW5spxoeN3Vs.woff2") format("woff2");
+    }
+
+    html, body, .container {
+      height: 100%;
+    }
+    .loader {
+    }
+    .container {
+      overflow-y: hidden;
+      overflow-x: hidden;
+      color: #0A64A0;
+      font-weight: 300;
+      font-size: 5em;
+      font-family: 'Work Sans', 'Roboto', 'Helvetica Neue', sans-serif;
+      display: -webkit-flexbox;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-flex-align: center;
+      -ms-flex-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      justify-content: center;
+    }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root" class="container"><div class="loader">BAREMIO</div></div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

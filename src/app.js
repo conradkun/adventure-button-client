@@ -37,7 +37,7 @@ class App extends Component {
   connectToBackend(client){
     let socket;
     if(process.env.REACT_APP_API_URL){
-      socket = io('https://baremio-api.herokuapp.com');
+      socket = io(process.env.REACT_APP_API_URL);
     }
     else {
       socket = io();
@@ -45,7 +45,6 @@ class App extends Component {
     client.configure(socketio(socket));
   }
   componentDidMount() {
-    console.log(window.navigator.onLine);
     if (window.navigator.onLine) {
       const client = this.state.client;
       client.authenticate().then(() => {
