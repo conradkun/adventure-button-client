@@ -30,8 +30,9 @@ export default class PriceInput extends Component {
                 [`${CLASS_ROOT}--active`]: this.state.active
             }
         );
-        return (
-                <FormField label={this.props.label} error={this.state.error}>
+        let content = (
+            <FormFields>
+                <FormField label="Montant" error={this.state.error}>
                     <NumberFormat className={classes} value={this.state.value} thousandSeparator='.' decimalSeparator='.'
                                   suffix={'€'}
                                   onChange={(e, value) => {
@@ -45,6 +46,16 @@ export default class PriceInput extends Component {
                                       }
                                   }}/>
                 </FormField>
+            </FormFields>
         );
+        return (
+            <Tile align='start' key={this.props.name} colorIndex={AppSettings.cardColor}>
+                <Card heading={this.props.name}
+                      description={content}
+                      headingStrong={true}
+                      contentPad='small'
+                />
+            </Tile>
+        )
     }
 }

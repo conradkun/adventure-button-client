@@ -176,6 +176,7 @@ class UsersAdmin extends Component {
                                    onSubmit={this._onEditUser}/>
         } else if (this.state.deleteUser){
             modal = <DeleteUserModal
+                                  msg={this.props.msg}
                                   onClose={this._onRequestForDeleteClose}
                                   email={this.state.deleteOption.email}
                                   id={this.state.deleteOption.id}

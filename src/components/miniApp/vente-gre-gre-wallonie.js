@@ -123,7 +123,10 @@ export default class VenteGreGreWallonie extends Component {
                                 </Header>
                                 <FormFields>
                                     <fieldset>
-                                        <Prix onChange={
+                                        <Prix
+                                          label="Prix de vente"
+                                          defaultValue={0}
+                                          onChange={
                                             (value) => {
                                                 this.setState({value: {...this.state.value, montant: value}})
                                             }

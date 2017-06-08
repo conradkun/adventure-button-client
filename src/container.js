@@ -23,11 +23,8 @@ import CardList from './screen/card_list';
 import MiniAppContainer from './screen/mini_app';
 import Admin from './screen/admin'
 import UsersAdmin from './screen/users_admin'
-/**
-import OrganisationAdmin from './screen/organisation_admin'
-
 import SettingsAdmin from './screen/settings_admin'
-**/
+
 
 import {
     Switch,
@@ -241,18 +238,12 @@ class Container extends Component {
                             <FadingRoute path="/app/b/:miniApp" component={MiniAppContainer}/>
                             <FadingRoute path="/app/admin" component={Admin}/>
                             <FadingRoute path="/app/users" component={UsersAdmin}/>
+                            <FadingRoute path="/app/settings" component={SettingsAdmin}/>
                         </Switch>
                         {modal}
                       </div>
                     </Split>
               );
         }
-        /**
-
-         <FadingRoute path="settings" component={SettingsAdmin}/>
-         <FadingRoute path="admin" component={Admin}/>
-         <FadingRoute path="organisation" component={OrganisationAdmin}/>
-         <FadingRoute path="users" component={UsersAdmin}/>
-         */
 }
 export default translate()(withRouter(Container));

@@ -29,12 +29,10 @@
       src: local("Work Sans Light"), local("WorkSans-Light"), url("https://fonts.gstatic.com/s/worksans/v2/FD_Udbezj8EHXbdsqLUplxampu5_7CjHW5spxoeN3Vs.woff2") format("woff2");
     }
 
-    html, body, .container {
+    html, body, #root, .loader-container {
       height: 100%;
     }
-    .loader {
-    }
-    .container {
+    .loader-container {
       overflow-y: hidden;
       overflow-x: hidden;
       color: #0A64A0;
@@ -54,7 +52,7 @@
     </style>
   </head>
   <body>
-    <div id="root" class="container"><div class="loader">BAREMIO</div></div>
+    <div id="root"><div class="loader-container"><span>BAREMIO</span></div></div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

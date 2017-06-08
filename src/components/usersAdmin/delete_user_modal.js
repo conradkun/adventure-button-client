@@ -21,6 +21,7 @@ export default class DeleteUserModal extends Component {
 
     _onSubmit (event){
         event.preventDefault();
+        this.props.msg.success("Cet utilisateur va être supprimé de la base de donnée, veuillez patienter");
         this.props.onSubmit(this.props.id);
     }
 
