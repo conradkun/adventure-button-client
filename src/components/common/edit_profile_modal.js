@@ -1,6 +1,7 @@
 // (C) Copyright 2014-2015 Hewlett-Packard Development Company, L.P.
 
 import React, { Component } from 'react';
+import { translate } from 'react-i18next';
 
 import Box from 'grommet/components/Box';
 import Button from 'grommet/components/Button';
@@ -13,10 +14,11 @@ import CheckBox from 'grommet/components/CheckBox';
 import Heading from 'grommet/components/Heading';
 import Label from 'grommet/components/Label';
 
-export default class EditProfileModal extends Component {
+class EditProfileModal extends Component {
     constructor (props) {
         super(props);
-
+        const { t } = props;
+        this.t = t;
         this._onSubmit = this._onSubmit.bind(this);
         this._onPasswordChange = this._onPasswordChange.bind(this);
         this._onPasswordConfirmChange = this._onPasswordConfirmChange.bind(this);
@@ -167,3 +169,5 @@ export default class EditProfileModal extends Component {
         );
     }
 }
+
+export default translate()(EditProfileModal);

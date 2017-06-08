@@ -1,6 +1,9 @@
 // (C) Copyright 2014-2016 Hewlett Packard Enterprise Development LP
 import React, { Component } from 'react';
 import Fade from 'react-fade';
+import { translate } from 'react-i18next';
+
+
 import Split from 'grommet/components/Split';
 import Sidebar from 'grommet/components/Sidebar';
 import Header from 'grommet/components/Header';
@@ -12,8 +15,8 @@ import CloseIcon from 'grommet/components/icons/base/Close';
 import Anchor from 'grommet/components/Anchor';
 import Footer from 'grommet/components/Footer';
 import User from 'grommet/components/icons/base/User'
-import AppSettings from './utils/app_settings';
 
+import AppSettings from './utils/app_settings';
 import EditProfileModal from './components/common/edit_profile_modal'
 
 import CardList from './screen/card_list';
@@ -32,10 +35,14 @@ import {
     withRouter
 } from 'react-router-dom'
 import AlertContainer from 'react-alert';
+
+
 class Container extends Component {
 
     constructor(props) {
         super(props);
+        const { t } = props;
+        this.t = t;
         this.alertOptions = {
           offset: 20,
           position: 'bottom right',
@@ -101,7 +108,7 @@ class Container extends Component {
         return (
             <Title pad='small' responsive={true}>
                     <Box align='center' direction='row'>
-                        <Title>Projet Bareme</Title>
+                        <Title>{this.t('appName')}</Title>
                     </Box>
             </Title>
         );
@@ -130,7 +137,7 @@ class Container extends Component {
          **/
         let baremeLink = (
             <Anchor path="/app" onClick={this._onMenuClick}>
-                Calcul de Barème
+                {this.t('navLinkCalculator')}
             </Anchor>
         );
         let settingsLink;
@@ -144,20 +151,19 @@ class Container extends Component {
 
         adminLink = (
             <Anchor path="/app/admin" onClick={this._onMenuClick}>
-                Administration
+                {this.t('navLinkAdmin')}
             </Anchor>);
 
         usersLink = (
             <Anchor path='/app/users' onClick={this._onMenuClick}>
-                Collaborateurs
+                {this.t('navLinkUsers')}
             </Anchor>
         );
         settingsLink = (
             <Anchor path='/app/settings' onClick={this._onMenuClick}>
-                Paramètres
+                {this.t('navLinkSettings')}
             </Anchor>
         );
-        console.log(this.props.offline);
         return (
             <Sidebar ref='sidebar' size='small' separator='right' colorIndex={AppSettings.mainColor}
                      fixed={true}>
@@ -181,13 +187,13 @@ class Container extends Component {
                   <Menu icon={<User />}
                       dropAlign={{"bottom": "bottom"}}>
                     <Anchor onClick={this._logout}>
-                        Déconnexion
+                        {this.t('navUserMenuLogout')}
                     </Anchor>
                     <Anchor onClick={this._onRequestForEditProfile}>
-                        Mon profil
+                        {this.t('navUserMenuMyProfile')}
                     </Anchor>
                     <Anchor href='#'>
-                        Aide
+                        {this.t('navUserMenuHelp')}
                     </Anchor>
                   </Menu>
                 </Footer>
@@ -249,4 +255,4 @@ class Container extends Component {
          <FadingRoute path="users" component={UsersAdmin}/>
          */
 }
-export default withRouter(Container);
+export default translate()(withRouter(Container));

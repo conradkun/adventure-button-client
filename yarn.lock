@@ -3507,7 +3507,7 @@ hoek@2.x.x:
   version "2.16.3"
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-2.16.3.tgz#20bb7403d3cea398e91dc4710a8ff1b8274a25ed"
 
-hoist-non-react-statics@^1.2.0:
+hoist-non-react-statics@1.2.0, hoist-non-react-statics@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-1.2.0.tgz#aa448cf0986d55cc40773b17174b7dd066cb7cfb"
 
@@ -3654,6 +3654,10 @@ https-browserify@0.0.1:
 hyphenate-style-name@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/hyphenate-style-name/-/hyphenate-style-name-1.0.2.tgz#31160a36930adaf1fc04c6074f7eb41465d4ec4b"
+
+i18next@^8.4.0:
+  version "8.4.0"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-8.4.0.tgz#ffdf2b5dee22c646f0a715f8f5a38a347c83a546"
 
 iconv-lite@0.4.13:
   version "0.4.13"
@@ -6357,6 +6361,12 @@ react-html-attributes@^1.3.0:
   dependencies:
     html-element-attributes "^1.0.0"
 
+react-i18next@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-4.1.0.tgz#dcf740b67c14ba13a1ae8e6890e6f243068fdad1"
+  dependencies:
+    hoist-non-react-statics "1.2.0"
+
 react-intl@^2.1.2, react-intl@^2.2.3:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-2.3.0.tgz#e1df6af5667fdf01cbe4aab20e137251e2ae5142"
@@ -6532,19 +6542,7 @@ readable-stream@1.0, "readable-stream@>=1.0.33-1 <1.1.0-0":
     isarray "0.0.1"
     string_decoder "~0.10.x"
 
-readable-stream@^2.0.0, readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.0.5, readable-stream@^2.0.6, readable-stream@^2.1.5, readable-stream@^2.2.2, readable-stream@^2.2.6, readable-stream@^2.2.9:
-  version "2.2.10"
-  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.2.10.tgz#effe72bb7c884c0dd335e2379d526196d9d011ee"
-  dependencies:
-    core-util-is "~1.0.0"
-    inherits "~2.0.1"
-    isarray "~1.0.0"
-    process-nextick-args "~1.0.6"
-    safe-buffer "^5.0.1"
-    string_decoder "~1.0.0"
-    util-deprecate "~1.0.1"
-
-"readable-stream@git+https://github.com/meteor/readable-stream.git":
+readable-stream@^2.0.0, readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.0.5, readable-stream@^2.0.6, readable-stream@^2.1.5, readable-stream@^2.2.2, readable-stream@^2.2.6, readable-stream@^2.2.9, "readable-stream@git+https://github.com/meteor/readable-stream.git":
   version "2.2.10"
   resolved "git+https://github.com/meteor/readable-stream.git#2e9112d7d31a2af6e0682db0e18679b1e5fd4694"
   dependencies:

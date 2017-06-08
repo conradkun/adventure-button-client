@@ -25,8 +25,7 @@ class App extends Component {
     const client = feathers().configure(hooks()).configure(auth(options))
 
     if (window.navigator.onLine) {
-      const socket = io('http://192.168.1.6:3030', {transports: ['websocket']});
-      client.configure(socketio(socket));
+      this.connectToBackend(client);
     }
 
     this.state = {
@@ -35,7 +34,16 @@ class App extends Component {
       offline: false
     }
   }
-
+  connectToBackend(client){
+    let socket;
+    if(process.env.REACT_APP_API_URL){
+      socket = io('https://baremio-api.herokuapp.com');
+    }
+    else {
+      socket = io();
+    }
+    client.configure(socketio(socket));
+  }
   componentDidMount() {
     console.log(window.navigator.onLine);
     if (window.navigator.onLine) {
