@@ -12,6 +12,9 @@ const render = (Component) => {
     );
 };
 
+undefined.map((test)=>{
+  console.log(test);
+});
 render(Routes);
 
 
