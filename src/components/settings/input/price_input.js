@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import classnames from 'classnames';
 import NumberFormat from 'react-number-format';
 import Card from 'grommet/components/Card';
-import Tile from 'grommet/components/Tile';
+import Box from 'grommet/components/Box';
 import AppSettings from '../../../utils/app_settings';
-import FormFields from 'grommet/components/FormFields'
+import Title from 'grommet/components/Title'
 import FormField from 'grommet/components/FormField'
 
 import CSSClassnames from 'grommet/utils/CSSClassnames';
@@ -31,7 +31,7 @@ export default class PriceInput extends Component {
             }
         );
         let content = (
-            <FormFields>
+
                 <FormField label="Montant" error={this.state.error}>
                     <NumberFormat className={classes} value={this.state.value} thousandSeparator='.' decimalSeparator='.'
                                   suffix={'€'}
@@ -46,16 +46,30 @@ export default class PriceInput extends Component {
                                       }
                                   }}/>
                 </FormField>
-            </FormFields>
         );
+        let basis = 'full';
+        let margin = {
+          top: 'large'
+        }
+        if(this.props.responsive === 'single'){
+          margin = {
+            ...margin,
+            horizontal: 'large'
+          }
+        }
         return (
-            <Tile align='start' key={this.props.name} colorIndex={AppSettings.cardColor}>
-                <Card heading={this.props.name}
-                      description={content}
-                      headingStrong={true}
-                      contentPad='small'
-                />
-            </Tile>
+                <Box
+                  justify="between" pad="medium" direction='row'
+                  className="drop-shadow"
+                  align='center'
+                  key={this.props.name}
+                  colorIndex={AppSettings.cardColor}
+                  basis = {basis}
+                  margin={margin}
+                >
+                <Title>{this.props.name}</Title>
+                {content}
+              </Box>
         )
     }
 }

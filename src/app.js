@@ -65,11 +65,15 @@ class App extends Component {
             //Save organisation to localStorage
             let organisationParsed = JSON.stringify(o);
             window.localStorage.setItem("organisation", organisationParsed);
-            this.props.history.push('/app');
+            if(this.props.location.pathname == "/"){
+              this.props.history.push('/app');
+            }
             this.setState({isLoading: false})
           })
         } else {
-          this.props.history.push('/app');
+          if(this.props.location.pathname == "/"){
+            this.props.history.push('/app');
+          }
           this.setState({isLoading: false})
         }
       }).catch(error => {
@@ -102,8 +106,10 @@ class App extends Component {
           client.set('organisation', organisation);
         }
         //TODO: OFFLINE FEATURES
-        this.props.history.push('/app');
         this.setState({isLoading: false});
+        if(this.props.location.pathname == "/"){
+          this.props.history.push('/app');
+        }
       }
     }
   }
@@ -122,7 +128,9 @@ class App extends Component {
           <Switch>
             <Route exact path='/' render={(props) => (<LoginPage {...props} client={this.state.client} offline={this.state.offline}/>)}/>
             <Route path='/app' render={(props) => (<Container {...props} client={this.state.client} offline={this.state.offline}/>)}/>
-            <Route render={(props) => (<LoginPage {...props} client={this.state.client}/>)}/>
+            <Route render={(props) => {
+                console.log("not found"); return (<LoginPage {...props} client={this.state.client}/>)
+              }}/>
           </Switch>
         </GrommetApp>
       )

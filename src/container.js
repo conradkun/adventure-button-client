@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import Fade from 'react-fade';
 import { translate } from 'react-i18next';
 
-
 import Split from 'grommet/components/Split';
 import Sidebar from 'grommet/components/Sidebar';
 import Header from 'grommet/components/Header';
@@ -23,7 +22,7 @@ import CardList from './screen/card_list';
 import MiniAppContainer from './screen/mini_app';
 import Admin from './screen/admin'
 import UsersAdmin from './screen/users_admin'
-import SettingsAdmin from './screen/settings_admin'
+import SettingsAdmin from './screen/settings'
 
 
 import {

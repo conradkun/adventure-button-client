@@ -14,7 +14,14 @@ import Card from 'grommet/components/Card';
 
 class UserCard extends Component {
   render() {
-
+     let deleteUserButton = (
+      <Anchor icon={< Trash />} onClick={() => {
+          this.props.onDeleteUser(this.props.id, this.props.email)
+      }} animateIcon={true} primary={true}/>
+    );
+    if (this.props.me){
+      deleteUserButton = undefined;
+    }
     let header = (
       <Header>
         <Box flex={true} responsive={true} justify='end' align="start" pad={{
@@ -28,10 +35,7 @@ class UserCard extends Component {
         <Box flex={true} responsive={false} justify='end' align="center" pad={{
           between: "medium"
         }} direction='row' disabled={false}>
-
-          <Anchor icon={< Trash />} onClick={() => {
-            this.props.onDeleteUser(this.props.id, this.props.email)
-          }} animateIcon={true} primary={true}/>
+        {deleteUserButton}
         </Box>
       </Header>
       );

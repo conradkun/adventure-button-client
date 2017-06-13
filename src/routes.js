@@ -15,6 +15,9 @@ let Routes =  (
     <I18nextProvider i18n={ i18n }>
         <Router>
             <Switch>
+              <Route path='/test'render={(props) => (
+                <b>Test</b>
+              )}/>
               <Route path='/' render={(props) => (
                 <App {...props}/>
               )}/>

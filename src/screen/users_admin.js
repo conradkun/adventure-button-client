@@ -195,7 +195,7 @@ class UsersAdmin extends Component {
          users.sort(this._compareWithCreatedAt);
          let cards = users.filter(this._search).map((u) => {
            return (
-             <UserCard key={u._id} id={u._id} email={u.email} onDeleteUser={this._onRequestForDelete}/>
+             <UserCard me={u._id === this.props.client.get('user')._id} key={u._id} id={u._id} email={u.email} onDeleteUser={this._onRequestForDelete}/>
            )
          });
         return (

@@ -1,4 +1,5 @@
 import ReactDOM from 'react-dom';
+//import Raven from 'raven-js';
 import registerServiceWorker from './registerServiceWorker';
 import './style/main.css';
 //import '../node_modules/grommet/grommet.min.css'
@@ -11,10 +12,11 @@ const render = (Component) => {
         document.getElementById('root')
     );
 };
-
-undefined.map((test)=>{
-  console.log(test);
-});
+/**
+Raven
+    .config('https://2317581d9de14a25a777c94f1280ab9a@sentry.io/178364')
+    .install();
+**/
 render(Routes);
 
 
