@@ -1,10 +1,6 @@
 import React, {Component} from 'react';
 import classnames from 'classnames';
 import NumberFormat from 'react-number-format';
-import Card from 'grommet/components/Card';
-import Box from 'grommet/components/Box';
-import AppSettings from '../../../utils/app_settings';
-import Title from 'grommet/components/Title'
 import FormField from 'grommet/components/FormField'
 
 import CSSClassnames from 'grommet/utils/CSSClassnames';
@@ -30,7 +26,7 @@ export default class PriceInput extends Component {
                 [`${CLASS_ROOT}--active`]: this.state.active
             }
         );
-        let content = (
+        return (
 
                 <FormField label="Montant" error={this.state.error}>
                     <NumberFormat className={classes} value={this.state.value} thousandSeparator='.' decimalSeparator='.'
@@ -47,29 +43,5 @@ export default class PriceInput extends Component {
                                   }}/>
                 </FormField>
         );
-        let basis = 'full';
-        let margin = {
-          top: 'large'
-        }
-        if(this.props.responsive === 'single'){
-          margin = {
-            ...margin,
-            horizontal: 'large'
-          }
-        }
-        return (
-                <Box
-                  justify="between" pad="medium" direction='row'
-                  className="drop-shadow"
-                  align='center'
-                  key={this.props.name}
-                  colorIndex={AppSettings.cardColor}
-                  basis = {basis}
-                  margin={margin}
-                >
-                <Title>{this.props.name}</Title>
-                {content}
-              </Box>
-        )
     }
 }

@@ -4,7 +4,7 @@ import Header from 'grommet/components/Header';
 import Anchor from 'grommet/components/Anchor';
 import Title from 'grommet/components/Title';
 import Tiles from 'grommet/components/Tiles';
-import PriceInput from '../components/settings/input/price_input';
+import SingleValue from '../components/settings/single_value';
 import AppSettings from '../utils/app_settings';
 import Spinner from 'react-spinkit';
 import MenuIcon from 'grommet/components/icons/base/Menu';
@@ -16,15 +16,39 @@ class Settings extends Component {
         super();
 
         this._search = this._search.bind(this);
+        this._load = this._load.bind(this);
 
         this.state = {
-          isLoading: false
+          isLoading: true,
+          settings: undefined,
+          searchString: ""
         }
+    }
+
+    componentDidMount() {
+      //TODO Fix the setState console.error();
+      this._load();
+    }
+
+    _load() {
+      const client = this.props.client;
+      const settings = client.service('settings');
+
+      settings.find({
+        query:{
+          organisationId: client.get('organisation')._id
+        }
+      }).then((data) => {
+        this.setState({
+          isLoading: false,
+          settings: data.data,
+        })
+      })
     }
 
     _search(setting){
         let name = setting.name;
-        return name.toLowerCase().indexOf(this.props.searchedString.toLowerCase()) !== -1;
+        return name.toLowerCase().indexOf(this.state.searchString.toLowerCase()) !== -1;
     }
 
     _compareWithCreatedAt(a, b) {
@@ -32,13 +56,10 @@ class Settings extends Component {
     }
 
     _renderContent() {
-      let card = [].filter(this._search).map((setting) => {
-          if (setting.type === "PRICE") {
-              console.log("check");
+      let card = this.state.settings.filter(this._search).sort(this._compareWithCreatedAt).map((setting) => {
+          if (setting.values.length === 1) {
               return(
-                  <PriceInput responsive={this.props.responsive} defaultValue={setting.value} name={setting.name} onChange={(value)=>{
-                      console.log(value);
-                  }}/>
+                  <SingleValue id={setting._id} key={setting._id} client={this.props.client} responsive={this.props.responsive} defaultValue={setting.values[0].value} name={setting.name} />
               )
 
           }
@@ -47,9 +68,7 @@ class Settings extends Component {
           <Box basis='full' margin='large'>
               <Tiles fill={true}
                      responsive={false}>
-                     <PriceInput defaultValue={1000} name={'Droit d´enregistrement'} onChange={(value)=>{
-                         console.log(value);
-                     }}/>
+                     {card}
               </Tiles>
           </Box>
       )
