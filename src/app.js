@@ -55,6 +55,7 @@ class App extends Component {
         return client.service('users').get(payload.userId);
       }).then(user => {
         client.set('user', user);
+        client.set('preferredRegion', window.localStorage.getItem('preferredRegion'));
         //Save user to localStorage
         let userParsed = JSON.stringify(user);
         window.localStorage.setItem("user", userParsed);
@@ -88,7 +89,6 @@ class App extends Component {
       //The user is offline, switching to the Offline mode
       this.setState({offline: true})
       const client = this.state.client;
-      console.log('Offline');
       //Get user from localStorage
       let userUnparsed = window.localStorage.getItem("user");
       if (!userUnparsed) {
@@ -96,12 +96,13 @@ class App extends Component {
         this.props.history.push('/');
         this.setState({isLoading: false});
       } else {
-        console.log("hello")
         let user = JSON.parse(userUnparsed);
         let organisationUnparsed = window.localStorage.getItem("organisation");
         let organisation = JSON.parse(organisationUnparsed);
-        console.log('user: ' + user.email);
+
         client.set('user', user);
+        client.set('preferredRegion', window.localStorage.getItem('preferredRegion'));
+
         if (user.role !== 'admin') {
           client.set('organisation', organisation);
         }

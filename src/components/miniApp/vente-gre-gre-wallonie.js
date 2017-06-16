@@ -5,6 +5,7 @@ import DroitEnregistrement from './input/droit_enregistrement';
 import Annexe from './input/annexe';
 import ReductionHonoraire from './input/reduction_honoraire';
 import Viewer from './viewer/viewer';
+import RegionSelect from './input/region_select';
 import Bareme from '../../utils/bareme';
 
 import Title from 'grommet/components/Title'
@@ -26,6 +27,7 @@ export default class VenteGreGreWallonie extends Component {
         this._generateViewer = this._generateViewer.bind(this);
 
         this.state = {
+            region: this.props.client.get('preferredRegion'),
             value: {
                 montant: 0,
                 droitEnregistrement: 12,
@@ -123,6 +125,14 @@ export default class VenteGreGreWallonie extends Component {
                                 </Header>
                                 <FormFields>
                                     <fieldset>
+                                        <RegionSelect
+                                          client={this.props.client}
+                                          onSelect={(v)=>{
+                                            this.setState({
+                                              region: v
+                                            })
+                                          }}
+                                        />
                                         <Prix
                                           label="Prix de vente"
                                           defaultValue={0}

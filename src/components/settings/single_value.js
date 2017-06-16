@@ -19,11 +19,7 @@ export default class SingleValue extends Component {
             const client = this.props.client;
             const settings = client.service('settings');
             settings.patch(this.props.id, {
-              values: [
-                {
                 value: v
-                }
-              ]
             })
           }}/>
         );

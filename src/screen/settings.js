@@ -26,7 +26,6 @@ class Settings extends Component {
     }
 
     componentDidMount() {
-      //TODO Fix the setState console.error();
       this._load();
     }
 
@@ -57,12 +56,9 @@ class Settings extends Component {
 
     _renderContent() {
       let card = this.state.settings.filter(this._search).sort(this._compareWithCreatedAt).map((setting) => {
-          if (setting.values.length === 1) {
               return(
-                  <SingleValue id={setting._id} key={setting._id} client={this.props.client} responsive={this.props.responsive} defaultValue={setting.values[0].value} name={setting.name} />
+                  <SingleValue id={setting._id} key={setting._id} client={this.props.client} responsive={this.props.responsive} defaultValue={setting.value} name={setting.name} />
               )
-
-          }
       });
       return (
           <Box basis='full' margin='large'>
