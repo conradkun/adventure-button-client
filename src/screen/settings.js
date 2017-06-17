@@ -68,15 +68,12 @@ class Settings extends Component {
     _renderContent() {
       let lastcategorie = null;
       let rows = [];
-      console.log(this.state.settings.sort(this._compareWithCategorie));
       this.state.settings.filter(this._search).sort(this._compareWithCategorie).forEach((setting) => {
-              console.log(setting);
-              if (setting.categorie !== lastcategorie) {
-                console.log("true");
-                  rows.push(<SettingsCategorie categorie={setting.categorie} key={setting.categorie} />);
-              }
-              rows.push(<SingleValue id={setting._id} key={setting._id} client={this.props.client} responsive={this.props.responsive} defaultValue={setting.value} name={setting.name} />);
-              lastcategorie = setting.categorie;
+          if (setting.categorie !== lastcategorie) {
+            rows.push(<SettingsCategorie categorie={setting.categorie} key={setting.categorie} />);
+          }
+          rows.push(<SingleValue id={setting._id} key={setting._id} client={this.props.client} responsive={this.props.responsive} defaultValue={setting.value} name={setting.name} />);
+          lastcategorie = setting.categorie;
       });
       return (
           <Box basis='full' margin='large'>
