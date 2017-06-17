@@ -47,24 +47,42 @@ class Settings extends Component {
 
     _search(setting){
         let name = setting.name;
-        return name.toLowerCase().indexOf(this.state.searchString.toLowerCase()) !== -1;
+        let categorie = setting.categorie;
+        return (name.toLowerCase().indexOf(this.state.searchString.toLowerCase()) !== -1)
+          || (categorie.toLowerCase().indexOf(this.state.searchString.toLowerCase()) !== -1)
     }
 
     _compareWithCreatedAt(a, b) {
       return new Date(a.createdAt) < new Date(b.createdAt);
     }
 
+    _compareWithCategorie(a, b) {
+      var categorieA = a.categorie.toLowerCase(),
+      categorieB = b.categorie.toLowerCase();
+      if (categorieA < categorieB) //sort string ascending
+        return -1;
+      if (categorieA > categorieB)
+        return 1;
+      return 0; //default return value (no sorting)
+    }
     _renderContent() {
-      let card = this.state.settings.filter(this._search).sort(this._compareWithCreatedAt).map((setting) => {
-              return(
-                  <SingleValue id={setting._id} key={setting._id} client={this.props.client} responsive={this.props.responsive} defaultValue={setting.value} name={setting.name} />
-              )
+      let lastcategorie = null;
+      let rows = [];
+      console.log(this.state.settings.sort(this._compareWithCategorie));
+      this.state.settings.filter(this._search).sort(this._compareWithCategorie).forEach((setting) => {
+              console.log(setting);
+              if (setting.categorie !== lastcategorie) {
+                console.log("true");
+                  rows.push(<SettingsCategorie categorie={setting.categorie} key={setting.categorie} />);
+              }
+              rows.push(<SingleValue id={setting._id} key={setting._id} client={this.props.client} responsive={this.props.responsive} defaultValue={setting.value} name={setting.name} />);
+              lastcategorie = setting.categorie;
       });
       return (
           <Box basis='full' margin='large'>
               <Tiles fill={true}
                      responsive={false}>
-                     {card}
+                     {rows}
               </Tiles>
           </Box>
       )
@@ -125,6 +143,18 @@ class Settings extends Component {
       )
     }
 
+}
+
+class SettingsCategorie extends React.Component {
+  render() {
+    return (
+      <Box basis='full' margin={{
+          top: 'large'
+        }}>
+        <h1 style={{marginBottom: "0px", textTransform: 'uppercase'}}>{this.props.categorie}</h1>
+      </Box>
+    );
+  }
 }
 
 export default Settings;
