@@ -126,6 +126,7 @@ export default class VenteGreGreWallonie extends Component {
                                 <FormFields>
                                     <fieldset>
                                         <RegionSelect
+                                          small={this.props.responsive === 'single' ? true : false}
                                           client={this.props.client}
                                           onSelect={(v)=>{
                                             this.setState({

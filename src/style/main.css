@@ -10133,6 +10133,8 @@ html {
     display: inline-block;
     padding: .5em 1.25em;
     outline: 0; }
+    .btngroup--btn--small {
+      font-size: 0.9rem; }
     .btngroup--btn--active {
       background: #0A64A0;
       color: #fff; }

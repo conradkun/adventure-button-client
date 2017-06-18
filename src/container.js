@@ -17,6 +17,7 @@ import User from 'grommet/components/icons/base/User'
 
 import AppSettings from './utils/app_settings';
 import EditProfileModal from './components/common/edit_profile_modal'
+import Logo from './components/common/logo';
 
 import CardList from './screen/card_list';
 import MiniAppContainer from './screen/mini_app';
@@ -102,11 +103,11 @@ class Container extends Component {
 
     _renderTitle () {
         return (
-            <Title pad='small' responsive={true}>
-                    <Box align='center' direction='row'>
-                        <Title>{this.t('appName')}</Title>
+
+                    <Box align='center' direction='row' responsive={false}>
+                          <Logo multiplier={0.1} margin="40px" color="#FFF"/>
+                          <Title pad='small' responsive={true}>Baremio</Title>
                     </Box>
-            </Title>
         );
     }
 
@@ -114,7 +115,7 @@ class Container extends Component {
       return (
           <Title pad='small' responsive={false}>
                   <Box align='center' direction='row'>
-                      <Title>IO</Title>
+                      <Logo multiplier={0.1} margin="40px" color="#FFF"/>
                   </Box>
           </Title>
       );

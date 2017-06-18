@@ -28,7 +28,7 @@ export default class MiniAppContainer extends Component{
         let component = undefined;
         Types.forEach((type) => {
             if(type.code === code) {
-                component = React.cloneElement(type.component, {client: this.props.client});;
+                component = React.cloneElement(type.component, {client: this.props.client, responsive: this.props.responsive});;
             }
         });
         return component;

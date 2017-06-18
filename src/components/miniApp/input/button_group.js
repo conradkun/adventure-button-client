@@ -10,11 +10,14 @@ class ButtonGroup extends React.Component {
   render () {
     let buttons = this.props.options.map((o)=>{
       let classes = "btngroup--btn";
+      if(this.props.small){
+        classes += " btngroup--btn--small";
+      }
       if(this.state.selected === o.value){
         classes = classes + " btngroup--btn--active";
       }
       return(
-        <div className={classes} onClick={()=>{
+        <div key={o.value} className={classes} onClick={()=>{
           this.setState({
             selected: o.value
           });

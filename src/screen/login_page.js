@@ -69,7 +69,7 @@ class LoginPage extends Component {
     return (
       <Box full={true} direction='column' align='center' justify='center' alignContent='center'>
         <Fade duration={.4}>
-          <LoginForm logo={< Logo />} align='center' errors={this.state.errors} onSubmit={this._handleSubmit.bind(this)}/>
+          <LoginForm logo={< Logo multiplier={0.5} text={true}/>} align='center' errors={this.state.errors} onSubmit={this._handleSubmit.bind(this)}/>
         </Fade>
       </Box>
     );
