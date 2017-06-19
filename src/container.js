@@ -19,7 +19,7 @@ import AppSettings from './utils/app_settings';
 import EditProfileModal from './components/common/edit_profile_modal'
 import Logo from './components/common/logo';
 
-import CardList from './screen/card_list';
+import miniAppList from './screen/mini_app_list';
 import MiniAppContainer from './screen/mini_app';
 import Admin from './screen/admin'
 import UsersAdmin from './screen/users_admin'
@@ -234,8 +234,8 @@ class Container extends Component {
                       <div>
                         <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
                         <Switch>
-                            <FadingRoute exact path='/app' component={CardList} />
-                            <FadingRoute path="/app/b/:miniApp" component={MiniAppContainer}/>
+                            <FadingRoute exact path='/app' component={miniAppList} />
+                            <FadingRoute path="/app/b/:miniAppCode" component={MiniAppContainer}/>
                             <FadingRoute path="/app/admin" component={Admin}/>
                             <FadingRoute path="/app/users" component={UsersAdmin}/>
                             <FadingRoute path="/app/settings" component={SettingsAdmin}/>

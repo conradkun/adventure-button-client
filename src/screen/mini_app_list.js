@@ -17,9 +17,9 @@ import Card from 'grommet/components/Card';
 import LinkNext from 'grommet/components/icons/base/LinkNext';
 
 import AppSettings from '../utils/app_settings';
-import Types from '../types';
+import miniApps from '../miniApps';
 
-class CardList extends Component{
+class miniAppList extends Component{
     constructor(props) {
         super(props);
         this._renderHeader = this._renderHeader.bind(this);
@@ -28,7 +28,7 @@ class CardList extends Component{
         }
     }
     _generateCards(){
-        return Types.map((type) => {
+        return miniApps.map((type) => {
             //Check if the name of the MiniApp match the Search String
             if(type.name.toLowerCase().indexOf(this.state.searchString.toLowerCase())!==-1){
                 let link = `app/b/${type.code}`;
@@ -119,4 +119,4 @@ class CardList extends Component{
         )
     }
 }
-export default withRouter(CardList);
+export default withRouter(miniAppList);

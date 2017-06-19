@@ -1,41 +1,68 @@
 import React, {Component} from 'react';
 
 import MenuIcon from 'grommet/components/icons/base/Menu';
-import Title from 'grommet/components/Title';
 import Box from 'grommet/components/Box';
-import Search from 'grommet/components/Search';
 import Header from 'grommet/components/Header';
 import Anchor from 'grommet/components/Anchor';
+import Article from 'grommet/components/Article';
+import Section from 'grommet/components/Section';
+import Columns from 'grommet/components/Columns';
 import LinkPrevious from 'grommet/components/icons/base/LinkPrevious';
-import Actions from 'grommet/components/icons/base/Actions';
 import FloatingButton from '../components/common/floating-button/floating-button';
 import MainButton from '../components/common/floating-button/main-button';
 import ChildButton from '../components/common/floating-button/child-button';
+import Viewer from '../components/miniApps/viewer/viewer';
 
 import AppSettings from '../utils/app_settings';
-import Types from '../types';
+import miniApps from '../miniApps';
 
 export default class MiniAppContainer extends Component {
   constructor(props) {
     super(props);
-    this.miniApp = this._getMiniAppComponent(this.props.match.params.miniApp);
+    this.error = false
+    this._onValueChanged = this._onValueChanged.bind(this);
+
+    this.miniApp = this._getMiniApp(this.props.match.params.miniAppCode);
     if (!this.miniApp) {
-      this.miniApp = <p>Error, this mini App doesnt exist</p>;
+      this.error = true;
+    }
+
+    this.miniAppInput = React.cloneElement(this.miniApp.input, {
+      client: this.props.client,
+      onValueChanged: this._onValueChanged,
+      defaultValue: this.defaultValue,
+      responsive: this.props.responsive
+    });
+
+    this.compute = this.miniApp.compute;
+    this.defaultValue = this.miniApp.defaultValue;
+    let defaultResult = this.compute(this.defaultValue);
+
+    if (!this.miniAppInput) {
+      this.error = true;
+    }
+
+    this.state = {
+      value: this.defaultValue,
+      result: defaultResult
     }
   }
-  _getMiniAppComponent(code) {
-    let component = undefined;
-    Types.forEach((type) => {
-      if (type.code === code) {
-        component = React.cloneElement(type.component, {
-          client: this.props.client,
-          responsive: this.props.responsive
-        });;
+
+  _getMiniApp(code) {
+    let miniApp = undefined;
+    miniApps.forEach((ma) => {
+      if (ma.code === code) {
+        miniApp = ma;
       }
     });
-    return component;
+    return miniApp;
   }
 
+
+  _onValueChanged(value) {
+    this.setState({value: value});
+    this.setState({result: this.compute(value)});
+  }
   _renderHeader() {
     /**
          * First create the header and add some button if the user is mobile
@@ -66,7 +93,30 @@ export default class MiniAppContainer extends Component {
       </Header>
     );
   }
-
+  _renderContent() {
+    return(
+      <Article>
+          <Section align='center' alignContent='center'>
+              <Columns justify='center' size='large'>
+                  <Box align='center'
+                       className="drop-shadow"
+                       pad='large'
+                       margin='small'
+                       colorIndex={AppSettings.cardColor}>
+                      {this.miniAppInput}
+                  </Box>
+                  <Box align='center'
+                       className="drop-shadow"
+                       pad='large'
+                       margin='small'
+                       colorIndex={AppSettings.cardColor}>
+                       <Viewer value={this.state.result}/>
+                  </Box>
+              </Columns>
+          </Section>
+      </Article>
+    )
+  }
   render() {
     var effect = 'zoomin',
       pos = 'br',
@@ -75,7 +125,7 @@ export default class MiniAppContainer extends Component {
       <Box full='vertical' colorIndex={AppSettings.backgroundColor}>
         {this._renderHeader()}
         <Box full='horizontal'>
-          {this.miniApp}
+        {this.error ? <b>ERROR</b> : this._renderContent()}
         </Box>
         <FloatingButton effect={effect} method={method} position={pos}>
           <MainButton iconResting="ion-plus-round" iconActive="ion-close-round"/>

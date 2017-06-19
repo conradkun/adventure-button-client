@@ -10,24 +10,20 @@ import AnnotatedMeter from './annotated_meter';
 export default class Viewer extends Component{
 
     render(){
-        let { series } = this.props;
+        let { value } = this.props;
         let type ='circle';
         if(isMobile()){
           type = 'bar';
         }
         return (
-            <Box align='center'
-                 className="drop-shadow"
-                 pad='large'
-                 margin='small'
-                 colorIndex={AppSettings.cardColor}>
+            <Box>
                 <AnnotatedMeter
                     size='medium'
                     type={type}
                     units='€'
                     responsive={true}
                     legend={true}
-                    series={series} />
+                    series={value} />
 
             </Box>
         )
