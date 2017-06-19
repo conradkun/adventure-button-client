@@ -12,15 +12,15 @@ import Search from 'grommet/components/Search';
 
 class Settings extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this._search = this._search.bind(this);
         this._load = this._load.bind(this);
 
         this.state = {
           isLoading: true,
-          settings: undefined,
+          settings: [],
           searchString: ""
         }
     }

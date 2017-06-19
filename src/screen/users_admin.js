@@ -27,7 +27,7 @@ class UsersAdmin extends Component {
         const client = props.client;
         const users = client.service('users');
         users.on('patched',  user => {
-          const newUserList = this.state.users.filter((u) => {return u._id !== user._id});
+          let newUserList = this.state.users.filter((u) => {return u._id !== user._id});
           newUserList.push(user);
           this.setState({
             users: newUserList
@@ -37,7 +37,7 @@ class UsersAdmin extends Component {
           users:  [...this.state.users, user]
         }));
         users.on('removed', user => {
-          const newUserList = this.state.users.filter((u) => {return u._id !== user._id});
+          let newUserList = this.state.users.filter((u) => {return u._id !== user._id});
           this.setState({
             users: newUserList
           })
