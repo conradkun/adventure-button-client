@@ -1,7 +1,4 @@
 import React, {Component} from 'react';
-
-import AppSettings from '../../../utils/app_settings';
-import Bareme from '../../../utils/bareme';
 import isMobile from 'is-mobile';
 
 import Box from 'grommet/components/Box';

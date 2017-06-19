@@ -52,7 +52,7 @@ class LoginPage extends Component {
             this.props.history.push('/app');
           })
         } else {
-          this.props.history.push('/app');
+          this.props.history.push('/app/admin');
         }
       }).catch(error => {
         if (error.code === 404) {

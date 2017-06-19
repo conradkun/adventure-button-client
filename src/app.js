@@ -77,9 +77,7 @@ class App extends Component {
             this.setState({isLoading: false})
           })
         } else {
-          if(this.props.location.pathname == "/"){
-            this.props.history.push('/app');
-          }
+          this.props.history.push('/app/admin');
           this.setState({isLoading: false})
         }
       }).catch(error => {

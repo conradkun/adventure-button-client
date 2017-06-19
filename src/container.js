@@ -104,10 +104,10 @@ class Container extends Component {
     _renderTitle () {
         return (
 
-                    <Box align='center' direction='row' responsive={false}>
-                          <Logo multiplier={0.1} margin="40px" color="#FFF"/>
-                          <Title pad='small' responsive={true}>Baremio</Title>
-                    </Box>
+          <Box align='center' direction='row' responsive={false}>
+                <Logo multiplier={0.1} margin="40px" color="#FFF"/>
+                <Title pad='small' responsive={true}>Baremio</Title>
+          </Box>
         );
     }
 
