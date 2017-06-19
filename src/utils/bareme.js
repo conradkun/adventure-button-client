@@ -15,24 +15,37 @@ const tableau = {
     J: [4.00,2.50,2.00,1.50,1.00,0.50,0.05],
     K: [5.00,4.50,4.00,3.50,2.50,1.20,0.10]
 };
-const tranche = [7500,10000,12500,15495,18600,186000];
+//ATTENTION (Majoration de 20% puis retrait de 5%) càd 120*0.95 = 114%
+const multiplicateur = 1.14;
+
+const tranche =
+[
+  7500,
+  10000 + 7500,
+  12500 + 10000 + 7500,
+  15495 + 12500 + 10000 + 7500,
+  18600 + 15495 + 12500 + 10000 + 7500,
+  186000 + 18600 + 15495 + 12500 + 10000 + 7500
+];
+
 function dotProduct(a,b) {
     let n = 0, lim = Math.min(a.length,b.length);
     for (let i = 0; i < lim; i++) n += a[i] * b[i];
     return n;
 }
 
-function newDotProduct(a,b) {
+function newDotProduct(a,b,result) {
     let acc = 0;
     for (let i=0;i<a.length;i++){
         if (i===0) {
             acc = a[0]*b[0];
+            result.tranche= [a[0]*b[0]];
         }
         else {
             acc = acc+(a[i]*(b[i]-b[i-1]));
+            result.tranche.push(a[i]*(b[i]-b[i-1]));
         }
     }
-
     return acc;
 }
 export default class Bareme {
@@ -45,7 +58,7 @@ export default class Bareme {
             tranche: [],
             total: 0
         };
-        let currentBareme = tableau[this.type];
+        let currentBareme = tableau[this.type].map((a)=>{return a * multiplicateur});
 
         //greatestN Index of the greatest value of tranche less than value
         let greatestN=-1;
@@ -69,13 +82,21 @@ export default class Bareme {
         {
             trancheN.push(tranche[i]);
         }
-
         let retrait= 0;
         if(greatestN > -1){
             retrait = tranche[greatestN];
         }
-        result.total = ((newDotProduct(percs,trancheN))+((currentBareme[greatestN+1]/100)*(value-retrait)));
+
+        result.total = +((newDotProduct(percs,trancheN,result))+((currentBareme[greatestN+1]/100)*(value-retrait))).toFixed(2);
+
+        let newTranche = [];
+        result.tranche.map((a)=>{
+          newTranche.push(+(a).toFixed(2));
+        })
+        newTranche.push(+((currentBareme[greatestN+1]/100)*(value-retrait)).toFixed(2));
+        result.tranche = newTranche;
 
         return result
+
     }
 }

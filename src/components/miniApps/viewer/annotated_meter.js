@@ -79,7 +79,6 @@ export default class AnnotatedMeter extends Component {
             value = 0;
             series.forEach(item => value += item.value);
             if (value > 9999) {
-                console.log("true");
                 sizeLabel = 'small';
             }
             value = parseFloat(Math.round(value * 100) / 100).toFixed(2);

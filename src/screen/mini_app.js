@@ -27,6 +27,9 @@ export default class MiniAppContainer extends Component {
       this.error = true;
     }
 
+    this.defaultValue = this.miniApp.defaultValue;
+    this.compute = this.miniApp.compute;
+
     this.miniAppInput = React.cloneElement(this.miniApp.input, {
       client: this.props.client,
       onValueChanged: this._onValueChanged,
@@ -34,9 +37,9 @@ export default class MiniAppContainer extends Component {
       responsive: this.props.responsive
     });
 
-    this.compute = this.miniApp.compute;
-    this.defaultValue = this.miniApp.defaultValue;
-    let defaultResult = this.compute(this.defaultValue);
+
+
+    let defaultResult = this.compute(this.props.client.get('organisation').settings, this.defaultValue);
 
     if (!this.miniAppInput) {
       this.error = true;
@@ -61,7 +64,7 @@ export default class MiniAppContainer extends Component {
 
   _onValueChanged(value) {
     this.setState({value: value});
-    this.setState({result: this.compute(value)});
+    this.setState({result: this.compute(this.props.client.get('organisation').settings, value)});
   }
   _renderHeader() {
     /**
@@ -129,9 +132,8 @@ export default class MiniAppContainer extends Component {
         </Box>
         <FloatingButton effect={effect} method={method} position={pos}>
           <MainButton iconResting="ion-plus-round" iconActive="ion-close-round"/>
-          <ChildButton onClick={(e) => {
-              console.log(e);
-              e.preventDefault();
+          <ChildButton onClick={() => {
+              console.log('clicked');
             }
           }icon="ion-android-share-alt" label="Partager"/>
           <ChildButton icon="ion-android-archive" label="Sauvegarder"/>

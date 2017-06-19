@@ -18,8 +18,6 @@ import Header from 'grommet/components/Header';
 export default class VenteGreGreWallonie extends Component {
     constructor(props) {
         super(props);
-        this.bareme = new Bareme("J");
-
         this.state = {
             region: this.props.client.get('preferredRegion'),
             value: this.props.defaultValue

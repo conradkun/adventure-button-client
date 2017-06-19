@@ -21,7 +21,7 @@ let miniApps = [
       annexe: false,
       reductionHonoraire: 0
     },
-    compute: (value) => {
+    compute: (settings, value) => {
       const bareme = new Bareme("J");
       let honoraire = +(bareme.compute(value.prix).total).toFixed(2);
       //TODO ask for rounding problem
