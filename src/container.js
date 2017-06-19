@@ -174,7 +174,7 @@ class Container extends Component {
                      alignContent='center'
                      >
                     <Menu primary={true}>
-                        {baremeLink}
+                        {this.state.me.role !== 'admin' ? baremeLink : undefined}
                         {this.state.me.role === 'admin' && !this.props.offline ? adminLink : undefined}
                         {this.state.me.role === 'manager' && !this.props.offline ? usersLink : undefined}
                         {this.state.me.role === 'manager' && !this.props.offline ? settingsLink : undefined}

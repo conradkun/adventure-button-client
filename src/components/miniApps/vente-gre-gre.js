@@ -3,9 +3,9 @@ import React, {Component} from 'react';
 import Prix from './input/montant';
 import DroitEnregistrement from './input/droit_enregistrement';
 import Annexe from './input/annexe';
-import ReductionHonoraire from './input/reduction_honoraire';
 import PressionImmobiliere from './input/pression_immobiliere';
 import RegionSelect from './input/region_select';
+import Abattement from './input/abattement';
 
 import Title from 'grommet/components/Title'
 import Form from 'grommet/components/Form';
@@ -39,6 +39,7 @@ export default class VenteGreGreWallonie extends Component {
       return(
             <fieldset>
               <Prix
+                key='bx'
                 label="Prix de vente"
                 defaultValue={0}
                 onChange={
@@ -74,13 +75,39 @@ export default class VenteGreGreWallonie extends Component {
           )
     }
 
-    _renderBruxelle() {
-
+    _renderBruxelles() {
+      return(
+            <fieldset>
+              <Prix
+                key='wal'
+                label="Prix de vente"
+                defaultValue={0}
+                onChange={
+                  (value) => {
+                      this.setState({value: {...this.state.value, prix: value}})
+                  }
+              }
+              />
+              <Annexe onChange={
+                  (value) => {
+                      this.setState({value: {...this.state.value, annexe: value}})
+                  }
+              }/>
+              <Abattement onChange={
+                  (value) => {
+                      this.setState({value: {...this.state.value, abattement: value}})
+                  }
+              }/>
+            </fieldset>
+          )
     }
     render() {
         let content;
         if(this.state.region === 'wallonie'){
           content = this._renderWallonie();
+        }
+        else if(this.state.region === 'bruxelles'){
+          content = this._renderBruxelles();
         }
         return (
               <Form>

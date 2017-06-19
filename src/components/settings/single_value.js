@@ -21,6 +21,15 @@ export default class SingleValue extends Component {
             settings.patch(this.props.id, {
                 value: v
             })
+            //Reload the organisation settings on the client
+            const organisation = client.service('organisation');
+            const user = client.get('user');
+            organisation.get(user.organisation).then((o) => {
+              client.set('organisation', o);
+              //Save organisation to localStorage
+              let organisationParsed = JSON.stringify(o);
+              window.localStorage.setItem("organisation", organisationParsed);
+            });
           }}/>
         );
         let basis = 'full';
