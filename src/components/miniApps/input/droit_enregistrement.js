@@ -21,7 +21,7 @@ export default class DroitEnregistrement extends Component{
             <FormField label="Droit d'enregistrement">
                 <Select
                         options={this.options}
-                        value={{value: this.state.value, label: this.state.value.toString() + "%"}}
+                        value={this.state.value.toString() + "%"}
                         onChange={(o) => {
                             this.setState({value: o.value.value});
                             this.props.onChange(o.value.value);

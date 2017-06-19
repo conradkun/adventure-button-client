@@ -1,16 +1,13 @@
 import React, {Component} from 'react';
 
-import Prix from './input/prix';
+import Prix from './input/montant';
 import DroitEnregistrement from './input/droit_enregistrement';
 import Annexe from './input/annexe';
 import ReductionHonoraire from './input/reduction_honoraire';
-import Viewer from './viewer/viewer';
+import PressionImmobiliere from './input/pression_immobiliere';
 import RegionSelect from './input/region_select';
-import Bareme from '../../utils/bareme';
 
 import Title from 'grommet/components/Title'
-import Section from 'grommet/components/Section';
-import Article from 'grommet/components/Article';
 import Form from 'grommet/components/Form';
 import FormFields from 'grommet/components/FormFields';
 import Header from 'grommet/components/Header';
@@ -18,18 +15,73 @@ import Header from 'grommet/components/Header';
 export default class VenteGreGreWallonie extends Component {
     constructor(props) {
         super(props);
+        let region = this.props.client.get('preferredRegion')
         this.state = {
             region: this.props.client.get('preferredRegion'),
-            value: this.props.defaultValue
+            value: this.props.defaultValue[region]
         }
+        this.props.onValueChanged(this.state.value);
 
     }
 
     componentWillUpdate(nextProps, nextState){
-      this.props.onValueChanged(nextState.value);
+      if(nextState.region !== this.state.region){
+        this.setState({
+          value: this.props.defaultValue[nextState.region]
+        });
+        this.props.onValueChanged(this.props.defaultValue[nextState.region]);
+      }
+      else {
+        this.props.onValueChanged(nextState.value);
+      }
+    }
+    _renderWallonie() {
+      return(
+            <fieldset>
+              <Prix
+                label="Prix de vente"
+                defaultValue={0}
+                onChange={
+                  (value) => {
+                      this.setState({value: {...this.state.value, prix: value}})
+                  }
+              }
+              />
+              <DroitEnregistrement onChange={
+                  (value) => {
+                      this.setState({
+                          value: {
+                              ...this.state.value,
+                              droitEnregistrement: value
+                          }
+                      })
+                  }
+              }
+                                   options={[15, 12.5, 6, 5]} default={12.5}/>
+              <Annexe onChange={
+                  (value) => {
+                      this.setState({value: {...this.state.value, annexe: value}})
+                  }
+              }/>
+            {((this.state.value.droitEnregistrement === 6) || (this.state.value.droitEnregistrement === 5))
+              ? <PressionImmobiliere
+                onChange={
+                    (value) => {
+                        this.setState({value: {...this.state.value, pressionImmobiliere: value}})
+                      }
+              }/> : undefined}
+            </fieldset>
+          )
     }
 
+    _renderBruxelle() {
+
+    }
     render() {
+        let content;
+        if(this.state.region === 'wallonie'){
+          content = this._renderWallonie();
+        }
         return (
               <Form>
                   <Header>
@@ -38,7 +90,6 @@ export default class VenteGreGreWallonie extends Component {
                       </Title>
                   </Header>
                   <FormFields>
-                      <fieldset>
                           <RegionSelect
                             small={this.props.responsive === 'single' ? true : false}
                             client={this.props.client}
@@ -48,37 +99,7 @@ export default class VenteGreGreWallonie extends Component {
                               })
                             }}
                           />
-                          <Prix
-                            label="Prix de vente"
-                            defaultValue={0}
-                            onChange={
-                              (value) => {
-                                  this.setState({value: {...this.state.value, prix: value}})
-                              }
-                          }
-                          />
-                          <DroitEnregistrement onChange={
-                              (value) => {
-                                  this.setState({
-                                      value: {
-                                          ...this.state.value,
-                                          droitEnregistrement: value
-                                      }
-                                  })
-                              }
-                          }
-                                               options={[12.5, 12, 5, 6]} default={12}/>
-                          <Annexe onChange={
-                              (value) => {
-                                  this.setState({value: {...this.state.value, annexe: value}})
-                              }
-                          }/>
-                          <ReductionHonoraire onChange={
-                              (value) => {
-                                  this.setState({value: {...this.state.value, reductionHonoraire: value}})
-                              }
-                          }/>
-                      </fieldset>
+                        {content}
                   </FormFields>
               </Form>
 

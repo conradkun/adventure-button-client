@@ -13,7 +13,7 @@ const CLASS_ROOT = CSSClassnames.TEXT_INPUT;
 const INPUT = CSSClassnames.INPUT;
 
 
-export default class PriceInput extends Component {
+export default class MontantInput extends Component {
     constructor(props) {
         super(props);
         this.state = {
