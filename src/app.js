@@ -55,7 +55,12 @@ class App extends Component {
         return client.service('users').get(payload.userId);
       }).then(user => {
         client.set('user', user);
-        client.set('preferredRegion', window.localStorage.getItem('preferredRegion'));
+        let preferredRegion = window.localStorage.getItem('preferredRegion');
+        if(!preferredRegion){
+          //DEFAULT PREFERRED REGION
+          preferredRegion = "wallonie";
+        }
+        client.set('preferredRegion',preferredRegion);
         //Save user to localStorage
         let userParsed = JSON.stringify(user);
         window.localStorage.setItem("user", userParsed);
