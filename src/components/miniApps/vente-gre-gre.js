@@ -6,6 +6,7 @@ import Annexe from './input/annexe';
 import PressionImmobiliere from './input/pression_immobiliere';
 import RegionSelect from './input/region_select';
 import Abattement from './input/abattement';
+import AbattementSelect from './input/abattement_select';
 
 import Title from 'grommet/components/Title'
 import Form from 'grommet/components/Form';
@@ -37,9 +38,9 @@ export default class VenteGreGreWallonie extends Component {
     }
     _renderWallonie() {
       return(
-            <fieldset>
+            <fieldset key='wal'>
               <Prix
-                key='bx'
+                key='wlp'
                 label="Prix de vente"
                 defaultValue={0}
                 onChange={
@@ -48,7 +49,7 @@ export default class VenteGreGreWallonie extends Component {
                   }
               }
               />
-              <DroitEnregistrement onChange={
+            <DroitEnregistrement key='wld' onChange={
                   (value) => {
                       this.setState({
                           value: {
@@ -74,12 +75,72 @@ export default class VenteGreGreWallonie extends Component {
             </fieldset>
           )
     }
-
+    _renderFlandre() {
+      return(
+            <fieldset key='fl'>
+              <Prix
+                key='flp'
+                label="Prix de vente"
+                defaultValue={0}
+                onChange={
+                  (value) => {
+                      this.setState({value: {...this.state.value, prix: value}})
+                  }
+              }
+              />
+            <DroitEnregistrement key='fld' onChange={
+                  (value) => {
+                      this.setState({
+                          value: {
+                              ...this.state.value,
+                              droitEnregistrement: value
+                          }
+                      })
+                  }
+              }
+              options={[10, 5]} default={10}/>
+            <Annexe onChange={
+                (value) => {
+                    this.setState({value: {...this.state.value, annexe: value}})
+                }
+            }/>
+            <AbattementSelect onChange={
+              (value) => {
+                  this.setState({
+                      value: {
+                          ...this.state.value,
+                          abattement: value
+                      }
+                  })
+              }
+            }
+            options={[
+              {
+                  label: 'Pas d\'abattement',
+                  value: 0
+              },
+              {
+                  label: 'Abattement sur 15000€',
+                  value: 15000
+              },
+              {
+                  label: 'Abattement majoré',
+                  value: 25000
+              },
+              {
+                  label: 'Abattement rénovation',
+                  value: 45000
+              },
+            ]}
+            />
+            </fieldset>
+          )
+    }
     _renderBruxelles() {
       return(
-            <fieldset>
+            <fieldset key='bx'>
               <Prix
-                key='wal'
+                key='bxp'
                 label="Prix de vente"
                 defaultValue={0}
                 onChange={
@@ -97,7 +158,9 @@ export default class VenteGreGreWallonie extends Component {
                   (value) => {
                       this.setState({value: {...this.state.value, abattement: value}})
                   }
-              }/>
+              }
+                          value={175000}
+              />
             </fieldset>
           )
     }
@@ -108,6 +171,9 @@ export default class VenteGreGreWallonie extends Component {
         }
         else if(this.state.region === 'bruxelles'){
           content = this._renderBruxelles();
+        }
+        else if(this.state.region === 'flandre'){
+          content = this._renderFlandre();
         }
         return (
               <Form>

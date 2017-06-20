@@ -1,7 +1,7 @@
 // (C) Copyright 2014-2016 Hewlett Packard Enterprise Development LP
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Fade from 'react-fade';
-import { translate } from 'react-i18next';
+import {translate} from 'react-i18next';
 
 import Split from 'grommet/components/Split';
 import Sidebar from 'grommet/components/Sidebar';
@@ -25,106 +25,113 @@ import Admin from './screen/admin'
 import UsersAdmin from './screen/users_admin'
 import SettingsAdmin from './screen/settings'
 
-
-import {
-    Switch,
-    Route,
-    withRouter
-} from 'react-router-dom'
+import {Switch, Route, withRouter} from 'react-router-dom'
 import AlertContainer from 'react-alert';
-
 
 class Container extends Component {
 
-    constructor(props) {
-        super(props);
-        const { t } = props;
-        this.t = t;
-        this.alertOptions = {
-          offset: 20,
-          position: 'bottom right',
-          theme: 'dark',
-          time: 4000,
-          transition: 'scale'
-        };
+  constructor(props) {
+    super(props);
+    const {t} = props;
+    this.t = t;
+    this.alertOptions = {
+      offset: 20,
+      position: 'bottom right',
+      theme: 'dark',
+      time: 4000,
+      transition: 'scale'
+    };
 
-        this._onResponsive = this._onResponsive.bind(this);
-        this._onMenuOpen = this._onMenuOpen.bind(this);
-        this._onMenuClick = this._onMenuClick.bind(this);
-        this._logout = this._logout.bind(this);
-        this._onRequestForEditProfile = this._onRequestForEditProfile.bind(this);
-        this._onRequestForEditProfileClose = this._onRequestForEditProfileClose.bind(this);
+    this._onResponsive = this._onResponsive.bind(this);
+    this._onMenuOpen = this._onMenuOpen.bind(this);
+    this._onMenuClick = this._onMenuClick.bind(this);
+    this._logout = this._logout.bind(this);
+    this._onRequestForEditProfile = this._onRequestForEditProfile.bind(this);
+    this._onRequestForEditProfileClose = this._onRequestForEditProfileClose.bind(this);
 
-        this.state = {
-            editProfile: false,
-            isLoading: true,
-            showMenu: true, responsive: 'multiple',
-            searchString: '',
-            me: props.client.get('user')
-        }
-    }
-    _logout(){
-      const client = this.props.client;
-      client.logout();
-      //Now we have to destroy the localStorage items
-      window.localStorage.removeItem('user');
-      window.localStorage.removeItem('organisation');
-      this.props.history.push('/');
-    }
+    /**
+        * Listen to Settings:Patched
+        **/
+    const client = this.props.client;
+    const settings = client.service('settings');
+    const organisation = client.service('organisation');
+    settings.on('patched', () => {
+      //We need to reload the organisation and change the settings
+      organisation.get(client.get('user').organisation).then((o) => {
+        client.set('organisation', o);
+        //Save organisation to localStorage
+        let organisationParsed = JSON.stringify(o);
+        window.localStorage.setItem("organisation", organisationParsed);
+      });
+    });
 
-    _onResponsive (responsive) {
-        this.setState({responsive: responsive});
-        if ('multiple' === responsive) {
-            this.setState({showMenu: true});
-        }
-        if ('single' === responsive) {
-            this.setState({showMenu: false});
-        }
+    this.state = {
+      editProfile: false,
+      isLoading: true,
+      showMenu: true,
+      responsive: 'multiple',
+      searchString: '',
+      me: props.client.get('user')
     }
-    _onRequestForEditProfile() {
-      this.setState({
-        editProfile: true
-      })
-    }
-    _onRequestForEditProfileClose() {
-      this.setState({
-        editProfile: false
-      })
-    }
-    _onMenuOpen () {
-        this.setState({showMenu: true});
-    }
+  }
+  _logout() {
+    const client = this.props.client;
+    client.logout();
+    //Now we have to destroy the localStorage items
+    window.localStorage.removeItem('user');
+    window.localStorage.removeItem('organisation');
+    this.props.history.push('/');
+  }
 
-    _onMenuClick () {
-        if ('single' === this.state.responsive) {
-            this.setState({showMenu: false});
-        }
+  _onResponsive(responsive) {
+    this.setState({responsive: responsive});
+    if ('multiple' === responsive) {
+      this.setState({showMenu: true});
     }
-
-    _renderTitle () {
-        return (
-
-          <Box align='center' direction='row' responsive={false}>
-                <Logo multiplier={0.1} margin="40px" color="#FFF"/>
-                <Title pad='small' responsive={true}>Baremio</Title>
-          </Box>
-        );
+    if ('single' === responsive) {
+      this.setState({showMenu: false});
     }
+  }
+  _onRequestForEditProfile() {
+    this.setState({editProfile: true})
+  }
+  _onRequestForEditProfileClose() {
+    this.setState({editProfile: false})
+  }
+  _onMenuOpen() {
+    this.setState({showMenu: true});
+  }
 
-    _renderAppLogo () {
-      return (
-          <Title pad='small' responsive={false}>
-                  <Box align='center' direction='row'>
-                      <Logo multiplier={0.1} margin="40px" color="#FFF"/>
-                  </Box>
-          </Title>
-      );
+  _onMenuClick() {
+    if ('single' === this.state.responsive) {
+      this.setState({showMenu: false});
     }
+  }
 
-    _renderNav () {
-        const title = this._renderTitle(true);
-        let closer;
-        /**
+  _renderTitle() {
+    return (
+
+      <Box align='center' direction='row' responsive={false}>
+        <Logo multiplier={0.1} margin="40px" color="#FFF"/>
+        <Title pad='small' responsive={true}>Baremio</Title>
+      </Box>
+    );
+  }
+
+  _renderAppLogo() {
+    return (
+      <Title pad='small' responsive={false}>
+        <Box align='center' direction='row'>
+          <Logo multiplier={0.1} margin="40px" color="#FFF"/>
+        </Box>
+      </Title>
+    );
+  }
+
+  _renderNav() {
+    const title = this._renderTitle(true);
+    let closer;
+    /**
          * When grommet will be updated
          let baremeLink = (
          <Anchor path={{ path: '/app', index: true }} onClick={this._onMenuClick}>
@@ -132,118 +139,127 @@ class Container extends Component {
          </Anchor>
          );
          **/
-        let baremeLink = (
-            <Anchor path="/app" onClick={this._onMenuClick}>
-                {this.t('navLinkCalculator')}
-            </Anchor>
-        );
-        let settingsLink;
-        let usersLink;
-        let adminLink;
-        if ('single' === this.state.responsive) {
-            closer = (
-                <Button icon={<CloseIcon />} onClick={this._onMenuClick}/>
-            );
-        }
-
-        adminLink = (
-            <Anchor path="/app/admin" onClick={this._onMenuClick}>
-                {this.t('navLinkAdmin')}
-            </Anchor>);
-
-        usersLink = (
-            <Anchor path='/app/users' onClick={this._onMenuClick}>
-                {this.t('navLinkUsers')}
-            </Anchor>
-        );
-        settingsLink = (
-            <Anchor path='/app/settings' onClick={this._onMenuClick}>
-                {this.t('navLinkSettings')}
-            </Anchor>
-        );
-        return (
-            <Sidebar ref='sidebar' size='small' separator='right' colorIndex={AppSettings.mainColor}
-                     fixed={true}>
-                <Header justify='between' size='large' pad={{horizontal: 'medium'}}>
-                    {title}
-                    {closer}
-                </Header>
-                <Box flex='grow'
-                     justify='start'
-                     align='center'
-                     alignContent='center'
-                     >
-                    <Menu primary={true}>
-                        {this.state.me.role !== 'admin' ? baremeLink : undefined}
-                        {this.state.me.role === 'admin' && !this.props.offline ? adminLink : undefined}
-                        {this.state.me.role === 'manager' && !this.props.offline ? usersLink : undefined}
-                        {this.state.me.role === 'manager' && !this.props.offline ? settingsLink : undefined}
-                    </Menu>
-                </Box>
-                <Footer pad='medium'>
-                  <Menu icon={<User />}
-                      dropAlign={{"bottom": "bottom"}}>
-                    <Anchor onClick={this._logout}>
-                        {this.t('navUserMenuLogout')}
-                    </Anchor>
-                    <Anchor onClick={this._onRequestForEditProfile}>
-                        {this.t('navUserMenuMyProfile')}
-                    </Anchor>
-                    <Anchor href='#'>
-                        {this.t('navUserMenuHelp')}
-                    </Anchor>
-                  </Menu>
-                </Footer>
-            </Sidebar>
-        );
-
-
+    let baremeLink = (
+      <Anchor path="/app" onClick={this._onMenuClick}>
+        {this.t('navLinkCalculator')}
+      </Anchor>
+    );
+    let settingsLink;
+    let usersLink;
+    let adminLink;
+    if ('single' === this.state.responsive) {
+      closer = (
+        <Button icon={< CloseIcon />} onClick={this._onMenuClick}/>
+      );
     }
 
-    render () {
-        let routeProps = {
-            responsive:this.state.responsive,
-            onMenuOpen: this._onMenuOpen,
-            onLogout: this._logout,
-            client: this.props.client,
-            renderAppLogo: this._renderAppLogo,
-            msg: this.msg
-        };
-        let fadeDuration = 0.5;
-        if(this.state.responsive === 'single'){
-          fadeDuration = 0;
-        }
-        let priority = ('single' === this.state.responsive && this.state.showMenu ?
-            'left' : 'right');
+    adminLink = (
+      <Anchor path="/app/admin" onClick={this._onMenuClick}>
+        {this.t('navLinkAdmin')}
+      </Anchor>
+    );
 
-        const FadingRoute = ({ component: Component, ...rest }) => (
-            <Route {...rest} render={matchProps => (
-                <Fade duration={fadeDuration}>
-                    <Component {...matchProps} {...routeProps}/>
-                </Fade>
-            )}/>
-        );
-        let modal;
-        if(this.state.editProfile){
-          modal = <EditProfileModal offline={this.props.offline} client={this.props.client} msg={this.msg} onClose={this._onRequestForEditProfileClose} onSubmit={this._onRequestForEditProfileClose}/>
-        }
-        return (
-                  <Split flex='right' priority={priority} fixed={true}
-                    onResponsive={this._onResponsive}>
-                      {this._renderNav()}
-                      <div>
-                        <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
-                        <Switch>
-                            <FadingRoute exact path='/app' component={miniAppList} />
-                            <FadingRoute path="/app/b/:miniAppCode" component={MiniAppContainer}/>
-                            <FadingRoute path="/app/admin" component={Admin}/>
-                            <FadingRoute path="/app/users" component={UsersAdmin}/>
-                            <FadingRoute path="/app/settings" component={SettingsAdmin}/>
-                        </Switch>
-                        {modal}
-                      </div>
-                    </Split>
-              );
-        }
+    usersLink = (
+      <Anchor path='/app/users' onClick={this._onMenuClick}>
+        {this.t('navLinkUsers')}
+      </Anchor>
+    );
+    settingsLink = (
+      <Anchor path='/app/settings' onClick={this._onMenuClick}>
+        {this.t('navLinkSettings')}
+      </Anchor>
+    );
+    return (
+      <Sidebar ref='sidebar' size='small' separator='right' colorIndex={AppSettings.mainColor} fixed={true}>
+        <Header justify='between' size='large' pad={{
+          horizontal: 'medium'
+        }}>
+          {title}
+          {closer}
+        </Header>
+        <Box flex='grow' justify='start' align='center' alignContent='center'>
+          <Menu primary={true}>
+            {this.state.me.role !== 'admin'
+              ? baremeLink
+              : undefined}
+            {this.state.me.role === 'admin' && !this.props.offline
+              ? adminLink
+              : undefined}
+            {this.state.me.role === 'manager' && !this.props.offline
+              ? usersLink
+              : undefined}
+            {this.state.me.role === 'manager' && !this.props.offline
+              ? settingsLink
+              : undefined}
+          </Menu>
+        </Box>
+        <Footer pad='medium'>
+          <Menu icon={< User />} dropAlign={{
+            "bottom": "bottom"
+          }}>
+            <Anchor onClick={this._logout}>
+              {this.t('navUserMenuLogout')}
+            </Anchor>
+            <Anchor onClick={this._onRequestForEditProfile}>
+              {this.t('navUserMenuMyProfile')}
+            </Anchor>
+            <Anchor href='#'>
+              {this.t('navUserMenuHelp')}
+            </Anchor>
+          </Menu>
+        </Footer>
+      </Sidebar>
+    );
+
+  }
+
+  render() {
+    let routeProps = {
+      responsive: this.state.responsive,
+      onMenuOpen: this._onMenuOpen,
+      onLogout: this._logout,
+      client: this.props.client,
+      renderAppLogo: this._renderAppLogo,
+      msg: this.msg
+    };
+    let fadeDuration = 0.5;
+    if (this.state.responsive === 'single') {
+      fadeDuration = 0;
+    }
+    let priority = ('single' === this.state.responsive && this.state.showMenu
+      ? 'left'
+      : 'right');
+
+    const FadingRoute = ({
+      component: Component,
+      ...rest
+    }) => (
+      <Route {...rest} render={matchProps => (
+        <Fade duration={fadeDuration}>
+          <Component {...matchProps} {...routeProps}/>
+        </Fade>
+      )}/>
+    );
+    let modal;
+    if (this.state.editProfile) {
+      modal = <EditProfileModal offline={this.props.offline} client={this.props.client} msg={this.msg} onClose={this._onRequestForEditProfileClose} onSubmit={this._onRequestForEditProfileClose}/>
+    }
+    return (
+      <Split flex='right' priority={priority} fixed={true} onResponsive={this._onResponsive}>
+        {this._renderNav()}
+        <div>
+          <AlertContainer ref={a => this.msg = a} {...this.alertOptions}/>
+          <Switch>
+            <FadingRoute exact path='/app' component={miniAppList}/>
+            <FadingRoute path="/app/b/:miniAppCode" component={MiniAppContainer}/>
+            <FadingRoute path="/app/admin" component={Admin}/>
+            <FadingRoute path="/app/users" component={UsersAdmin}/>
+            <FadingRoute path="/app/settings" component={SettingsAdmin}/>
+          </Switch>
+          {modal}
+        </div>
+      </Split>
+    );
+  }
 }
 export default translate()(withRouter(Container));

@@ -27,7 +27,7 @@ class App extends Component {
     if (window.navigator.onLine) {
       this.connectToBackend(client);
     }
-
+    
     this.state = {
       isLoading: true,
       client: client,

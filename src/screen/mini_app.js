@@ -21,7 +21,6 @@ export default class MiniAppContainer extends Component {
     super(props);
     this.error = false
     this._onValueChanged = this._onValueChanged.bind(this);
-
     this.miniApp = this._getMiniApp(this.props.match.params.miniAppCode);
     if (!this.miniApp) {
       this.error = true;

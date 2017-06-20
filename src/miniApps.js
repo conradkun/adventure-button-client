@@ -28,6 +28,13 @@ let miniApps = [
       pressionImmobiliere: 0,
 
 
+      flandre:{
+        region: 'flandre',
+        prix: 0,
+        droitEnregistrement: 10,
+        annexe: false,
+        abattement: 0
+      },
 
       wallonie:{
         region: 'wallonie',
@@ -41,7 +48,7 @@ let miniApps = [
         region: 'bruxelles',
         prix: 0,
         annexe: false,
-        abattement: false
+        abattement: 0
       }
 
     },
@@ -162,10 +169,82 @@ let miniApps = [
             #Abattement (175 000€)
         \*------------------------------------*/
         if(value.abattement){
-          droitEnregistrement = (12.5 / 100) * (value.prix - 175000);
+          droitEnregistrement = (12.5 / 100) * (value.prix - value.abattement);
         }
         else {
           droitEnregistrement = (12.5 / 100) * (value.prix);
+        }
+
+        /*------------------------------------*\
+            #Montant minimum
+        \*------------------------------------*/
+        if (droitEnregistrement < 50) {
+          droitEnregistrement = 50;
+        }
+
+        if (value.annexe) {
+          droitEnregistrement += 50;
+        }
+
+        let droitEcriture = 50;
+
+        let eRegistration = 45;
+
+        let fraisDivers = getSetting('frais_divers_vente_gre_a_gre', settings);
+
+        let tva = +((0.21) * (honoraire + droitEcriture + fraisDivers + eRegistration)).toFixed(2);
+
+
+
+        let transcription = 220;
+
+        var result = [
+            {
+            label: 'Droit d\'enregistrement',
+            value: droitEnregistrement
+            },
+            {
+              label: 'Honoraire',
+              value: honoraire
+            },
+            {
+              label: 'Droits d\'écriture',
+              value: droitEcriture
+            },
+            {
+              label: 'E-registration',
+              value: eRegistration
+            },
+            {
+              label: 'Frais divers',
+              value: fraisDivers
+            },
+            {
+              label: 'Transcription',
+              value: transcription
+            },
+            {
+              label: 'TVA',
+              value: tva
+            },
+        ];
+        return result;
+      }
+      if(value.region === 'flandre') {
+        if (honoraire < 7.5) {
+          honoraire = 7.5
+        }
+
+        let droitEnregistrement = 0;
+
+        /*------------------------------------*\
+            #Abattement (Au choix)
+        \*------------------------------------*/
+        if(value.abattement){
+          droitEnregistrement = (value.droitEnregistrement / 100) * (value.prix - value.abattement);
+        }
+        else {
+          droitEnregistrement = (value.droitEnregistrement / 100) * (value.prix);
         }
 
         /*------------------------------------*\
