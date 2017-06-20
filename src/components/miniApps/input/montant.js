@@ -32,7 +32,7 @@ export default class MontantInput extends Component {
         );
         return (
                 <FormField label={this.props.label} error={this.state.error}>
-                    <NumberFormat className={classes} value={this.state.value} thousandSeparator='.' decimalSeparator='.'
+                    <NumberFormat className={classes} value={this.state.value || this.props.value || this.props.defaultValue} thousandSeparator='.' decimalSeparator='.'
                                   suffix={'€'}
                                   onChange={(e, value) => {
                                       if(parseFloat(value.replace(',', '.')) >= 0){

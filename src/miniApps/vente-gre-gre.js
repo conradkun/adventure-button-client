@@ -99,9 +99,9 @@ const miniApp =
           droitEnregistrement += 50;
         }
 
-        let droitEcriture = getSetting('droit_ecriture', settings);;
+        let droitEcriture = getSetting('droit_ecriture', settings);
 
-        let eRegistration = getSetting('e_registration', settings);;
+        let eRegistration = getSetting('e_registration', settings);
 
         let fraisDivers = getSetting('frais_divers_vente_gre_a_gre', settings);
 
@@ -114,7 +114,7 @@ const miniApp =
 
         var result = [
             {
-              label: 'Droit d\'enregistrement',
+              label: 'Droits d\'enregistrement',
               value: droitEnregistrement,
               etat: true
             },
@@ -157,7 +157,7 @@ const miniApp =
         \*------------------------------------*/
         if (value.droitEnregistrement === 5) {
           result.push({
-            label: 'Reduction d\'honoraire',
+            label: 'Réduction d\'honoraire',
             value: -(250 * (1 + tauxTva)),
             etat: false
           });
@@ -194,9 +194,9 @@ const miniApp =
         droitEnregistrement += 50;
       }
 
-      let droitEcriture = 50;
+      let droitEcriture = getSetting('droit_ecriture', settings);
 
-      let eRegistration = 45;
+      let eRegistration = getSetting('e_registration', settings);
 
       let fraisDivers = getSetting('frais_divers_vente_gre_a_gre', settings);
 
@@ -204,11 +204,11 @@ const miniApp =
 
 
 
-      let transcription = 220;
+      let transcription = getSetting('transcription', settings);
 
       var result = [
           {
-            label: 'Droit d\'enregistrement',
+            label: 'Droits d\'enregistrement',
             value: droitEnregistrement,
             etat: true
           },
@@ -275,9 +275,9 @@ const miniApp =
         droitEnregistrement += 50;
       }
 
-      let droitEcriture = 50;
+      let droitEcriture = getSetting('droit_ecriture', settings);
 
-      let eRegistration = 45;
+      let eRegistration = getSetting('e_registration', settings);
 
       let fraisDivers = getSetting('frais_divers_vente_gre_a_gre', settings);
 
@@ -285,11 +285,11 @@ const miniApp =
 
 
 
-      let transcription = 220;
+      let transcription = getSetting('transcription', settings);
 
       var result = [
           {
-            label: 'Droit d\'enregistrement',
+            label: 'Droits d\'enregistrement',
             value: droitEnregistrement,
             etat: true
           },

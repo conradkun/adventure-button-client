@@ -141,7 +141,7 @@ class AnnotatedMeter extends Component {
         }
 
         return (
-            <Box align='start'>
+            <Box alignSelf='center'>
                 <Box>
                     {top}
                     {middle}

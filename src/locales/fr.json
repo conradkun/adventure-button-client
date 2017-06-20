@@ -36,13 +36,18 @@
     "Frais et Honoraires de l'Etude" : "Frais et Honoraires de l'Etude",
     "Provision": "Provision",
 
-    "Droit d'enregistrement": "Droit d'enregistrement",
+    "Droits d'enregistrement": "Droits d'enregistrement",
     "Honoraire" : "Honoraire",
     "Droits d'écriture" : "Droits d'écriture",
+    "Droits d'inscription" : "Droits d'inscription",
     "E-registration" : "E-registration",
     "Frais divers" : "Frais divers",
     "Transcription" : "Transcription",
     "TVA" : "TVA",
-    "Total" : "Total"
+    "Total" : "Total",
+    "Réduction d'honoraire" : "Réduction d'honoraire",
+    "Provision pour salaire de radiation" : "Provision pour salaire de radiation",
+    "Provision pour salaire du conservateur" : "Provision pour salaire du conservateur"
+
   }
 }
