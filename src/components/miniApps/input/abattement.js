@@ -4,9 +4,6 @@ import CheckBox from 'grommet/components/CheckBox';
 import AppSettings from '../../../utils/app_settings';
 
 export default class Annexe extends Component{
-    constructor(props){
-        super(props);
-    }
     render(){
         return (
             <FormField label="Abattement">

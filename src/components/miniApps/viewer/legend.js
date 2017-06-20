@@ -1,4 +1,3 @@
-
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import currencyFormatter from 'currency-formatter';
@@ -7,6 +6,7 @@ import List from 'grommet/components/List';
 import ListItem from 'grommet/components/ListItem';
 import CSSClassnames from 'grommet/utils/CSSClassnames';
 import Announcer from 'grommet/utils/Announcer';
+import {translate} from 'react-i18next';
 
 import AppSettings from '../../../utils/app_settings'
 const CLASS_ROOT = CSSClassnames.LEGEND;
@@ -25,11 +25,12 @@ function getMaxDecimalDigits(series) {
     return Math.pow(10, maxDigits);
 }
 
-export default class Legend extends Component {
+class Legend extends Component {
 
     constructor(props, context) {
         super(props, context);
 
+        this.t = props.t;
         this._onActive = this._onActive.bind(this);
         this._renderSeries = this._renderSeries.bind(this);
         this._renderSwatch = this._renderSwatch.bind(this);
@@ -206,7 +207,7 @@ export default class Legend extends Component {
             <ListItem className={`${CLASS_ROOT}__total`}
                       justify='between' separator='none' pad={{ horizontal: 'small' }}>
         <span className={`${CLASS_ROOT}__total-label`}>
-          <FormattedMessage id="Total" defaultMessage="Total" />
+          <FormattedMessage id="Total" defaultMessage={this.t('Total')} />
         </span>
                 <span className={`${CLASS_ROOT}__total-value`}>
                     {currencyFormatter.format(totalValue, AppSettings.currencyOptionFormater)}
@@ -247,6 +248,8 @@ export default class Legend extends Component {
     }
 
 }
+
+export default translate()(Legend);
 
 Legend.defaultProps = {
     announce: false

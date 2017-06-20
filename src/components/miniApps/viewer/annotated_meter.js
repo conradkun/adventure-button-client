@@ -13,7 +13,7 @@ import Value from 'grommet/components/Value';
 import Legend from './legend';
 import ListItem from 'grommet/components/ListItem';
 import FormattedMessage from 'grommet/components/FormattedMessage';
-
+import {translate} from 'react-i18next';
 const CLASS_ROOT = 'grommetux-legend';
 
 function getMaxDecimalDigits(series){
@@ -29,12 +29,13 @@ function getMaxDecimalDigits(series){
     return Math.pow(10, maxDigits);
 }
 
-export default class AnnotatedMeter extends Component {
+class AnnotatedMeter extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this._onActive = this._onActive.bind(this);
         this._seriesTotal = this._seriesTotal.bind(this);
+        this.t = props.t;
         this.state = {};
     }
 
@@ -83,7 +84,7 @@ export default class AnnotatedMeter extends Component {
             }
             value = parseFloat(Math.round(value * 100) / 100).toFixed(2);
             value = currencyFormatter.format(value, AppSettings.currencyOptionFormater);
-            label = <FormattedMessage id='Total' defaultMessage='Provision'/>;
+            label = <FormattedMessage id='Total' defaultMessage={this.t('Provision')}/>;
         }
 
         let top, middle, bottom, alignLegend;
@@ -167,3 +168,5 @@ AnnotatedMeter.propTypes = {
     type: PropTypes.oneOf(['bar', 'circle']).isRequired,
     units: PropTypes.string
 };
+
+export default translate()(AnnotatedMeter);

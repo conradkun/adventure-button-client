@@ -29,6 +29,20 @@
     "containerProfileModalChangePasswordSuccess": "Votre mot de passe a été modifié",
     "containerProfileModalErrorPasswordTooShort": "Ce mot de passe est trop court",
     "containerProfileModalErrorPasswordMismatch": "Le mot de passe ne correspont pas",
-    "containerProfileModalErrorCheckPasswordConfirm": "Vérifier le champ de confirmation"
+    "containerProfileModalErrorCheckPasswordConfirm": "Vérifier le champ de confirmation",
+
+
+    "Frais et Taxes Administrative" : "Frais et Taxes Administrative",
+    "Frais et Honoraires de l'Etude" : "Frais et Honoraires de l'Etude",
+    "Provision": "Provision",
+
+    "Droit d'enregistrement": "Droit d'enregistrement",
+    "Honoraire" : "Honoraire",
+    "Droits d'écriture" : "Droits d'écriture",
+    "E-registration" : "E-registration",
+    "Frais divers" : "Frais divers",
+    "Transcription" : "Transcription",
+    "TVA" : "TVA",
+    "Total" : "Total"
   }
 }
