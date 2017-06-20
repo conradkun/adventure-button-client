@@ -26,7 +26,7 @@ class Viewer extends Component{
         let seriesMeter = [
           {
             colorIndex : 'neutral-1',
-            label: this.t('Frais et Taxes Administrative'),
+            label: this.t('Frais et Taxes Administratives'),
             value: sumEtat
           },
           {

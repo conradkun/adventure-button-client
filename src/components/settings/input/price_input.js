@@ -13,7 +13,7 @@ export default class PriceInput extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: this.props.defaultValue,
+            value: this.props.defaultValue.toString().replace('.', ','),
             error: undefined
         }
     }
