@@ -1,5 +1,5 @@
 import React from 'react';
-import VenteGreGre from '../components/miniApps/vente-gre-gre'
+import VenteGreGre from '../components/miniApps/vente_gre_gre'
 import Bareme from '../utils/bareme';
 
 function getSetting(shortcode, settings){

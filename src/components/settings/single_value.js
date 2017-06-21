@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Card from 'grommet/components/Card';
 import Box from 'grommet/components/Box';
 import AppSettings from '../../utils/app_settings';
 import Title from 'grommet/components/Title'
@@ -32,28 +33,20 @@ export default class SingleValue extends Component {
             });
           }}/>
         );
-        let basis = 'full';
-        let margin = {
-          top: 'large'
-        }
-        if(this.props.responsive === 'single'){
-          margin = {
-            ...margin,
-            horizontal: 'large'
-          }
-        }
+        let direction = this.props.responsive === 'single' ? 'column' : 'row';
+        let header = (
+          <Box direction={direction} justify='between'>
+            <Title>{this.props.name}</Title>
+            {content}
+          </Box>
+        )
         return (
-                <Box
-                  justify="between" pad="medium" direction='row'
-                  className="drop-shadow"
-                  align='center'
-                  colorIndex={AppSettings.cardColor}
-                  basis = {basis}
-                  margin={margin}
+                <Card
+                  margin={{
+                    top: 'large'
+                  }} responsive={false} className="drop-shadow" basis="full" colorIndex="light-1" key={this.props.email} heading={header}
                 >
-                <Title>{this.props.name}</Title>
-                {content}
-              </Box>
+              </Card>
         )
     }
 }
