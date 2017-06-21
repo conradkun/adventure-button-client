@@ -2395,11 +2395,11 @@ img[height] {
     flex-basis: 192px; } }
 
 .grommetux-card--selectable:hover > div {
-  background-color: #EBEBEB;
+  background-color: #FFF;
   color: #000;
   cursor: pointer; }
   .grommetux-card--selectable:hover > div .grommetux-card__content .grommetux-paragraph::after {
-    background: linear-gradient(to right, transparent, #EBEBEB 50%); }
+    background: linear-gradient(to right, transparent, #FFF 50%); }
 
 @-webkit-keyframes carousel-reveal {
   0% {
@@ -10865,3 +10865,16 @@ html {
   width: 0;
   border: none;
   padding: 0 24px; }
+
+.better_card {
+  filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.2));
+  border-radius: 12px; }
+  .better_card > div {
+    transition: all .2s ease-in-out; }
+  .better_card:hover > div {
+    transform: scale(1.04);
+    filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.2));
+    border-radius: 12px;
+    background-color: #FFF;
+    color: #000;
+    cursor: pointer; }

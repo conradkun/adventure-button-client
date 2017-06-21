@@ -50,14 +50,13 @@ class miniAppList extends Component{
                               basis={basis}
                               responsive={false}
                               key={type.name}
-                              className="drop-shadow"
+                              className="better_card"
                               heading={type.name}
                               colorIndex={AppSettings.cardColor}
-                              link={<Anchor onClick={() => {
-                                  this.props.history.push(link);
+                              onClick={()=>{
+                                this.props.history.push(link);
                               }}
-                                            icon={<LinkNext />}
-                                            label='Go'/>}/>
+                              />
 
                 );
             }
