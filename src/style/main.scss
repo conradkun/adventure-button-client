@@ -118,3 +118,14 @@ html{
     }
   }
 }
+
+.grommet_price_input {
+  display: inline-block;
+  -ms-flex: 1 1 0%;
+  flex: 1 1 0%;
+  -ms-flex-preferred-size: inherit;
+  flex-basis: inherit;
+  width: 0;
+  border: none;
+  padding: 0 24px;
+}
