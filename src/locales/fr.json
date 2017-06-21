@@ -46,8 +46,8 @@
     "TVA" : "TVA",
     "Total" : "Total",
     "Réduction d'honoraire" : "Réduction d'honoraire",
-    "Provision pour salaire de radiation" : "Provision pour salaire de radiation",
-    "Provision pour salaire du conservateur" : "Provision pour salaire du conservateur"
+    "Salaire de radiation" : "Salaire de radiation",
+    "Salaire du conservateur" : "Salaire du conservateur"
 
   }
 }

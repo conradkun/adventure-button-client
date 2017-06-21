@@ -9,7 +9,7 @@ export default class Annexe extends Component{
     }
     render(){
         return (
-            <FormField label="Annexes">
+            <FormField>
                 <CheckBox
                     label="Une annexe ou plus"
                     defaultValue={0}

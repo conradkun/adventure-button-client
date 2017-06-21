@@ -46,10 +46,12 @@ const miniApp =
 
     let tva = +((tauxTva) * (honoraire + droitEcriture + fraisDivers + eRegistration)).toFixed(2);
 
-    /**
-    Attention : pas bon 
-    **/
-    let salaireConservateur = 270;
+
+    var salaireConservateur = 210;
+
+    if(value.inscription > 300000) {
+      salaireConservateur = 900;
+    }
 
     var result = [
         {
@@ -74,7 +76,7 @@ const miniApp =
           etat: false
         },
         {
-          label: 'Provision pour salaire du conservateur',
+          label: 'Salaire du conservateur',
           value: salaireConservateur,
           etat: true,
         },

@@ -1,5 +1,5 @@
 import React from 'react';
-import MainLevee from '../components/miniApps/mainlevee';
+import Pret from '../components/miniApps/pret';
 import Bareme from '../utils/bareme';
 
 function getSetting(shortcode, settings){
@@ -10,38 +10,53 @@ function getSetting(shortcode, settings){
     }
   })
   if(!setting){
-    console.error("This setting does not exist: " + shortcode);
+    console.error("Nonexistent Setting");
+    return 0;
   }
   return setting.value;
 }
 const miniApp =
 {
-  code: 'mainlevee',
-  name: 'Mainlevée',
-  input: <MainLevee/>,
+  code: 'pret',
+  name: 'Prêt',
+  input: <Pret/>,
   defaultValue: {
-    inscription: 0,
+    pret: 0,
+    droitEnregistrement: 1,
+    reductionHonoraire: false,
     annexe: false
   },
   compute: (settings, value) => {
-    const bareme = new Bareme("B");
+    const bareme = new Bareme("F");
     const tauxTva = 0.21
-    let honoraire = bareme.compute(value.inscription).total;
+    let honoraire = bareme.compute(value.pret).total;
+    if(value.reductionHonoraire){
+      honoraire = honoraire / 2;
+    }
     if (honoraire < 7.5) {
       honoraire = 7.5
     }
-    let droitEnregistrement = 75;
+    let droitEnregistrement = (value.droitEnregistrement / 100 * value.pret);
+
     if (value.annexe) {
       droitEnregistrement += 100;
     }
 
+    let droitInscription = (0.003 * value.pret);
+
     let eRegistration = getSetting('e_registration', settings);
 
-    let fraisDivers = getSetting('frais_divers_mainlevee', settings);
+    let fraisDivers = getSetting('frais_divers_credit', settings);
 
-    let tva = +((tauxTva) * (honoraire + fraisDivers + eRegistration)).toFixed(2);
+    let droitEcriture = getSetting('droit_ecriture', settings);
 
-    let salaireRadiation = 270;
+    let tva = +((tauxTva) * (honoraire + droitEcriture + fraisDivers + eRegistration)).toFixed(2);
+
+    var salaireConservateur = 210;
+
+    if(value.pret > 300000) {
+      salaireConservateur = 900;
+    }
 
     var result = [
         {
@@ -66,8 +81,18 @@ const miniApp =
           etat: false
         },
         {
-          label: 'Salaire de radiation',
-          value: salaireRadiation,
+          label: 'Droits d\'inscription',
+          value: droitInscription,
+          etat: true
+        },
+        {
+          label: 'Droits d\'écriture',
+          value: droitEcriture,
+          etat: true
+        },
+        {
+          label: 'Salaire du conservateur',
+          value: salaireConservateur,
           etat: true,
         },
         {
