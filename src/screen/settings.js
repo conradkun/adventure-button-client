@@ -56,19 +56,27 @@ class Settings extends Component {
       return new Date(a.createdAt) < new Date(b.createdAt);
     }
 
-    _compareWithCategorie(a, b) {
+    _compareWithCategorieAndName(a, b) {
       var categorieA = a.categorie.toLowerCase(),
       categorieB = b.categorie.toLowerCase();
       if (categorieA < categorieB) //sort string ascending
         return -1;
       if (categorieA > categorieB)
         return 1;
-      return 0; //default return value (no sorting)
+      //Same categorie
+      var nameA = a.name.toLowerCase(),
+      nameB = b.name.toLowerCase();
+      if (nameA < nameB) //sort string ascending
+        return -1;
+      if (nameA > nameB)
+        return 1;
+      //Same name
+      return 0;
     }
     _renderContent() {
       let lastcategorie = null;
       let rows = [];
-      this.state.settings.filter(this._search).sort(this._compareWithCategorie).forEach((setting) => {
+      this.state.settings.filter(this._search).sort(this._compareWithCategorieAndName).forEach((setting) => {
           if (setting.categorie !== lastcategorie) {
             rows.push(<SettingsCategorie categorie={setting.categorie} key={setting.categorie} />);
           }

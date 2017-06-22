@@ -1,5 +1,5 @@
 import React from 'react';
-import MandatHypothecaire from '../components/miniApps/mandat_hypothecaire';
+import Cession from '../components/miniApps/cession';
 import Bareme from '../utils/bareme';
 
 function getSetting(shortcode, settings){
@@ -16,42 +16,38 @@ function getSetting(shortcode, settings){
 }
 const miniApp =
 {
-  code: 'mandat_hypothecaire',
-  name: 'Mandat Hypothécaire',
-  input: <MandatHypothecaire/>,
+  code: 'cession',
+  name: 'Cession',
+  input: <Cession/>,
   defaultValue: {
-    montant: 0,
+    valeur: 0,
+    valeurDroitEnregistrement: 0,
     annexe: false,
-    operationComplementaire: 0,
+    flandre: false
   },
   compute: (settings, value) => {
-    const bareme = new Bareme("G");
+    console.log(value);
+    const bareme = new Bareme("J");
     const tauxTva = 0.21
-    let honoraire = bareme.compute(value.montant).total / 4;
+    let honoraire = bareme.compute(value.valeur).total;
     if (honoraire < 7.5) {
       honoraire = 7.5
     }
-    let droitEnregistrement = 50;
+    let droitEnregistrement = value.flandre ? (0.025 * value.valeurDroitEnregistrement) : (0.01 * value.valeurDroitEnregistrement);
+
     if (value.annexe) {
       droitEnregistrement += 100;
     }
 
     let eRegistration = getSetting('e_registration', settings);
 
+    let fraisDivers = getSetting('frais_divers_cession', settings);
+
     let droitEcriture = getSetting('droit_ecriture', settings);
 
-    let fraisDivers = getSetting('frais_divers_mandat_hypothecaire', settings);
+    let tva = +((tauxTva) * (honoraire + droitEcriture + fraisDivers + eRegistration)).toFixed(2);
 
-    if(value.operationComplementaire){
-      if(value.operationComplementaire === 1){
-        fraisDivers = getSetting('frais_divers_mandat_hypothecaire_complementaire_2', settings);
-      }
-      else if(value.operationComplementaire === 2){
-        fraisDivers = getSetting('frais_divers_mandat_hypothecaire_complementaire_3', settings);
-      }
-    }
-
-    let tva = +((tauxTva) * (honoraire + fraisDivers + droitEcriture +eRegistration)).toFixed(2);
+    let transcription = 220;
 
     var result = [
         {
@@ -65,11 +61,6 @@ const miniApp =
           etat: false
         },
         {
-          label: 'Droits d\'écriture',
-          value: droitEcriture,
-          etat: true
-        },
-        {
           label: 'E-registration',
           value: eRegistration,
           etat: true
@@ -79,6 +70,16 @@ const miniApp =
           value: fraisDivers,
           frais: true,
           etat: false
+        },
+        {
+          label: 'Droits d\'écriture',
+          value: droitEcriture,
+          etat: true
+        },
+        {
+          label: 'Transcription',
+          value: transcription,
+          etat: true
         },
         {
           label: 'TVA',

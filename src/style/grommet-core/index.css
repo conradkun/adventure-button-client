@@ -2360,11 +2360,11 @@ img[height] {
     flex-basis: 192px; } }
 
 .grommetux-card--selectable:hover > div {
-  background-color: #EBEBEB;
+  background-color: #FFF;
   color: #000;
   cursor: pointer; }
   .grommetux-card--selectable:hover > div .grommetux-card__content .grommetux-paragraph::after {
-    background: linear-gradient(to right, transparent, #EBEBEB 50%); }
+    background: linear-gradient(to right, transparent, #FFF 50%); }
 
 @-webkit-keyframes carousel-reveal {
   0% {

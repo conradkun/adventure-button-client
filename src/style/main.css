@@ -10868,10 +10868,12 @@ html {
 
 .better_card {
   filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.2));
+  transition: all .2s ease-in-out;
   border-radius: 12px; }
   .better_card > div {
-    transition: all .2s ease-in-out; }
-  .better_card:hover > div {
+    transition: all .2s ease-in-out;
+    border-radius: 12px; }
+  .better_card:hover {
     transform: scale(1.04);
     filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.2));
     border-radius: 12px;

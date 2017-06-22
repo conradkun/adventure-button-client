@@ -23,7 +23,8 @@ export default class MontantInput extends Component {
         this.state = {
             value: (this.props.defaultValue ? this.props.defaultValue.toString().replace('.', ',') : '0'),
             error: undefined
-        }
+        };
+        props.onChange(this.state.value);
         this._onAdd = this._onAdd.bind(this);
         this._onSubtract = this._onSubtract.bind(this);
     }
