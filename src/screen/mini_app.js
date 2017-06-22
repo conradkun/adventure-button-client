@@ -89,8 +89,13 @@ export default class MiniAppContainer extends Component {
   _onSave(save){
     this.setState({
       save: false
+    });
+    const client = this.props.client;
+    const saves = client.service('saves');
+    saves.create(save)
+    .then((s)=>{
+      this.props.msg.success('Sauvegarde réussie!');
     })
-    console.log(save);
   }
 
   _renderHeader() {
@@ -128,7 +133,7 @@ export default class MiniAppContainer extends Component {
     let modal;
     if(this.state.save){
       modal = (
-        <SaveModal onClose={this._onRequestForSaveClose} value={this.state.value} miniApp={this.miniApp.code} onSubmit={this._onSave}/>
+        <SaveModal client={this.props.client} msg={this.props.msg} onClose={this._onRequestForSaveClose} value={this.state.value} miniApp={this.miniApp.code} onSubmit={this._onSave}/>
       )
     }
     return modal;

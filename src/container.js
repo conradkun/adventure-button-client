@@ -36,7 +36,7 @@ class Container extends Component {
     this.t = t;
     this.alertOptions = {
       offset: 20,
-      position: 'bottom right',
+      position: 'top right',
       theme: 'dark',
       time: 4000,
       transition: 'scale'

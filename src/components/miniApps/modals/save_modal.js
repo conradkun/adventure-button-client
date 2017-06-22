@@ -8,7 +8,7 @@ import Form from 'grommet/components/Form';
 import Footer from 'grommet/components/Footer';
 import Layer from 'grommet/components/Layer';
 import Label from 'grommet/components/Label';
-
+import SelectCase from './select_case';
 
 export default class SaveModal extends Component {
     constructor (props) {
@@ -22,11 +22,16 @@ export default class SaveModal extends Component {
     _onSubmit (event){
         event.preventDefault();
         let save = {
-          case: 'TEST',
+          caseId: this.state.case,
           miniApp: this.props.miniApp,
           value: this.props.value
         }
-        this.props.onSubmit(save);
+        if(!this.state.case){
+            this.props.msg.error('Veuillez spécifier un dossier!')
+        }
+        else {
+          this.props.onSubmit(save);
+        }
     }
 
 
@@ -36,10 +41,19 @@ export default class SaveModal extends Component {
             >
                 <Box pad={{vertical: 'large', horizontal: 'small'}}>
                     <Form onSubmit={this._onSubmit}>
-                        <header><h1>Confirmation</h1></header>
-                        <Label>Êtes vous sur de vouloir sauvegarder?</Label>
+                        <header><h1>Ajouter à un dossier</h1></header>
+                        <Box margin='small'>
+                          <Label>Pour ajouter ce calcul de frais à un dossier, veuillez choisir un dossier dans la liste ci dessous (ou en créer un)</Label>
+                        </Box>
+                        <SelectCase client={this.props.client} msg={this.props.msg} onChange={
+                            (v)=>{
+                              this.setState({
+                                case: v
+                              });
+                            }
+                          }/>
                         <Footer pad={{vertical: 'medium'}} justify='center'>
-                            <Button label="Oui" primary={true}
+                            <Button label="Sauvegarder" primary={true}
                                     onClick={this._onSubmit} type="submit"/>
                         </Footer>
                     </Form>
