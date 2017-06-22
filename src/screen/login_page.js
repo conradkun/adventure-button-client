@@ -15,7 +15,6 @@ class LoginPage extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.offline)
     if (this.props.offline) {
       this.setState({errors: ["Vous êtes Offline, connectez vous au moins une fois pour accéder à l'application"]});
     }

@@ -12,6 +12,7 @@ import FloatingButton from '../components/common/floating-button/floating-button
 import MainButton from '../components/common/floating-button/main-button';
 import ChildButton from '../components/common/floating-button/child-button';
 import Viewer from '../components/miniApps/viewer/viewer';
+import SaveModal from '../components/miniApps/modals/save_modal';
 
 import AppSettings from '../utils/app_settings';
 import miniApps from '../miniApps';
@@ -21,6 +22,12 @@ export default class MiniAppContainer extends Component {
     super(props);
     this.error = false
     this._onValueChanged = this._onValueChanged.bind(this);
+    this._onRequestForSave = this._onRequestForSave.bind(this);
+    this._onRequestForSaveClose = this._onRequestForSaveClose.bind(this);
+    this._onSave = this._onSave.bind(this);
+
+
+
     this.miniApp = this._getMiniApp(this.props.match.params.miniAppCode);
     if (!this.miniApp) {
       this.error = true;
@@ -46,6 +53,8 @@ export default class MiniAppContainer extends Component {
 
     this.state = {
       value: this.defaultValue,
+      save: false,
+      share: false,
       result: defaultResult
     }
   }
@@ -65,6 +74,25 @@ export default class MiniAppContainer extends Component {
     this.setState({value: value});
     this.setState({result: this.compute(this.props.client.get('organisation').settings, value)});
   }
+
+  _onRequestForSave(){
+    this.setState({
+      save: true
+    })
+  }
+  _onRequestForSaveClose(){
+    this.setState({
+      save: false
+    })
+  }
+
+  _onSave(save){
+    this.setState({
+      save: false
+    })
+    console.log(save);
+  }
+
   _renderHeader() {
     /**
          * First create the header and add some button if the user is mobile
@@ -95,6 +123,16 @@ export default class MiniAppContainer extends Component {
       </Header>
     );
   }
+
+  _renderModal(){
+    let modal;
+    if(this.state.save){
+      modal = (
+        <SaveModal onClose={this._onRequestForSaveClose} value={this.state.value} miniApp={this.miniApp.code} onSubmit={this._onSave}/>
+      )
+    }
+    return modal;
+  }
   _renderContent() {
     return(
       <Article>
@@ -115,6 +153,7 @@ export default class MiniAppContainer extends Component {
                        <Viewer value={this.state.result}/>
                   </Box>
               </Columns>
+              {this._renderModal()}
           </Section>
       </Article>
     )
@@ -135,7 +174,10 @@ export default class MiniAppContainer extends Component {
               console.log('clicked');
             }
           }icon="ion-android-share-alt" label="Partager"/>
-          <ChildButton icon="ion-android-archive" label="Sauvegarder"/>
+          <ChildButton onClick={() => {
+              this._onRequestForSave();
+            }
+          }icon="ion-android-archive" label="Sauvegarder"/>
         </FloatingButton>
       </Box>
     )

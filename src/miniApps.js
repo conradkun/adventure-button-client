@@ -4,6 +4,7 @@ import Credit from './miniApps/credit';
 import Pret from './miniApps/pret';
 import MandatHypothecaire from './miniApps/mandat-hypothecaire';
 import Cession from './miniApps/cession';
+import Partage from './miniApps/partage';
 
 let miniApps = [
   VenteGreGre,
@@ -11,7 +12,8 @@ let miniApps = [
   Credit,
   Pret,
   MandatHypothecaire,
-  Cession
+  Cession,
+  Partage
 ];
 
 export default miniApps

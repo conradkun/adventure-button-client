@@ -15,7 +15,7 @@ export default class NombreBiens extends Component{
                     step={1}
                     onChange={(e) => {
                         let value = e.target.value;
-                        if (!(value < 1 || value==='')){
+                        if (!(value < 0 || value==='')){
                             this.props.onChange(parseFloat(value));
                             this.setState({ error: undefined });
                         }
