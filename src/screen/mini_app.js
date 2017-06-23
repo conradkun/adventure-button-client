@@ -167,12 +167,9 @@ export default class MiniAppContainer extends Component {
     var effect = 'zoomin',
       pos = 'br',
       method = 'click';
-    return (
-      <Box full='vertical' colorIndex={AppSettings.backgroundColor}>
-        {this._renderHeader()}
-        <Box full='horizontal'>
-        {this.error ? <b>ERROR</b> : this._renderContent()}
-        </Box>
+    let floatingButton;
+    if(!this.props.offline){
+      floatingButton = (
         <FloatingButton effect={effect} method={method} position={pos}>
           <MainButton iconResting="ion-plus-round" iconActive="ion-close-round"/>
           <ChildButton onClick={() => {
@@ -184,6 +181,15 @@ export default class MiniAppContainer extends Component {
             }
           }icon="ion-android-archive" label="Sauvegarder"/>
         </FloatingButton>
+      )
+    }
+    return (
+      <Box full='vertical' colorIndex={AppSettings.backgroundColor}>
+        {this._renderHeader()}
+        <Box full='horizontal'>
+        {this.error ? <b>ERROR</b> : this._renderContent()}
+        </Box>
+        {floatingButton}
       </Box>
     )
   }

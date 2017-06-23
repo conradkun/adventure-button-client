@@ -14,6 +14,8 @@ import CloseIcon from 'grommet/components/icons/base/Close';
 import Anchor from 'grommet/components/Anchor';
 import Footer from 'grommet/components/Footer';
 import User from 'grommet/components/icons/base/User'
+import Notification from 'grommet/components/Notification';
+
 
 import AppSettings from './utils/app_settings';
 import EditProfileModal from './components/common/edit_profile_modal'
@@ -57,15 +59,17 @@ class Container extends Component {
     const client = this.props.client;
     const settings = client.service('settings');
     const organisation = client.service('organisation');
-    settings.on('patched', () => {
-      //We need to reload the organisation and change the settings
-      organisation.get(client.get('user').organisation).then((o) => {
-        client.set('organisation', o);
-        //Save organisation to localStorage
-        let organisationParsed = JSON.stringify(o);
-        window.localStorage.setItem("organisation", organisationParsed);
+    if(!this.props.offline){
+      settings.on('patched', () => {
+        //We need to reload the organisation and change the settings
+        organisation.get(client.get('user').organisation).then((o) => {
+          client.set('organisation', o);
+          //Save organisation to localStorage
+          let organisationParsed = JSON.stringify(o);
+          window.localStorage.setItem("organisation", organisationParsed);
+        });
       });
-    });
+    }
 
     this.state = {
       editProfile: false,
@@ -123,7 +127,7 @@ class Container extends Component {
   _renderAppLogo() {
     return (
       <Title pad='small' responsive={false}>
-        <Box align='center' direction='row'>
+        <Box align='center' pad='small' direction='row'>
           <Logo multiplier={0.1} margin="40px" color="#FFF"/>
         </Box>
       </Title>
@@ -189,7 +193,7 @@ class Container extends Component {
             {this.state.me.role !== 'admin'
               ? baremeLink
               : undefined}
-            {this.state.me.role !== 'admin'
+            {this.state.me.role !== 'admin' && !this.props.offline
               ? casesLink
               : undefined}
             {this.state.me.role === 'admin' && !this.props.offline
@@ -230,7 +234,8 @@ class Container extends Component {
       onLogout: this._logout,
       client: this.props.client,
       renderAppLogo: this._renderAppLogo,
-      msg: this.msg
+      msg: this.msg,
+      offline: this.props.offline
     };
     let fadeDuration = 0.5;
     if (this.state.responsive === 'single') {
@@ -258,6 +263,9 @@ class Container extends Component {
       <Split flex='right' priority={priority} fixed={true} onResponsive={this._onResponsive}>
         {this._renderNav()}
         <div>
+          {this.props.offline ? <Notification message='Vous êtes offline'
+            status='warning'
+            size='medium' /> : undefined}
           <AlertContainer ref={a => this.msg = a} {...this.alertOptions}/>
           <Switch>
             <FadingRoute exact path='/app' component={miniAppList}/>
@@ -266,6 +274,7 @@ class Container extends Component {
             <FadingRoute path="/app/admin" component={Admin}/>
             <FadingRoute path="/app/users" component={UsersAdmin}/>
             <FadingRoute path="/app/settings" component={SettingsAdmin}/>
+            <FadingRoute component={miniAppList}/>
           </Switch>
           {modal}
         </div>

@@ -27,7 +27,7 @@ class App extends Component {
     if (window.navigator.onLine) {
       this.connectToBackend(client);
     }
-    
+
     this.state = {
       isLoading: true,
       client: client,
@@ -104,8 +104,12 @@ class App extends Component {
         let organisation = JSON.parse(organisationUnparsed);
 
         client.set('user', user);
-        client.set('preferredRegion', window.localStorage.getItem('preferredRegion'));
-
+        let preferredRegion = window.localStorage.getItem('preferredRegion');
+        if(!preferredRegion){
+          //DEFAULT PREFERRED REGION
+          preferredRegion = "wallonie";
+        }
+        client.set('preferredRegion',preferredRegion);
         if (user.role !== 'admin') {
           client.set('organisation', organisation);
         }
@@ -133,7 +137,7 @@ class App extends Component {
             <Route exact path='/' render={(props) => (<LoginPage {...props} client={this.state.client} offline={this.state.offline}/>)}/>
             <Route path='/app' render={(props) => (<Container {...props} client={this.state.client} offline={this.state.offline}/>)}/>
             <Route render={(props) => {
-                console.log("not found"); return (<LoginPage {...props} client={this.state.client}/>)
+                console.log("not found"); return (<Container {...props} client={this.state.client} offline={this.state.offline}/>)
               }}/>
           </Switch>
         </GrommetApp>
