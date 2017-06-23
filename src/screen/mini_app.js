@@ -133,7 +133,7 @@ export default class MiniAppContainer extends Component {
     let modal;
     if(this.state.save){
       modal = (
-        <SaveModal client={this.props.client} msg={this.props.msg} onClose={this._onRequestForSaveClose} value={this.state.value} miniApp={this.miniApp.code} onSubmit={this._onSave}/>
+        <SaveModal client={this.props.client} msg={this.props.msg} onClose={this._onRequestForSaveClose} value={this.state.value} miniAppCode={this.miniApp.code} miniAppName={this.miniApp.name} onSubmit={this._onSave}/>
       )
     }
     return modal;

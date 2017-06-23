@@ -4,8 +4,9 @@ import Header from 'grommet/components/Header';
 import Anchor from 'grommet/components/Anchor';
 import UserAdd from 'grommet/components/icons/base/UserAdd';
 import Edit from 'grommet/components/icons/base/Edit';
+import Expand from 'grommet/components/icons/base/Expand';
 import Trash from 'grommet/components/icons/base/Trash';
-import UserAdmin from 'grommet/components/icons/base/UserAdmin';
+import Close from 'grommet/components/icons/base/Close';
 import Tiles from 'grommet/components/Tiles';
 import Heading from 'grommet/components/Heading';
 import Meter from 'grommet/components/Meter';
@@ -14,6 +15,39 @@ import Value from 'grommet/components/Value';
 
 import Card from 'grommet/components/Card';
 class CaseCard extends Component {
+
+  constructor(props){
+    super(props);
+    this._deleteSave = this._deleteSave.bind(this);
+    this._deleteCase = this._deleteCase.bind(this);
+  }
+
+  _deleteCase(){
+    const client = this.props.client
+    const cases = client.service('cases');
+    cases.remove(this.props.cas._id)
+    .then(()=>{
+      this.props.msg.success("Supprimé!")
+    })
+  }
+  _deleteSave(id){
+    const client = this.props.client
+    const saves = client.service('saves');
+    const cases = client.service('cases');
+    if(!(this.props.cas.saves) || !(this.props.cas.saves instanceof Array)){
+      cases.remove(this.props.cas._id)
+      .then(()=>{
+        this.props.msg.success("Supprimé!")
+      })
+    }
+    else {
+      saves.remove(id)
+      .then(()=>{
+        this.props.msg.success("Supprimé!")
+      })
+    }
+  }
+
   render() {
     if(!this.props.cas.saves){
       return <b>Damn</b>
@@ -30,47 +64,39 @@ class CaseCard extends Component {
         <Box flex={true} responsive={false} justify='end' align="center" pad={{
           between: "medium"
         }} direction='row' disabled={false}>
-          <b>Icon here</b>
+        <Anchor icon={< Trash />} onClick={() => {
+          this._deleteCase();
+        }} animateIcon={true} primary={true}/>
         </Box>
       </Header>
     );
 
     let savesCards;
-    if(this.props.cas.saves instanceof Array){
-      savesCards = this.props.cas.saves.map((save) => {
-        let header = (
-          <Header>
-            <Heading strong={false} tag='h3'>
-              {save.miniApp}
-            </Heading>
+    let saves = this.props.cas.saves;
+    if(!(saves instanceof Array))
+      saves = [saves]
 
-            <Box responsive={false} flex={true} justify='end' align="center" pad={{
-              between: "small"
-            }} direction='row'>
-              Icons
-            </Box>
-          </Header>
-        )
-        return (<Card basis="full" className="subQuest" colorIndex="light-1" key={save._id} heading={header}/>)
-      });
-    } else {
-      const save = this.props.cas.saves;
+    savesCards = saves.map((save) => {
       let header = (
         <Header>
           <Heading strong={false} tag='h3'>
-            {save.miniApp}
+            {save.miniAppName}
           </Heading>
 
           <Box responsive={false} flex={true} justify='end' align="center" pad={{
             between: "small"
           }} direction='row'>
-            Icons
+          <Anchor icon={< Expand />} onClick={() => {
+            this.props.onExpand(save.miniAppCode, save.value);
+          }} animateIcon={true} primary={false}/>
+          <Anchor icon={< Close />} onClick={() => {
+            this._deleteSave(save._id);
+          }} animateIcon={true} primary={false}/>
           </Box>
         </Header>
       )
-      savesCards = <Card basis="full" className="subQuest" colorIndex="light-1" key={save._id} heading={header}/>
-    }
-
+      return (<Card basis="full" colorIndex="light-1" key={save._id} heading={header}/>)
+    });
 
     let description = (
       <Tiles fill={true}>

@@ -1,19 +1,24 @@
 import React, {Component} from 'react';
 import Box from 'grommet/components/Box';
+import Button from 'grommet/components/Button';
 import Search from 'grommet/components/Search';
 import Header from 'grommet/components/Header';
 import Anchor from 'grommet/components/Anchor';
 import Title from 'grommet/components/Title';
 import Add from 'grommet/components/icons/base/Add';
-import User from 'grommet/components/icons/base/Edit';
 import Close from 'grommet/components/icons/base/Close';
 import MenuIcon from 'grommet/components/icons/base/Menu';
 import LinkPrevious from 'grommet/components/icons/base/LinkPrevious';
 import Tiles from 'grommet/components/Tiles';
 import Tile from 'grommet/components/Tile';
 import Card from 'grommet/components/Card';
+import ListPlaceholder from 'grommet-addons/components/ListPlaceholder';
+
 import AppSettings from '../utils/app_settings';
 import CaseCard from '../components/cases/case_card';
+import ExpandModal from '../components/cases/expand_modal';
+import miniApps from '../miniApps';
+import Viewer from '../components/miniApps/viewer/viewer';
 import Spinner from 'react-spinkit';
 //import {sleep} from 'wait-promise';
 
@@ -64,10 +69,16 @@ class Cases extends Component {
     this._load = this._load.bind(this);
     this._renderHeader = this._renderHeader.bind(this);
     this._renderContent = this._renderContent.bind(this);
+    this._getMiniApp = this._getMiniApp.bind(this);
+    this._onRequestForExpand = this._onRequestForExpand.bind(this);
+    this._onRequestForExpandClose = this._onRequestForExpandClose.bind(this);
+
     this.state = {
       isLoading: true,
       cases: [],
-      searchString: ""
+      searchString: "",
+      expand: false,
+      expandResult: undefined
     }
   }
 
@@ -79,6 +90,16 @@ class Cases extends Component {
   _search(cas) {
     let name = cas.name;
     return name.toLowerCase().indexOf(this.state.searchString.toLowerCase()) !== -1;
+  }
+
+  _getMiniApp(code) {
+    let miniApp = undefined;
+    miniApps.forEach((ma) => {
+      if (ma.code === code) {
+        miniApp = ma;
+      }
+    });
+    return miniApp;
   }
 
   _getCases(query={
@@ -112,6 +133,19 @@ class Cases extends Component {
     })
   }
 
+  _onRequestForExpand(code, value){
+    const miniApp = this._getMiniApp(code);
+    this.setState({
+      expand: true,
+      expandResult: miniApp.compute(this.props.client.get('organisation').settings, value)
+    })
+  }
+  _onRequestForExpandClose(){
+    this.setState({
+      expand: false,
+      expandResult : undefined
+    })
+  }
   _compareWithCreatedAt(a, b) {
     return new Date(a.createdAt) < new Date(b.createdAt);
   }
@@ -121,16 +155,31 @@ class Cases extends Component {
     let cases = this.state.cases;
     cards = cases.map((c) => {
       return (
-        <CaseCard key={c._id} cas={c}/>
+        <CaseCard key={c._id} client={this.props.client} msg={this.props.msg} onExpand={this._onRequestForExpand} cas={c}/>
       )
     });
 
+    let modal;
+    if(this.state.expand){
+      modal = <ExpandModal value={this.state.expandResult} onClose={this._onRequestForExpandClose}/>
+    }
     return (
-      <Box colorIndex={AppSettings.backgroundColor} margin='small'>
+      <Box colorIndex={AppSettings.backgroundColor} margin='large'>
+        <ListPlaceholder addControl={<Button icon={<Add style={{stroke :'#FFF'}}/>}
+          label='Effectuer un calcul de frais'
+          path='/app'
+          primary={true}
+          a11yTitle='Effectuer un calcul de frais' />}
+          emptyMessage="Vous n'avez aucun dossier pour le moment, sauvegarder un calcul de frais pour en créer un."
+          unfilteredTotal={this.state.cases.length}
+          filteredTotal={1} />
         <Tiles fill={true}
-               flush={false}>
+               flush={false}
+               responsive={false}
+               >
           {cards}
         </Tiles>
+        {modal}
       </Box>
     )
   }

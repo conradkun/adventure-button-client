@@ -24,7 +24,8 @@ export default class SaveModal extends Component {
         if(this.state.case.id){
           let save = {
             caseId: this.state.case.id,
-            miniApp: this.props.miniApp,
+            miniAppCode: this.props.miniAppCode,
+            miniAppName: this.props.miniAppName,
             value: this.props.value
           }
           if(!this.state.case){
@@ -44,7 +45,8 @@ export default class SaveModal extends Component {
           .then((data)=>{
             let save = {
               caseId: data._id,
-              miniApp: this.props.miniApp,
+              miniAppCode: this.props.miniAppCode,
+              miniAppName: this.props.miniAppName,
               value: this.props.value
             }
             this.props.onSubmit(save);

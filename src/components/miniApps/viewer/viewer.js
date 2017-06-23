@@ -44,6 +44,7 @@ class Viewer extends Component{
         return (
             <Box align='start'>
                 <AnnotatedMeter
+                    i18n={this.props.i18n}
                     size='medium'
                     type={type}
                     units='€'
@@ -51,7 +52,7 @@ class Viewer extends Component{
                     legend={false}
                     series={seriesMeter} />
                   <Box alignSelf='center'>
-                        <Legend series={seriesLegend} units='€' total={true}
+                        <Legend i18n={this.props.i18n} series={seriesLegend} units='€' total={true}
                                 />
                   </Box>
             </Box>
