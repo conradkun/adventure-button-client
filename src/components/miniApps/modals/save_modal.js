@@ -21,16 +21,37 @@ export default class SaveModal extends Component {
 
     _onSubmit (event){
         event.preventDefault();
-        let save = {
-          caseId: this.state.case,
-          miniApp: this.props.miniApp,
-          value: this.props.value
+        if(this.state.case.id){
+          let save = {
+            caseId: this.state.case.id,
+            miniApp: this.props.miniApp,
+            value: this.props.value
+          }
+          if(!this.state.case){
+              this.props.msg.error('Veuillez spécifier un dossier!')
+          }
+          else {
+              console.log('save ',save);
+              this.props.onSubmit(save);
+          }
         }
-        if(!this.state.case){
-            this.props.msg.error('Veuillez spécifier un dossier!')
-        }
-        else {
-          this.props.onSubmit(save);
+        else{
+          const client = this.props.client;
+          const cases = client.service('cases');
+          cases.create({
+            name: this.state.case.name
+          })
+          .then((data)=>{
+            let save = {
+              caseId: data._id,
+              miniApp: this.props.miniApp,
+              value: this.props.value
+            }
+            this.props.onSubmit(save);
+          }).catch((e)=>{
+            console.log(e);
+            this.props.msg.error("Erreur: " + e);
+          })
         }
     }
 
@@ -46,9 +67,12 @@ export default class SaveModal extends Component {
                           <Label>Pour ajouter ce calcul de frais à un dossier, veuillez choisir un dossier dans la liste ci dessous (ou en créer un)</Label>
                         </Box>
                         <SelectCase client={this.props.client} msg={this.props.msg} onChange={
-                            (v)=>{
+                            (value, id)=>{
                               this.setState({
-                                case: v
+                                case: {
+                                  name: value,
+                                  id: id
+                                }
                               });
                             }
                           }/>

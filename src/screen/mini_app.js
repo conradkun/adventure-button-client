@@ -100,8 +100,8 @@ export default class MiniAppContainer extends Component {
 
   _renderHeader() {
     /**
-         * First create the header and add some button if the user is mobile
-         */
+    * First create the header and add some button if the user is mobile
+    */
     let appLogo;
     let mobileButton;
     let goBack;

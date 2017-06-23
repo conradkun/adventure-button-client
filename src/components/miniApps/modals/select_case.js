@@ -24,7 +24,10 @@ export default class SelectCase extends Component{
 
     _getCases(query={
       query: {
-        $limit: 10,
+        $limit: 5,
+        $sort: {
+          createdAt: -1
+        }
       }
     }){
       return new Promise((resolve,reject)=>{
@@ -81,7 +84,7 @@ export default class SelectCase extends Component{
                             else {
                               this._getCases({
                                 query: {
-                                  $limit: 10,
+                                  $limit: 5,
                                   name: {
                                     $search: searchString
                                   }
@@ -89,10 +92,10 @@ export default class SelectCase extends Component{
                               })
                               .then((options)=>{
                                 let labelObject = (
-                                <Box direction='row' margin='small'>
+                                <Box direction='row' align='center' margin='small'>
                                   <IconAdd/>
                                   <Box direction='row' flex={true} align='center' margin={{left: 'small'}}>
-                                    <Label size='medium' margin={{left: 'small'}}>Créer le dossier: <b>{searchString}</b></Label>
+                                    <Label size='medium' margin='small'>Créer le dossier: <b>{searchString}</b></Label>
                                   </Box>
                                 </Box>
                                 )
@@ -123,20 +126,9 @@ export default class SelectCase extends Component{
                                 }
                             });
                             if(o.value.new){
-                              const client = this.props.client;
-                              const cases = client.service('cases');
-                              cases.create({
-                                name: o.value.value
-                              })
-                              .then((data)=>{
-                                this.props.onChange(data._id);
-                                this._load();
-                              }).catch((e)=>{
-                                console.log(e);
-                                this.props.msg.error("Erreur: " + e);
-                              })
+                              this.props.onChange(o.value.value, undefined);
                             } else {
-                              this.props.onChange(o.value.id);
+                              this.props.onChange(o.value.value, o.value.id);
                             }
                         }} />
             </FormField>

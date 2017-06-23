@@ -38,6 +38,7 @@ class Settings extends Component {
           organisationId: client.get('organisation')._id
         }
       }).then((data) => {
+        console.log(data);
         this.setState({
           isLoading: false,
           settings: data.data,

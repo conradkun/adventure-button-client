@@ -21,9 +21,11 @@ import Logo from './components/common/logo';
 
 import miniAppList from './screen/mini_app_list';
 import MiniAppContainer from './screen/mini_app';
+import Cases from './screen/cases';
 import Admin from './screen/admin'
 import UsersAdmin from './screen/users_admin'
 import SettingsAdmin from './screen/settings'
+
 
 import {Switch, Route, withRouter} from 'react-router-dom'
 import AlertContainer from 'react-alert';
@@ -144,6 +146,7 @@ class Container extends Component {
         {this.t('navLinkCalculator')}
       </Anchor>
     );
+    let casesLink;
     let settingsLink;
     let usersLink;
     let adminLink;
@@ -152,13 +155,16 @@ class Container extends Component {
         <Button icon={< CloseIcon />} onClick={this._onMenuClick}/>
       );
     }
-
+    casesLink = (
+      <Anchor path="/app/cases" onClick={this._onMenuClick}>
+        Dossiers
+      </Anchor>
+    )
     adminLink = (
       <Anchor path="/app/admin" onClick={this._onMenuClick}>
         {this.t('navLinkAdmin')}
       </Anchor>
     );
-
     usersLink = (
       <Anchor path='/app/users' onClick={this._onMenuClick}>
         {this.t('navLinkUsers')}
@@ -169,6 +175,7 @@ class Container extends Component {
         {this.t('navLinkSettings')}
       </Anchor>
     );
+
     return (
       <Sidebar ref='sidebar' size='small' separator='right' colorIndex={AppSettings.mainColor} fixed={true}>
         <Header justify='between' size='large' pad={{
@@ -181,6 +188,9 @@ class Container extends Component {
           <Menu primary={true}>
             {this.state.me.role !== 'admin'
               ? baremeLink
+              : undefined}
+            {this.state.me.role !== 'admin'
+              ? casesLink
               : undefined}
             {this.state.me.role === 'admin' && !this.props.offline
               ? adminLink
@@ -252,6 +262,7 @@ class Container extends Component {
           <Switch>
             <FadingRoute exact path='/app' component={miniAppList}/>
             <FadingRoute path="/app/b/:miniAppCode" component={MiniAppContainer}/>
+            <FadingRoute path="/app/cases" component={Cases}/>
             <FadingRoute path="/app/admin" component={Admin}/>
             <FadingRoute path="/app/users" component={UsersAdmin}/>
             <FadingRoute path="/app/settings" component={SettingsAdmin}/>
