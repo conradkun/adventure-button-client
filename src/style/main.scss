@@ -81,7 +81,10 @@ html{
     padding: .5em 1.25em;
     outline: 0; // no glow crap
     &--small {
-      font-size: 0.9rem;
+      font-size: 1rem;
+    }
+    &--extra-small {
+      font-size: 0.8rem;
     }
     &--active {
       background: #0A64A0;

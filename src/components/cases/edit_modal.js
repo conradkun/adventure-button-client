@@ -76,6 +76,7 @@ export default class EditModal extends Component {
     saves.patch(this.props.id, save)
     .then((s)=>{
       this.props.msg.success('Sauvegarde réussie!');
+      this.props.onClose();
     })
   }
 

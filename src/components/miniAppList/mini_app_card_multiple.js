@@ -43,7 +43,7 @@ class MiniAppCardMultiple extends React.Component {
                 className="better_card"
                 heading={this.props.miniApp.name}
                 colorIndex={AppSettings.cardColor}
-                description={<RegionSelect small={true} client={this.props.client} onSelect={(r)=>{
+                description={<RegionSelect small={true} xsmall={this.props.responsive === 'single' ? true : false} client={this.props.client} onSelect={(r)=>{
                   this.setState({region: r})
                 }}/>}
                 onClick={()=>{

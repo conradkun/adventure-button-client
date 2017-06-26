@@ -21,6 +21,7 @@ class RegionSelect extends React.Component {
           }
         ]}
         small={this.props.small}
+        xsmall={this.props.xsmall}
         defaultValue={this.props.client.get('preferredRegion')}
         onSelect={(v)=>{
           this.props.onSelect(v);

@@ -13,6 +13,9 @@ class ButtonGroup extends React.Component {
       if(this.props.small){
         classes += " btngroup--btn--small";
       }
+      if(this.props.xsmall){
+        classes += " btngroup--btn--extra-small";
+      }
       if(this.state.selected === o.value){
         classes = classes + " btngroup--btn--active";
       }
