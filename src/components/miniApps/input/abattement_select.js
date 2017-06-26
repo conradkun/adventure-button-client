@@ -6,10 +6,18 @@ export default class AbattementSelect extends Component{
     constructor(props){
         super(props);
         this.options = props.options;
-
-        this.state = {
+        let defaultOption = {
           value: 0,
           label: 'Pas d\'abattement'
+        };
+        props.options.forEach((o)=>{
+          if(o.value === props.defaultValue){
+            defaultOption = o
+          }
+        })
+        this.state = {
+          value: defaultOption.value,
+          label: defaultOption.label
         };
 
     }

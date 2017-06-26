@@ -12,7 +12,7 @@ export default class Annexe extends Component{
             <FormField>
                 <CheckBox
                     label="Une annexe ou plus"
-                    defaultValue={0}
+                    defaultChecked={this.props.defaultValue}
                     toggle={AppSettings.toggleInsteadOfCheckbox}
                     onChange={(e) => {
                         let value = e.target.checked;

@@ -15,7 +15,7 @@ import Viewer from '../components/miniApps/viewer/viewer';
 import SaveModal from '../components/miniApps/modals/save_modal';
 
 import AppSettings from '../utils/app_settings';
-import miniApps from '../miniApps';
+import {miniApps} from '../miniApps';
 
 export default class MiniAppContainer extends Component {
   constructor(props) {
@@ -86,7 +86,14 @@ export default class MiniAppContainer extends Component {
     })
   }
 
-  _onSave(save){
+  _onSave(caseId){
+    let save = {
+      miniAppName: this.miniApp.name,
+      miniAppCode: this.miniApp.code,
+      caseId: caseId,
+      value: this.state.value,
+      result: this.state.result
+    }
     this.setState({
       save: false
     });

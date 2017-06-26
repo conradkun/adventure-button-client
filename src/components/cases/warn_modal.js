@@ -35,9 +35,9 @@ export default class DeleteUserModal extends Component {
                         <Box direction='row' responsive={false} flex={'grow'} justify='center' pad={{
                             between: "large"
                           }}>
-                            <Button margin='medium' label="Oui" primary={false}
+                            <Button label="Oui" primary={false}
                                     onClick={this._onSubmit} type="submit"/>
-                            <Button margin='medium' label="Non" primary={true}
+                            <Button label="Non" primary={true}
                                     onClick={this._onClose} type="submit"/>
                         </Box>
                         </Footer>

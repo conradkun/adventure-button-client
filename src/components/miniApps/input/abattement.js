@@ -9,11 +9,11 @@ export default class Annexe extends Component{
             <FormField label="Abattement">
                 <CheckBox
                     label={'Abattement sur '+ this.props.value + '€'}
-                    defaultValue={0}
+                    defaultChecked={this.props.defaultValue}
                     toggle={AppSettings.toggleInsteadOfCheckbox}
                     onChange={(e) => {
                         let checked = e.target.checked;
-                        this.props.onChange(checked ? this.props.value : 0);
+                        this.props.onChange(checked);
                     }}
                 />
             </FormField>

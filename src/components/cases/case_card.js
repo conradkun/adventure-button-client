@@ -13,7 +13,7 @@ import Value from 'grommet/components/Value';
 import Label from 'grommet/components/Label';
 import Responsive from 'grommet/utils/Responsive';
 
-import miniApps from '../../miniApps';
+import {miniApps} from '../../miniApps';
 import AppSettings from '../../utils/app_settings'
 import currencyFormatter from 'currency-formatter';
 

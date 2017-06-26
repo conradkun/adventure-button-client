@@ -10,55 +10,31 @@ import Anchor from 'grommet/components/Anchor';
 import LinkPrevious from 'grommet/components/icons/base/LinkPrevious';
 
 import Tiles from 'grommet/components/Tiles';
-import Menu from 'grommet/components/Menu';
-import Actions from 'grommet/components/icons/base/Actions';
-import Tile from 'grommet/components/Tile';
-import Card from 'grommet/components/Card';
-import LinkNext from 'grommet/components/icons/base/LinkNext';
+import MiniAppCard from '../components/miniAppList/mini_app_card';
+import MiniAppCardMultiple from '../components/miniAppList/mini_app_card_multiple';
 
 import AppSettings from '../utils/app_settings';
-import miniApps from '../miniApps';
+import {miniAppsList} from '../miniApps';
 
 class miniAppList extends Component{
     constructor(props) {
         super(props);
         this._renderHeader = this._renderHeader.bind(this);
+        this._generateCards = this._generateCards.bind(this);
         this.state = {
             searchString: ""
         }
     }
+
     _generateCards(){
-        return miniApps.map((type) => {
+        return miniAppsList.map((miniApp) => {
             //Check if the name of the MiniApp match the Search String
-            if(type.name.toLowerCase().indexOf(this.state.searchString.toLowerCase())!==-1){
-                let link = `app/b/${type.code}`;
-                let basis = 'medium';
-                let margin = {
-                  top: 'large'
+            if(miniApp.name.toLowerCase().indexOf(this.state.searchString.toLowerCase())!==-1){
+                if(miniApp.code instanceof Array){
+                  return <MiniAppCardMultiple key={miniApp.name} client={this.props.client} responsive={this.props.responsive} miniApp={miniApp}/>
+                } else {
+                  return <MiniAppCard key={miniApp.name} responsive={this.props.responsive} miniApp={miniApp}/>
                 }
-                if(this.props.responsive === 'single'){
-                  basis = 'full'
-                  margin = {
-                    ...margin,
-                    horizontal: 'large'
-                  }
-                }
-                return (
-
-                        <Card
-                              margin={margin}
-                              basis={basis}
-                              responsive={false}
-                              key={type.name}
-                              className="better_card"
-                              heading={type.name}
-                              colorIndex={AppSettings.cardColor}
-                              onClick={()=>{
-                                this.props.history.push(link);
-                              }}
-                              />
-
-                );
             }
         });
     }

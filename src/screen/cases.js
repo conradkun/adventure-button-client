@@ -18,7 +18,7 @@ import AppSettings from '../utils/app_settings';
 import CaseCard from '../components/cases/case_card';
 import ExpandModal from '../components/cases/expand_modal';
 import WarnModal from '../components/cases/warn_modal';
-import miniApps from '../miniApps';
+import {miniApps} from '../miniApps';
 import Viewer from '../components/miniApps/viewer/viewer';
 import Spinner from 'react-spinkit';
 //import {sleep} from 'wait-promise';

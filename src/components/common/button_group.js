@@ -17,7 +17,9 @@ class ButtonGroup extends React.Component {
         classes = classes + " btngroup--btn--active";
       }
       return(
-        <div key={o.value} className={classes} onClick={()=>{
+        <div key={o.value} className={classes} onClick={(e)=>{
+          e.cancelBubble = true;
+          if (e.stopPropagation) e.stopPropagation();
           this.setState({
             selected: o.value
           });

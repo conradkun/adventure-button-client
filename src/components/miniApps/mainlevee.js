@@ -4,7 +4,6 @@ import Prix from './input/montant';
 import DroitEnregistrement from './input/droit_enregistrement';
 import Annexe from './input/annexe';
 import PressionImmobiliere from './input/pression_immobiliere';
-import RegionSelect from './input/region_select';
 import Abattement from './input/abattement';
 import AbattementSelect from './input/abattement_select';
 

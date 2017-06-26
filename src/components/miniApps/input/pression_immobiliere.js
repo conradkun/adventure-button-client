@@ -17,8 +17,8 @@ export default class PressionImmobiliere extends Component{
         ]
 
         this.state = {
-          value: 0,
-          label: 'Zone à pression Immobilière normale'
+          value: this.props.defaultValue,
+          label: this.props.defaultValue ? 'Zone à forte pression Immobilière' : 'Zone à pression Immobilière normale'
         };
 
     }

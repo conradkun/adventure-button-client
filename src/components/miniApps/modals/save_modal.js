@@ -42,6 +42,7 @@ export default class SaveModal extends Component {
           })
           .then((data)=>{
             let caseId = data._id;
+            console.log('caseId', caseId);
             this.props.onSubmit(caseId);
           }).catch((e)=>{
             console.log(e);
