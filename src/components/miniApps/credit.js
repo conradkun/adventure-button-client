@@ -32,7 +32,7 @@ export default class Credit extends Component {
                     <fieldset>
                       <Prix
                         label="Crédit augmenté des accessoires"
-                        defaultValue={0}
+                        defaultValue={this.props.defaultValue.credit}
                         onChange={
                           (value) => {
                               this.setState({value: {...this.state.value, credit: value}});
@@ -42,14 +42,16 @@ export default class Credit extends Component {
                       <Prix
                         label="Inscription hypothécaire"
                         key={this.state.value.credit}
-                        defaultValue={this.state.value.credit}
+                        defaultValue={this.props.defaultValue.inscription || this.state.value.credit}
                         onChange={
                           (value) => {
                               this.setState({value: {...this.state.value, inscription: value}})
                             }
                           }
                         />
-                        <Annexe onChange={
+                        <Annexe
+                          defaultValue={this.props.defaultValue.annexe}
+                          onChange={
                             (value) => {
                                 this.setState({value: {...this.state.value, annexe: value}})
                             }

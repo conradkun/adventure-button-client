@@ -9,7 +9,7 @@ export default class ReductionHonoraire extends Component{
             <FormField>
                 <CheckBox
                     label={this.props.label}
-                    defaultValue={0}
+                    defaultValue={this.props.defaultValue}
                     toggle={AppSettings.toggleInsteadOfCheckbox}
                     onChange={(e) => {
                         let value = e.target.checked;

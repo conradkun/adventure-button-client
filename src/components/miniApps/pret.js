@@ -34,7 +34,7 @@ export default class Pret extends Component {
                     <fieldset>
                       <Prix
                         label="Prêt augmenté des accessoires"
-                        defaultValue={0}
+                        defaultValue={this.props.defaultValue.pret}
                         onChange={
                           (value) => {
                               this.setState({value: {...this.state.value, pret: value}});
@@ -51,13 +51,16 @@ export default class Pret extends Component {
                                   })
                               }
                           }
-                        options={[1, 0]} default={1}/>
-                        <Annexe onChange={
+                        options={[1, 0]} default={this.props.defaultValue.droitEnregistrement}/>
+                        <Annexe
+                          defaultValue={this.props.defaultValue.annexe}
+                          onChange={
                             (value) => {
                                 this.setState({value: {...this.state.value, annexe: value}})
                             }
                         }/>
                         <ReductionHonoraire
+                          defaultValue={this.props.defaultValue.reductionHonoraire}
                           label="Prêt social (réduction des honoraires)"
                           onChange={
                             (value) => {

@@ -34,7 +34,7 @@ export default class Partage extends Component {
                     <fieldset>
                       <Prix
                         label="Valeur vénale du patrimoine"
-                        defaultValue={0}
+                        defaultValue={this.props.defaultValue.valeur}
                         onChange={
                           (value) => {
                               this.setState({value: {...this.state.value, valeur: value}});
@@ -44,7 +44,7 @@ export default class Partage extends Component {
                       <Prix
                         label="Valeur vénale du patrimoine immobilier"
                         key={this.state.value.valeur}
-                        defaultValue={this.state.value.valeur}
+                        defaultValue={this.props.defaultValue.valeurImmobilier || this.state.value.valeur}
                         onChange={
                           (value) => {
                               this.setState({value: {...this.state.value, valeurImmobilier: value}})
@@ -53,13 +53,15 @@ export default class Partage extends Component {
                         />
                         <NombreBiens
                           label="Nombre de biens"
-                          defaultValue={0}
+                          defaultValue={this.props.defaultValue.nombreBiens}
                           onChange={
                             (value) => {
                                 this.setState({value: {...this.state.value, nombreBiens: value}})
                             }
                         }/>
-                        <Annexe onChange={
+                        <Annexe
+                          defaultValue={this.props.defaultValue.annexe}
+                          onChange={
                             (value) => {
                                 this.setState({value: {...this.state.value, annexe: value}})
                             }

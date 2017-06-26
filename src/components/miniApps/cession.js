@@ -36,7 +36,7 @@ export default class Cession extends Component {
                     <fieldset>
                       <Prix
                         label="Valeur du ou des lot(s) cédé(s)"
-                        defaultValue={0}
+                        defaultValue={this.props.defaultValue.valeur}
                         onChange={
                           (value) => {
                               this.setState({value: {...this.state.value, valeur: value}});
@@ -46,14 +46,16 @@ export default class Cession extends Component {
                       <Prix
                         label="Montant utilisé dans le calcul des droits d'enregistrement"
                         key={this.state.value.valeur}
-                        defaultValue={this.state.value.valeur}
+                        defaultValue={this.props.defaultValue.valeurDroitEnregistrement || this.state.value.valeur}
                         onChange={
                           (value) => {
                               this.setState({value: {...this.state.value, valeurDroitEnregistrement: value}})
                             }
                           }
                         />
-                        <Annexe onChange={
+                        <Annexe
+                          defaultValue={this.props.defaultValue.annexe}
+                          onChange={
                             (value) => {
                                 this.setState({value: {...this.state.value, annexe: value}})
                             }
@@ -61,7 +63,7 @@ export default class Cession extends Component {
                         <FormField>
                             <CheckBox
                                 label="Flandre (droit d'enregistrement à 2.5%)"
-                                defaultValue={0}
+                                defaultValue={this.props.defaultValue.flandre}
                                 toggle={AppSettings.toggleInsteadOfCheckbox}
                                 onChange={(e) => {
                                     let value = e.target.checked;

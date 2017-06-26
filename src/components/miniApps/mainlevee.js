@@ -36,14 +36,16 @@ export default class MainLevee extends Component {
                     <fieldset>
                       <Prix
                         label="Inscription"
-                        defaultValue={0}
+                        defaultValue={this.props.defaultValue.inscription}
                         onChange={
                           (value) => {
                               this.setState({value: {...this.state.value, inscription: value}})
                             }
                           }
                         />
-                        <Annexe onChange={
+                        <Annexe
+                           defaultValue={this.props.defaultValue.annexe}
+                          onChange={
                             (value) => {
                                 this.setState({value: {...this.state.value, annexe: value}})
                             }

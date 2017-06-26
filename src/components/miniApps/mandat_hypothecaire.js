@@ -33,19 +33,22 @@ export default class MandatHypothecaire extends Component {
                     <fieldset>
                       <Prix
                         label="Montant total du mandat"
-                        defaultValue={0}
+                        defaultValue={this.props.defaultValue.montant}
                         onChange={
                           (value) => {
                               this.setState({value: {...this.state.value, montant: value}})
                             }
                           }
                         />
-                      <Annexe onChange={
+                      <Annexe
+                        defaultValue={this.props.defaultValue.annexe}
+                        onChange={
                             (value) => {
                                 this.setState({value: {...this.state.value, annexe: value}})
                             }
                         }/>
                       <OperationComplementaire
+                        defaultValue={this.props.defaultValue.operationComplementaire} 
                         onChange={
                               (value) => {
                                   this.setState({value: {...this.state.value, operationComplementaire: value}})

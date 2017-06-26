@@ -20,9 +20,19 @@ class OperationComplementaire extends Component{
           }
         ];
 
+        let defaultOption =   {
+            value: 0,
+            label: 'Isolé'
+        };
+  
+        this.options.forEach((o)=>{
+          if(o.value === props.defaultValue){
+            defaultOption = o
+          }
+        })
         this.state = {
-          value: 0,
-          label: 'Isolé'
+          value: defaultOption.value,
+          label: defaultOption.label
         };
 
     }
