@@ -1,4 +1,4 @@
-import VenteGreGre from './miniApps/vente-gre-gre';
+import VenteGreGre from './miniApps/vente-gre-gre-wallonie';
 import MainLevee from './miniApps/mainlevee';
 import Credit from './miniApps/credit';
 import Pret from './miniApps/pret';
