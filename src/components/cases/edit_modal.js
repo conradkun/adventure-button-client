@@ -1,16 +1,17 @@
 import React, {Component} from 'react';
 
 import Box from 'grommet/components/Box';
-import Article from 'grommet/components/Article';
+import Button from 'grommet/components/Button';
 import Section from 'grommet/components/Section';
 import Columns from 'grommet/components/Columns';
-import Viewer from '../components/miniApps/viewer/viewer';
+import Viewer from '../miniApps/viewer/viewer';
+import Layer from 'grommet/components/Layer';
 
+import AppSettings from '../../utils/app_settings';
+import {miniApps} from '../../miniApps';
+import i18n from '../../i18n';
 
-import AppSettings from '../utils/app_settings';
-import miniApps from '../miniApps';
-
-export default class MiniAppContainer extends Component {
+export default class EditModal extends Component {
   constructor(props) {
     super(props);
     this.error = false
@@ -27,20 +28,19 @@ export default class MiniAppContainer extends Component {
     this.compute = this.miniApp.compute;
 
     this.miniAppInput = React.cloneElement(this.miniApp.input, {
+      noAutoOnValueChanged: true,
       client: props.client,
       onValueChanged: this._onValueChanged,
-      defaultValue: this.props.value,
-      responsive: this.props.responsive
+      defaultValue: props.value,
+      responsive: props.responsive
     });
 
 
 
     let result = this.compute(this.props.client.get('organisation').settings, props.value);
-
+    this.result = result;
     this.state = {
       value: props.value,
-      save: false,
-      share: false,
       result: result
     }
   }
@@ -57,76 +57,57 @@ export default class MiniAppContainer extends Component {
 
 
   _onValueChanged(value) {
-    this.setState({value: value});
-    this.setState({result: this.compute(this.props.client.get('organisation').settings, value)});
+    console.log(value);
+    this.value = value;
+    this.result = this.compute(this.props.client.get('organisation').settings, value);
+    this.forceUpdate();
   }
 
-  _onRequestForSave(){
-    this.setState({
-      save: true
-    })
-  }
-  _onRequestForSaveClose(){
-    this.setState({
-      save: false
-    })
-  }
 
-  _onSave(caseId){
-    this.setState({
-      save: false
-    });
+  _onSave(){
     const client = this.props.client;
     const saves = client.service('saves');
     let save = {
-      caseId: caseId,
       miniAppCode: this.miniApp.code,
       miniAppName: this.miniApp.name,
-      value: this.state.value,
-      result: this.state.result
+      value: this.value,
+      result: this.result
     };
-    saves.create(save)
+    saves.patch(this.props.id, save)
     .then((s)=>{
       this.props.msg.success('Sauvegarde réussie!');
     })
   }
 
-  _renderHeader() {
-
-  }
-
   _renderContent() {
     return(
-      <Article>
-          <Section align='center' alignContent='center'>
-              <Columns justify='center' size='large'>
+              <Box justify='center' margin={this.props.responsive === 'single' ? 'none' : 'large'} basis='full' direction='row'>
                   <Box align='center'
-                       className="drop-shadow"
-                       pad='large'
-                       margin='small'
+                       pad={{
+                         between: 'large'
+                       }}
+                       margin={this.props.responsive === 'single' ? 'none' : 'large'}
                        colorIndex={AppSettings.cardColor}>
                       {this.miniAppInput}
+                      <Button label="Sauvegarder" primary={true} onClick={()=>{
+                          this._onSave()
+                      }}/>
                   </Box>
                   <Box align='center'
-                       className="drop-shadow"
-                       pad='large'
-                       margin='small'
+                    margin={this.props.responsive === 'single' ? 'none' : 'large'}
                        colorIndex={AppSettings.cardColor}>
-                       <Viewer value={this.state.result}/>
+                       <Viewer i18n={i18n} value={this.result}/>
                   </Box>
-              </Columns>
-          </Section>
-      </Article>
+              </Box>
     )
   }
   render() {
     return (
-      <Box full='vertical' colorIndex={AppSettings.backgroundColor}>
-        {this._renderHeader()}
-        <Box full='horizontal'>
+      <Layer colorIndex={AppSettings.backgroundColor} closer={true} onClose={this.props.onClose} >
+        <Box>
         {this.error ? <b>ERROR</b> : this._renderContent()}
         </Box>
-      </Box>
+      </Layer>
     )
   }
 }

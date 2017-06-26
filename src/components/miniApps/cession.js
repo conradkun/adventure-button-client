@@ -21,7 +21,9 @@ export default class Cession extends Component {
     }
 
     componentWillUpdate(nextProps, nextState){
+      if(nextState !== this.state){
         this.props.onValueChanged(nextState.value);
+      }
     }
 
     render() {

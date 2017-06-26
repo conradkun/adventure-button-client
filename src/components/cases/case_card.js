@@ -23,7 +23,6 @@ class CaseCard extends Component {
   constructor(props){
     super(props);
     this._deleteSave = this._deleteSave.bind(this);
-    this._deleteCase = this._deleteCase.bind(this);
   }
 
 
@@ -38,14 +37,6 @@ class CaseCard extends Component {
   }
 
 
-  _deleteCase(){
-    const client = this.props.client
-    const cases = client.service('cases');
-    cases.remove(this.props.cas._id)
-    .then(()=>{
-      this.props.msg.success("Supprimé!")
-    })
-  }
   _deleteSave(id){
     const client = this.props.client
     const saves = client.service('saves');
@@ -81,7 +72,7 @@ class CaseCard extends Component {
           between: "medium"
         }} direction='row' disabled={false}>
         <Anchor icon={< Trash />} onClick={() => {
-          this._deleteCase();
+          this.props.onDeleteCase(this.props.cas._id);
         }} animateIcon={true} primary={true}/>
         </Box>
       </Header>

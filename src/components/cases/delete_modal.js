@@ -17,6 +17,7 @@ export default class DeleteUserModal extends Component {
     }
 
     _onSubmit (event){
+        event.preventDefault();
         this.props.onSubmit();
     }
 
@@ -28,16 +29,14 @@ export default class DeleteUserModal extends Component {
                 <Box pad={{vertical: 'large', horizontal: 'small'}}>
                     <Form onSubmit={this._onSubmit}>
                         <header><h1>Avertissement</h1></header>
-                        <Label>Ce calcul de provision a été effectué avec une version antérieure des paramètres de votre étude.
-                        Si vous modifiez ce calcul maintenant, le résultat pourrait être différent.
-                        Êtes-vous sur(e) de vouloir continuer?</Label>
+                        <Label>Êtes-vous sur(e) de vouloir supprimer ce dossier?</Label>
                         <Footer pad={{vertical: 'medium'}} justify='center'>
                         <Box direction='row' responsive={false} flex={'grow'} justify='center' pad={{
                             between: "large"
                           }}>
-                            <Button label="Oui" primary={false}
+                            <Button label="Oui" primary={true} accent={true}
                                     onClick={this._onSubmit} type="submit"/>
-                            <Button label="Non" primary={true}
+                            <Button label="Non" primary={false}
                                     onClick={this.props.onClose}/>
                         </Box>
                         </Footer>

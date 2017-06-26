@@ -18,6 +18,8 @@ import AppSettings from '../utils/app_settings';
 import CaseCard from '../components/cases/case_card';
 import ExpandModal from '../components/cases/expand_modal';
 import WarnModal from '../components/cases/warn_modal';
+import EditModal from '../components/cases/edit_modal';
+import DeleteModal from '../components/cases/delete_modal';
 import {miniApps} from '../miniApps';
 import Viewer from '../components/miniApps/viewer/viewer';
 import Spinner from 'react-spinkit';
@@ -75,6 +77,8 @@ class Cases extends Component {
     this._onRequestForExpandClose = this._onRequestForExpandClose.bind(this);
     this._onRequestForEdit = this._onRequestForEdit.bind(this);
     this._onRequestForEditClose = this._onRequestForEditClose.bind(this);
+    this._onRequestForDeleteCase = this._onRequestForDeleteCase.bind(this);
+    this._onDeleteCase = this._onDeleteCase.bind(this);
 
     this.state = {
       isLoading: true,
@@ -198,6 +202,23 @@ class Cases extends Component {
       editValue: undefined
     })
   }
+  _onRequestForDeleteCase(id){
+    this.setState({
+      delete: true,
+      deleteId:id
+    });
+  }
+  _onDeleteCase(){
+    const client = this.props.client
+    const cases = client.service('cases');
+    cases.remove(this.state.deleteId)
+    .then(()=>{
+      this.setState({
+        delete: false
+      });
+      this.props.msg.success("Supprimé!")
+    })
+  }
   _compareWithCreatedAt(a, b) {
     return new Date(a.createdAt) < new Date(b.createdAt);
   }
@@ -234,7 +255,7 @@ class Cases extends Component {
     let cases = this.state.cases;
     cards = cases.map((c) => {
       return (
-        <CaseCard key={c._id} client={this.props.client} msg={this.props.msg} onExpand={this._onRequestForExpand} onEdit={this._onRequestForEdit} responsive={this.props.responsive} cas={c}/>
+        <CaseCard key={c._id} client={this.props.client} msg={this.props.msg} onExpand={this._onRequestForExpand} onEdit={this._onRequestForEdit} onDeleteCase={this._onRequestForDeleteCase} responsive={this.props.responsive} cas={c}/>
       )
     });
 
@@ -243,7 +264,13 @@ class Cases extends Component {
       modal = <ExpandModal result={this.state.expandResult} DBResult={this.state.expandDBResult} equal={this.state.expandEqual} onClose={this._onRequestForExpandClose}/>
     }
     else if(this.state.warn){
-      modal = <WarnModal onSubmit={()=>{ this.setState({warn: false, edit: true})}} onClose={()=>{ this.setState({warn: false})}}/>
+      modal = <WarnModal onSubmit={()=>{ this.setState({warn: false, edit: true})}} onClose={()=>{this.setState({warn: false}); this._onRequestForEditClose()}}/>
+    }
+    else if(this.state.edit){
+      modal = <EditModal code={this.state.editCode} id={this.state.editId} value={this.state.editValue} client={this.props.client} responsive={this.props.responsive} onClose={this._onRequestForEditClose}
+        msg={this.props.msg}/>
+    } else if(this.state.delete){
+      modal = <DeleteModal onClose={()=>{this.setState({delete: false})}} onSubmit={()=>{ this._onDeleteCase()}}/>
     }
     return (
       <Box colorIndex={AppSettings.backgroundColor} margin='large'>

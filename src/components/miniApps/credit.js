@@ -17,7 +17,9 @@ export default class Credit extends Component {
     }
 
     componentWillUpdate(nextProps, nextState){
-        this.props.onValueChanged(nextState.value);
+        if(nextState !== this.state){
+          this.props.onValueChanged(nextState.value);
+        }
     }
 
     render() {

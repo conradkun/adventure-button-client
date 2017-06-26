@@ -19,7 +19,9 @@ export default class Partage extends Component {
     }
 
     componentWillUpdate(nextProps, nextState){
+      if(nextState !== this.state){
         this.props.onValueChanged(nextState.value);
+      }
     }
 
     render() {

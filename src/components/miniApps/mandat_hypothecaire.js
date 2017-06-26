@@ -18,7 +18,9 @@ export default class MandatHypothecaire extends Component {
     }
 
     componentWillUpdate(nextProps, nextState){
+      if(nextState !== this.state){
         this.props.onValueChanged(nextState.value);
+      }
     }
 
     render() {
@@ -48,7 +50,7 @@ export default class MandatHypothecaire extends Component {
                             }
                         }/>
                       <OperationComplementaire
-                        defaultValue={this.props.defaultValue.operationComplementaire} 
+                        defaultValue={this.props.defaultValue.operationComplementaire}
                         onChange={
                               (value) => {
                                   this.setState({value: {...this.state.value, operationComplementaire: value}})
