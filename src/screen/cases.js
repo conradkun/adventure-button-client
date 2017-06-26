@@ -17,6 +17,7 @@ import ListPlaceholder from 'grommet-addons/components/ListPlaceholder';
 import AppSettings from '../utils/app_settings';
 import CaseCard from '../components/cases/case_card';
 import ExpandModal from '../components/cases/expand_modal';
+import WarnModal from '../components/cases/warn_modal';
 import miniApps from '../miniApps';
 import Viewer from '../components/miniApps/viewer/viewer';
 import Spinner from 'react-spinkit';
@@ -64,7 +65,7 @@ class Cases extends Component {
     });
 
 
-    this._search = this._search.bind(this);
+    this._onSearch = this._onSearch.bind(this);
     this._getCases = this._getCases.bind(this);
     this._load = this._load.bind(this);
     this._renderHeader = this._renderHeader.bind(this);
@@ -72,24 +73,22 @@ class Cases extends Component {
     this._getMiniApp = this._getMiniApp.bind(this);
     this._onRequestForExpand = this._onRequestForExpand.bind(this);
     this._onRequestForExpandClose = this._onRequestForExpandClose.bind(this);
+    this._onRequestForEdit = this._onRequestForEdit.bind(this);
+    this._onRequestForEditClose = this._onRequestForEditClose.bind(this);
 
     this.state = {
       isLoading: true,
       cases: [],
       searchString: "",
       expand: false,
-      expandResult: undefined
+      warn: false,
+      edit: false
     }
   }
 
   componentDidMount() {
     //TODO Fix the setState console.error();
     this._load();
-  }
-
-  _search(cas) {
-    let name = cas.name;
-    return name.toLowerCase().indexOf(this.state.searchString.toLowerCase()) !== -1;
   }
 
   _getMiniApp(code) {
@@ -123,6 +122,7 @@ class Cases extends Component {
       })
     });
   }
+
   _load() {
     this._getCases()
     .then((cl)=>{
@@ -133,21 +133,100 @@ class Cases extends Component {
     })
   }
 
-  _onRequestForExpand(code, value){
+  _onRequestForExpand(code, value, result){
     const miniApp = this._getMiniApp(code);
+    const computedResult = miniApp.compute(this.props.client.get('organisation').settings, value);
+    const equal = this._checkResult(result, computedResult);
     this.setState({
       expand: true,
-      expandResult: miniApp.compute(this.props.client.get('organisation').settings, value)
+      expandDBResult: result,
+      expandResult: computedResult,
+      expandEqual: equal
     })
   }
+
   _onRequestForExpandClose(){
     this.setState({
       expand: false,
-      expandResult : undefined
+      expandDBResult: undefined,
+      expandResult : undefined,
+      expandEqual: undefined
+    })
+  }
+
+  _checkResult(result, DBResult){
+    let resultValueArray = [];
+    let DBResultValueArray=  [];
+    result.forEach((r)=>{
+      resultValueArray.push(r.value);
+    })
+    resultValueArray.sort();
+    DBResult.forEach((r)=>{
+      DBResultValueArray.push(r.value);
+    })
+    DBResultValueArray.sort();
+    return JSON.stringify(resultValueArray) === JSON.stringify(DBResultValueArray);
+  }
+
+  _onRequestForEdit(id, code, value, result){
+    const miniApp = this._getMiniApp(code);
+    const computedResult = miniApp.compute(this.props.client.get('organisation').settings, value);
+    const equal = this._checkResult(result, computedResult);
+    if(!equal){
+      this.setState({
+        warn: true,
+        editId: id,
+        editCode: code,
+        editValue: value
+      })
+    }
+    else {
+      this.setState({
+        edit: true,
+        editId: id,
+        editCode: code,
+        editValue: value
+      })
+    }
+  }
+
+  _onRequestForEditClose(){
+    this.setState({
+      edit: false,
+      editId: undefined,
+      editCode: undefined,
+      editValue: undefined
     })
   }
   _compareWithCreatedAt(a, b) {
     return new Date(a.createdAt) < new Date(b.createdAt);
+  }
+
+  _onSearch(e){
+    if(e.target.value === ''){
+      this._getCases()
+      .then((cl)=>{
+        this.setState({
+          cases: cl
+        })
+      })
+    }
+    else {
+      let query={
+        query:{
+          name:{
+            $search: e.target.value
+          },
+          $limit: 10
+        }
+      }
+      this._getCases(query)
+      .then((cl)=>{
+        this.setState({
+          cases: cl
+        })
+      })
+    }
   }
 
   _renderContent() {
@@ -155,13 +234,16 @@ class Cases extends Component {
     let cases = this.state.cases;
     cards = cases.map((c) => {
       return (
-        <CaseCard key={c._id} client={this.props.client} msg={this.props.msg} onExpand={this._onRequestForExpand} cas={c}/>
+        <CaseCard key={c._id} client={this.props.client} msg={this.props.msg} onExpand={this._onRequestForExpand} onEdit={this._onRequestForEdit} responsive={this.props.responsive} cas={c}/>
       )
     });
 
     let modal;
     if(this.state.expand){
-      modal = <ExpandModal value={this.state.expandResult} onClose={this._onRequestForExpandClose}/>
+      modal = <ExpandModal result={this.state.expandResult} DBResult={this.state.expandDBResult} equal={this.state.expandEqual} onClose={this._onRequestForExpandClose}/>
+    }
+    else if(this.state.warn){
+      modal = <WarnModal onSubmit={()=>{ this.setState({warn: false, edit: true})}} onClose={()=>{ this.setState({warn: false})}}/>
     }
     return (
       <Box colorIndex={AppSettings.backgroundColor} margin='large'>
@@ -210,32 +292,7 @@ class Cases extends Component {
     }
     search = (<Search inline={true} fill={true} size='medium' placeHolder='Rechercher' defaultValue={this.state.searchString} dropAlign={{
       "right": "right"
-    }} onDOMChange={(e) => {
-      if(e.target.value === ''){
-        this._getCases()
-        .then((cl)=>{
-          this.setState({
-            cases: cl
-          })
-        })
-      }
-      else {
-        let query={
-          query:{
-            name:{
-              $search: e.target.value
-            },
-            $limit: 10
-          }
-        }
-        this._getCases(query)
-        .then((cl)=>{
-          this.setState({
-            cases: cl
-          })
-        })
-      }
-    }}/>);
+    }} onDOMChange={this._onSearch} />);
     return (
       <Header size='small' className="drop-shadow-bottom" colorIndex={colorIndex} fixed={true}>
         {appLogo}

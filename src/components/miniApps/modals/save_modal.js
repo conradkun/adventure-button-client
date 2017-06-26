@@ -21,19 +21,17 @@ export default class SaveModal extends Component {
 
     _onSubmit (event){
         event.preventDefault();
+        if(!this.state.case){
+          this.props.msg.error("Vous devez selectionner un dossier");
+          return;
+        }
         if(this.state.case.id){
-          let save = {
-            caseId: this.state.case.id,
-            miniAppCode: this.props.miniAppCode,
-            miniAppName: this.props.miniAppName,
-            value: this.props.value
-          }
+          let caseId = this.state.case.id;
           if(!this.state.case){
               this.props.msg.error('Veuillez spécifier un dossier!')
           }
           else {
-              console.log('save ',save);
-              this.props.onSubmit(save);
+              this.props.onSubmit(caseId);
           }
         }
         else{
@@ -43,13 +41,8 @@ export default class SaveModal extends Component {
             name: this.state.case.name
           })
           .then((data)=>{
-            let save = {
-              caseId: data._id,
-              miniAppCode: this.props.miniAppCode,
-              miniAppName: this.props.miniAppName,
-              value: this.props.value
-            }
-            this.props.onSubmit(save);
+            let caseId = data._id;
+            this.props.onSubmit(caseId);
           }).catch((e)=>{
             console.log(e);
             this.props.msg.error("Erreur: " + e);

@@ -19,6 +19,7 @@ const miniApp =
   code: 'cession',
   name: 'Cession',
   input: <Cession/>,
+  mainField: 'valeur', 
   defaultValue: {
     valeur: 0,
     valeurDroitEnregistrement: 0,

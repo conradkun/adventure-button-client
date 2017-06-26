@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import Box from 'grommet/components/Box';
 import Header from 'grommet/components/Header';
 import Anchor from 'grommet/components/Anchor';
-import UserAdd from 'grommet/components/icons/base/UserAdd';
 import Edit from 'grommet/components/icons/base/Edit';
 import Expand from 'grommet/components/icons/base/Expand';
 import Trash from 'grommet/components/icons/base/Trash';
@@ -11,7 +10,12 @@ import Tiles from 'grommet/components/Tiles';
 import Heading from 'grommet/components/Heading';
 import Meter from 'grommet/components/Meter';
 import Value from 'grommet/components/Value';
+import Label from 'grommet/components/Label';
+import Responsive from 'grommet/utils/Responsive';
 
+import miniApps from '../../miniApps';
+import AppSettings from '../../utils/app_settings'
+import currencyFormatter from 'currency-formatter';
 
 import Card from 'grommet/components/Card';
 class CaseCard extends Component {
@@ -21,6 +25,18 @@ class CaseCard extends Component {
     this._deleteSave = this._deleteSave.bind(this);
     this._deleteCase = this._deleteCase.bind(this);
   }
+
+
+  _getMiniApp(code) {
+    let miniApp = undefined;
+    miniApps.forEach((ma) => {
+      if (ma.code === code) {
+        miniApp = ma;
+      }
+    });
+    return miniApp;
+  }
+
 
   _deleteCase(){
     const client = this.props.client
@@ -77,22 +93,31 @@ class CaseCard extends Component {
       saves = [saves]
 
     savesCards = saves.map((save) => {
+      let mainField = this._getMiniApp(save.miniAppCode).mainField;
+      let mainFieldOfSave = currencyFormatter.format(save.value[mainField], AppSettings.currencyOptionFormater);
       let header = (
         <Header>
-          <Heading strong={false} tag='h3'>
-            {save.miniAppName}
-          </Heading>
-
-          <Box responsive={false} flex={true} justify='end' align="center" pad={{
-            between: "small"
-          }} direction='row'>
-          <Anchor icon={< Expand />} onClick={() => {
-            this.props.onExpand(save.miniAppCode, save.value);
-          }} animateIcon={true} primary={false}/>
-          <Anchor icon={< Close />} onClick={() => {
-            this._deleteSave(save._id);
-          }} animateIcon={true} primary={false}/>
+          <Box responsive={false} direction='row' justify='between' flex={true}>
+            <Box direction='row'>
+              <Heading tag='h2'>{save.miniAppName}</Heading>
+              <Box margin='small' alignSelf='start'>
+                <Value size='small' units='€' value={mainFieldOfSave}/>
+              </Box>
+            </Box>
+            <Box responsive={false} flex={true} justify='end' align="end" pad={{
+                between: "small"
+              }} direction={this.props.responsive === 'single' ? 'column' : 'row'}>
+              <Anchor icon={< Expand />} onClick={() => {
+                  this.props.onExpand(save.miniAppCode, save.value, save.result);
+                }} animateIcon={true} primary={false}/>
+              <Anchor icon={< Edit />} onClick={() => {
+                  this.props.onEdit(save._id, save.miniAppCode, save.value, save.result);
+                }} animateIcon={true} primary={false}/>
+              <Anchor icon={< Close />} onClick={() => {
+                  this._deleteSave(save._id);
+              }} animateIcon={true} primary={false}/>
           </Box>
+        </Box>
         </Header>
       )
       return (<Card basis="full" colorIndex="light-1" key={save._id} heading={header}/>)

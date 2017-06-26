@@ -18,6 +18,7 @@ const miniApp =
 {
   code: 'partage',
   name: 'Partage',
+  mainField: 'valeur',
   input: <Partage/>,
   defaultValue: {
     valeur: 0,

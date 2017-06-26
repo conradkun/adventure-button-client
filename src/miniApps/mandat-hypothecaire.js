@@ -18,6 +18,7 @@ const miniApp =
 {
   code: 'mandat_hypothecaire',
   name: 'Mandat Hypothécaire',
+  mainField: 'montant',
   input: <MandatHypothecaire/>,
   defaultValue: {
     montant: 0,

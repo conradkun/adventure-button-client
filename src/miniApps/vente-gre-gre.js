@@ -19,17 +19,19 @@ const miniApp =
   code: 'vente-gre-gre',
   name: 'Vente de Gré à Gré',
   input: <VenteGreGre/>,
+  mainField: 'prix',
+  multiple: true,
   defaultValue: {
     region: 'wallonie',
     prix: 0,
-    droitEnregistrement: 12,
+    droitEnregistrement: 12.5,
     annexe: false,
-    pressionImmobiliere: 0,
+    pressionImmobiliere: 1,
 
 
     flandre:{
       region: 'flandre',
-      prix: 0,
+      prix: 100000,
       droitEnregistrement: 10,
       annexe: false,
       abattement: 0
@@ -37,17 +39,17 @@ const miniApp =
 
     wallonie:{
       region: 'wallonie',
-      prix: 0,
-      droitEnregistrement: 12,
-      annexe: false,
-      pressionImmobiliere: 0
+      prix: 200000,
+      droitEnregistrement: 12.5,
+      annexe: true,
+      pressionImmobiliere: 1
     },
 
     bruxelles:{
       region: 'bruxelles',
-      prix: 0,
+      prix: 300000,
       annexe: false,
-      abattement: 0
+      abattement: 1
     }
 
   },
@@ -177,7 +179,7 @@ const miniApp =
           #Abattement (175 000€)
       \*------------------------------------*/
       if(value.abattement){
-        droitEnregistrement = (12.5 / 100) * (value.prix - value.abattement);
+        droitEnregistrement = (12.5 / 100) * (value.prix - 175000);
       }
       else {
         droitEnregistrement = (12.5 / 100) * (value.prix);

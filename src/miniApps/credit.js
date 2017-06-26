@@ -18,6 +18,7 @@ const miniApp =
 {
   code: 'credit',
   name: 'Crédit',
+  mainField: 'credit',
   input: <Credit/>,
   defaultValue: {
     credit: 0,

@@ -19,6 +19,7 @@ const miniApp =
 {
   code: 'pret',
   name: 'Prêt',
+  mainField: 'pret',
   input: <Pret/>,
   defaultValue: {
     pret: 0,

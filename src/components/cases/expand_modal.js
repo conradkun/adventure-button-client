@@ -7,7 +7,9 @@ import Button from 'grommet/components/Button';
 import Form from 'grommet/components/Form';
 import Footer from 'grommet/components/Footer';
 import Layer from 'grommet/components/Layer';
-import Label from 'grommet/components/Label';
+import FormField from 'grommet/components/FormField';
+import CheckBox from 'grommet/components/CheckBox';
+import Notification from 'grommet/components/Notification';
 import Viewer from '../miniApps/viewer/viewer';
 import i18n from '../../i18n';
 
@@ -15,9 +17,9 @@ class ExpandModal extends Component {
     constructor (props) {
         super(props);
         this._onSubmit = this._onSubmit.bind(this);
-        this.state = {
-
-        };
+        this.state= {
+          recompute: false,
+        }
     }
 
     _onSubmit (event){
@@ -25,18 +27,46 @@ class ExpandModal extends Component {
       this.props.onClose();
     }
     render () {
+        let notEqualComponent;
+        if(!this.props.equal){
+          notEqualComponent = (
+            <Box>
+              <Notification message='Les paramètres utilisés lors de ce calcul
+                de provision ne sont plus à jour,
+                vous pouvez réeffectuer ce calcul aves les nouveaux paramètres.'
+              style={{
+                marginBottom: '20px',
+                borderRadius: '5px'
+              }}
+              status='warning'
+              size='medium' />
+              <FormField>
+                  <CheckBox
+                      label="Recalculer"
+                      defaultValue={0}
+                      toggle={true}
+                      onChange={(e) => {
+                          let value = e.target.checked;
+                          this.setState({
+                            recompute: value
+                          });
+                      }}
+                  />
+              </FormField>
+            </Box>
+          )
+        }
         return (
             <Layer onClose={this.props.onClose} closer={true} align="center"
             >
+
                 <Box pad={{vertical: 'large', horizontal: 'small'}}>
                     <Form onSubmit={this._onSubmit}>
-                        <Viewer i18n={i18n} value={this.props.value}/>
-                        <Footer pad={{vertical: 'medium'}} justify='center'>
-                            <Button label="Fermer" primary={false}
-                                    onClick={this._onSubmit} type="submit"/>
-                        </Footer>
+                        {notEqualComponent}
+                        <Viewer i18n={i18n} value={this.state.recompute ? this.props.result : this.props.DBResult}/>
                     </Form>
                 </Box>
+
             </Layer>
         );
     }

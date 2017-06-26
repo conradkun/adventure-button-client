@@ -18,6 +18,7 @@ const miniApp =
 {
   code: 'mainlevee',
   name: 'Mainlevée',
+  mainField: 'inscription',
   input: <MainLevee/>,
   defaultValue: {
     inscription: 0,

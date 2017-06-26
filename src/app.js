@@ -132,7 +132,7 @@ class App extends Component {
       );
     } else {
       content = (
-        <GrommetApp centered={false}>
+        <GrommetApp inline={true} centered={false}>
           <Switch>
             <Route exact path='/' render={(props) => (<LoginPage {...props} client={this.state.client} offline={this.state.offline}/>)}/>
             <Route path='/app' render={(props) => (<Container {...props} client={this.state.client} offline={this.state.offline}/>)}/>
