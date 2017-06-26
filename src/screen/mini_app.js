@@ -13,6 +13,7 @@ import MainButton from '../components/common/floating-button/main-button';
 import ChildButton from '../components/common/floating-button/child-button';
 import Viewer from '../components/miniApps/viewer/viewer';
 import SaveModal from '../components/miniApps/modals/save_modal';
+import ShareModal from '../components/miniApps/modals/share_modal';
 
 import AppSettings from '../utils/app_settings';
 import {miniApps} from '../miniApps';
@@ -24,6 +25,8 @@ export default class MiniAppContainer extends Component {
     this._onValueChanged = this._onValueChanged.bind(this);
     this._onRequestForSave = this._onRequestForSave.bind(this);
     this._onRequestForSaveClose = this._onRequestForSaveClose.bind(this);
+    this._onRequestForShare = this._onRequestForShare.bind(this);
+    this._onRequestForShareClose = this._onRequestForShareClose.bind(this);
     this._onSave = this._onSave.bind(this);
 
 
@@ -86,6 +89,17 @@ export default class MiniAppContainer extends Component {
     })
   }
 
+  _onRequestForShare(){
+    this.setState({
+      share: true
+    })
+  }
+  _onRequestForShareClose(){
+    this.setState({
+      share: false
+    })
+  }
+
   _onSave(caseId){
     let save = {
       miniAppName: this.miniApp.name,
@@ -140,8 +154,11 @@ export default class MiniAppContainer extends Component {
     let modal;
     if(this.state.save){
       modal = (
-        <SaveModal client={this.props.client} msg={this.props.msg} onClose={this._onRequestForSaveClose} value={this.state.value} miniAppCode={this.miniApp.code} miniAppName={this.miniApp.name} onSubmit={this._onSave}/>
+        <SaveModal client={this.props.client} msg={this.props.msg} onClose={this._onRequestForSaveClose} onSubmit={this._onSave}/>
       )
+    }
+    else if(this.state.share){
+      modal = <ShareModal onClose={this._onRequestForShareClose} msg={this.props.msg} onSubmit={(e)=>{console.log(e)}}/>;
     }
     return modal;
   }
@@ -180,7 +197,7 @@ export default class MiniAppContainer extends Component {
         <FloatingButton effect={effect} method={method} position={pos}>
           <MainButton iconResting="ion-plus-round" iconActive="ion-close-round"/>
           <ChildButton onClick={() => {
-              console.log('clicked');
+              this._onRequestForShare();
             }
           }icon="ion-android-share-alt" label="Partager"/>
           <ChildButton onClick={() => {
