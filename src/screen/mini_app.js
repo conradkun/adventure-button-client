@@ -249,11 +249,11 @@ export default class MiniAppContainer extends Component {
           <ChildButton onClick={() => {
               this._onRequestForShare();
             }
-          }icon="ion-android-share-alt" label="Partager"/>
+          }icon="ion-paper-airplane" label="Partager"/>
           <ChildButton onClick={() => {
               this._onRequestForSave();
             }
-          }icon="ion-paper-airplane" label="Sauvegarder"/>
+          }icon="ion-android-archive" label="Sauvegarder"/>
         </FloatingButton>
       )
     }
