@@ -14,11 +14,19 @@ export default class SaveModal extends Component {
     constructor (props) {
         super(props);
         this._onSubmit = this._onSubmit.bind(this);
+        this.state = {
+          emails : []
+        }
     }
 
     _onSubmit (event){
         event.preventDefault();
-        this.props.onSubmit({})
+        if(this.state.emails.length > 0){
+          this.props.onSubmit(this.state.emails)
+        }
+        else {
+          this.props.msg.error('Veuillez ajouter au moins une adresse email!')
+        }
     }
 
     render () {
@@ -30,7 +38,9 @@ export default class SaveModal extends Component {
                         <header><h1>Partager</h1></header>
                         <Box margin='small'>
                           <Label>Partager ce calcul de frais</Label>
-                          <EmailsSelect msg={this.props.msg} onChange={(emails)=>{console.log(emails)}}/>
+                          <EmailsSelect msg={this.props.msg} onChange={(emails)=>{this.setState({
+                              emails: emails
+                            })}}/>
                         </Box>
 
                         <Footer pad={{vertical: 'medium'}} justify='center'>

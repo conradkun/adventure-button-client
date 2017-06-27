@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import currencyFormatter from 'currency-formatter';
 
 import MenuIcon from 'grommet/components/icons/base/Menu';
 import Box from 'grommet/components/Box';
@@ -25,9 +26,10 @@ export default class MiniAppContainer extends Component {
     this._onValueChanged = this._onValueChanged.bind(this);
     this._onRequestForSave = this._onRequestForSave.bind(this);
     this._onRequestForSaveClose = this._onRequestForSaveClose.bind(this);
+    this._onSave = this._onSave.bind(this);
     this._onRequestForShare = this._onRequestForShare.bind(this);
     this._onRequestForShareClose = this._onRequestForShareClose.bind(this);
-    this._onSave = this._onSave.bind(this);
+    this._onShare = this._onShare.bind(this);
 
 
 
@@ -89,17 +91,6 @@ export default class MiniAppContainer extends Component {
     })
   }
 
-  _onRequestForShare(){
-    this.setState({
-      share: true
-    })
-  }
-  _onRequestForShareClose(){
-    this.setState({
-      share: false
-    })
-  }
-
   _onSave(caseId){
     let save = {
       miniAppName: this.miniApp.name,
@@ -118,6 +109,59 @@ export default class MiniAppContainer extends Component {
       this.props.msg.success('Sauvegarde réussie!');
     })
   }
+
+  _onRequestForShare(){
+    this.setState({
+      share: true
+    })
+  }
+  _onRequestForShareClose(){
+    this.setState({
+      share: false
+    })
+  }
+
+  _onShare(emailList){
+    this.setState({
+      share: false
+    });
+    let emails = emailList.map((email)=>{
+      return email.value
+    });
+    this.props.msg.info("Envoi en cours...");
+    const client = this.props.client;
+    const sharer = client.service('sharer');
+    let series = [];
+    console.log(series);
+    let total = 0;
+    this.state.result.forEach((s)=>{
+      total += s.value
+    });
+    console.log(total);
+    this.state.result.forEach((s)=>{
+      let serie = {
+        label: s.label,
+        value: currencyFormatter.format(s.value, AppSettings.currencyOptionFormater) + '€'
+      }
+      series.push(serie);
+    });
+    const data = {
+      organisation: this.props.client.get('organisation').name,
+      total: currencyFormatter.format(total, AppSettings.currencyOptionFormater) + '€',
+      miniAppName: this.miniApp.name,
+      series: series
+    }
+    const share = {
+      emails: emails,
+      data: data
+    }
+    console.log(share);
+    sharer.create(share)
+    .then((s)=>{
+      this.props.msg.success('Partage réussi!');
+    })
+  }
+
 
   _renderHeader() {
     /**
@@ -158,7 +202,7 @@ export default class MiniAppContainer extends Component {
       )
     }
     else if(this.state.share){
-      modal = <ShareModal onClose={this._onRequestForShareClose} msg={this.props.msg} onSubmit={(e)=>{console.log(e)}}/>;
+      modal = <ShareModal onClose={this._onRequestForShareClose} msg={this.props.msg} onSubmit={this._onShare}/>;
     }
     return modal;
   }

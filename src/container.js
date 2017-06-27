@@ -29,7 +29,7 @@ import UsersAdmin from './screen/users_admin'
 import SettingsAdmin from './screen/settings'
 
 
-import {Switch, Route, withRouter} from 'react-router-dom'
+import {Switch, Route, withRouter, Redirect} from 'react-router-dom'
 import AlertContainer from 'react-alert';
 
 class Container extends Component {
@@ -274,7 +274,7 @@ class Container extends Component {
             <FadingRoute path="/app/admin" component={Admin}/>
             <FadingRoute path="/app/users" component={UsersAdmin}/>
             <FadingRoute path="/app/settings" component={SettingsAdmin}/>
-            <FadingRoute component={miniAppList}/>
+            <Redirect to='/app'/>
           </Switch>
           {modal}
         </div>
