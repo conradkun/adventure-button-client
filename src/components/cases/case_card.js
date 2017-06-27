@@ -6,6 +6,7 @@ import Edit from 'grommet/components/icons/base/Edit';
 import Expand from 'grommet/components/icons/base/Expand';
 import Trash from 'grommet/components/icons/base/Trash';
 import Close from 'grommet/components/icons/base/Close';
+import Send from 'grommet/components/icons/base/Send';
 import Tiles from 'grommet/components/Tiles';
 import Heading from 'grommet/components/Heading';
 import Meter from 'grommet/components/Meter';
@@ -101,6 +102,9 @@ class CaseCard extends Component {
               <Anchor icon={< Expand />} onClick={() => {
                   this.props.onExpand(save.miniAppCode, save.value, save.result);
                 }} animateIcon={true} primary={false}/>
+              <Anchor icon={< Send />} onClick={() => {
+                    this.props.onShare(save.miniAppName, save.result);
+                  }} animateIcon={true} primary={false}/>
               <Anchor icon={< Edit />} onClick={() => {
                   this.props.onEdit(save._id, save.miniAppCode, save.value, save.result);
                 }} animateIcon={true} primary={false}/>

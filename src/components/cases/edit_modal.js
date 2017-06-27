@@ -57,7 +57,6 @@ export default class EditModal extends Component {
 
 
   _onValueChanged(value) {
-    console.log(value);
     this.value = value;
     this.result = this.compute(this.props.client.get('organisation').settings, value);
     this.forceUpdate();
@@ -77,6 +76,8 @@ export default class EditModal extends Component {
     .then((s)=>{
       this.props.msg.success('Sauvegarde réussie!');
       this.props.onClose();
+    }).catch((e)=>{
+      this.props.msg.success('Erreur: ' + e);
     })
   }
 

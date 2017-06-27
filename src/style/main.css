@@ -10882,3 +10882,6 @@ html {
     background-color: #FFF;
     color: #000;
     cursor: pointer; }
+
+.annotated-meter-value--small > div > span {
+  font-size: 2rem; }

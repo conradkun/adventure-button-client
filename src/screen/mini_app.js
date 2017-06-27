@@ -125,19 +125,21 @@ export default class MiniAppContainer extends Component {
     this.setState({
       share: false
     });
+
     let emails = emailList.map((email)=>{
       return email.value
     });
+
     this.props.msg.info("Envoi en cours...");
     const client = this.props.client;
     const sharer = client.service('sharer');
     let series = [];
-    console.log(series);
     let total = 0;
+
     this.state.result.forEach((s)=>{
       total += s.value
     });
-    console.log(total);
+
     this.state.result.forEach((s)=>{
       let serie = {
         label: s.label,
@@ -145,17 +147,19 @@ export default class MiniAppContainer extends Component {
       }
       series.push(serie);
     });
+
     const data = {
       organisation: this.props.client.get('organisation').name,
       total: currencyFormatter.format(total, AppSettings.currencyOptionFormater) + '€',
       miniAppName: this.miniApp.name,
       series: series
     }
+
     const share = {
       emails: emails,
       data: data
     }
-    console.log(share);
+
     sharer.create(share)
     .then((s)=>{
       this.props.msg.success('Partage réussi!');
@@ -247,7 +251,7 @@ export default class MiniAppContainer extends Component {
           <ChildButton onClick={() => {
               this._onRequestForSave();
             }
-          }icon="ion-android-archive" label="Sauvegarder"/>
+          }icon="ion-paper-airplane" label="Sauvegarder"/>
         </FloatingButton>
       )
     }

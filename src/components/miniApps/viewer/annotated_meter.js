@@ -60,6 +60,7 @@ class AnnotatedMeter extends Component {
     render() {
         const {legend, max, series, type, units, responsive} = this.props;
         let sizeLabel = 'medium';
+        let fontSizeClass = undefined
         let size = this.props.size;
         const {index} = this.state;
 
@@ -72,7 +73,7 @@ class AnnotatedMeter extends Component {
             value = 0;
             value = series[index].value;
             if (value > 9999) {
-                sizeLabel = 'small';
+                fontSizeClass = 'annotated-meter-value--small';
             }
             value = currencyFormatter.format(value, AppSettings.currencyOptionFormater);
             label = series[index].label;
@@ -80,7 +81,7 @@ class AnnotatedMeter extends Component {
             value = 0;
             series.forEach(item => value += item.value);
             if (value > 9999) {
-                sizeLabel = 'small';
+                fontSizeClass = 'annotated-meter-value--small';
             }
             value = parseFloat(Math.round(value * 100) / 100).toFixed(2);
             value = currencyFormatter.format(value, AppSettings.currencyOptionFormater);
@@ -112,7 +113,7 @@ class AnnotatedMeter extends Component {
                 <Meter type='circle' stacked={true} series={series}
                        label={
                            <Value value={value} units={units} align='center' label={label}
-                                  size={sizeLabel}/>
+                                  size={sizeLabel} className={fontSizeClass}/>
                        } max={max} size={size} activeIndex={index}
                        onActive={this._onActive}/>
             );

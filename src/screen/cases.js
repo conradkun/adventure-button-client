@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import currencyFormatter from 'currency-formatter';
 import Box from 'grommet/components/Box';
 import Button from 'grommet/components/Button';
 import Search from 'grommet/components/Search';
@@ -20,8 +21,8 @@ import ExpandModal from '../components/cases/expand_modal';
 import WarnModal from '../components/cases/warn_modal';
 import EditModal from '../components/cases/edit_modal';
 import DeleteModal from '../components/cases/delete_modal';
+import ShareModal from '../components/miniApps/modals/share_modal';
 import {miniApps} from '../miniApps';
-import Viewer from '../components/miniApps/viewer/viewer';
 import Spinner from 'react-spinkit';
 //import {sleep} from 'wait-promise';
 
@@ -79,6 +80,9 @@ class Cases extends Component {
     this._onRequestForEditClose = this._onRequestForEditClose.bind(this);
     this._onRequestForDeleteCase = this._onRequestForDeleteCase.bind(this);
     this._onDeleteCase = this._onDeleteCase.bind(this);
+    this._onRequestForShare = this._onRequestForShare.bind(this);
+    this._onRequestForShareClose = this._onRequestForShareClose.bind(this);
+    this._onShare = this._onShare.bind(this);
 
     this.state = {
       isLoading: true,
@@ -86,7 +90,8 @@ class Cases extends Component {
       searchString: "",
       expand: false,
       warn: false,
-      edit: false
+      edit: false,
+      share: false
     }
   }
 
@@ -132,6 +137,8 @@ class Cases extends Component {
     .then((cl)=>{
       this.setState({
         isLoading: false,
+        unfilteredTotal: cl.length,
+        filteredTotal: cl.length,
         cases: cl
       })
     })
@@ -219,6 +226,66 @@ class Cases extends Component {
       this.props.msg.success("Supprimé!")
     })
   }
+
+  _onRequestForShare(shareMiniAppName, shareResult){
+    this.setState({
+      share: true,
+      shareResult: shareResult,
+      shareMiniAppName: shareMiniAppName
+    })
+  }
+  _onRequestForShareClose(){
+    this.setState({
+      share: false,
+      shareResult: undefined
+    })
+  }
+
+  _onShare(emailList){
+    this.setState({
+      share: false
+    });
+
+    let emails = emailList.map((email)=>{
+      return email.value
+    });
+
+    this.props.msg.info("Envoi en cours...");
+    const client = this.props.client;
+    const sharer = client.service('sharer');
+    let series = [];
+    let total = 0;
+
+    this.state.shareResult.forEach((s)=>{
+      total += s.value
+    });
+
+    this.state.shareResult.forEach((s)=>{
+      let serie = {
+        label: s.label,
+        value: currencyFormatter.format(s.value, AppSettings.currencyOptionFormater) + '€'
+      }
+      series.push(serie);
+    });
+
+    const data = {
+      organisation: this.props.client.get('organisation').name,
+      total: currencyFormatter.format(total, AppSettings.currencyOptionFormater) + '€',
+      miniAppName: this.state.shareMiniAppName,
+      series: series
+    }
+
+    const share = {
+      emails: emails,
+      data: data
+    }
+
+    sharer.create(share)
+    .then((s)=>{
+      this.props.msg.success('Partage réussi!');
+    })
+  }
+
   _compareWithCreatedAt(a, b) {
     return new Date(a.createdAt) < new Date(b.createdAt);
   }
@@ -228,7 +295,8 @@ class Cases extends Component {
       this._getCases()
       .then((cl)=>{
         this.setState({
-          cases: cl
+          cases: cl,
+          filteredTotal: cl.length
         })
       })
     }
@@ -244,7 +312,8 @@ class Cases extends Component {
       this._getCases(query)
       .then((cl)=>{
         this.setState({
-          cases: cl
+          cases: cl,
+          filteredTotal: cl.length
         })
       })
     }
@@ -255,7 +324,7 @@ class Cases extends Component {
     let cases = this.state.cases;
     cards = cases.map((c) => {
       return (
-        <CaseCard key={c._id} client={this.props.client} msg={this.props.msg} onExpand={this._onRequestForExpand} onEdit={this._onRequestForEdit} onDeleteCase={this._onRequestForDeleteCase} responsive={this.props.responsive} cas={c}/>
+        <CaseCard key={c._id} client={this.props.client} msg={this.props.msg} onExpand={this._onRequestForExpand} onEdit={this._onRequestForEdit} onShare={this._onRequestForShare} onDeleteCase={this._onRequestForDeleteCase} responsive={this.props.responsive} cas={c}/>
       )
     });
 
@@ -271,6 +340,8 @@ class Cases extends Component {
         msg={this.props.msg}/>
     } else if(this.state.delete){
       modal = <DeleteModal onClose={()=>{this.setState({delete: false})}} onSubmit={()=>{ this._onDeleteCase()}}/>
+    } else if(this.state.share){
+      modal = <ShareModal onClose={this._onRequestForShareClose} msg={this.props.msg} onSubmit={this._onShare}/>;
     }
     return (
       <Box colorIndex={AppSettings.backgroundColor} margin='large'>
@@ -279,9 +350,9 @@ class Cases extends Component {
           path='/app'
           primary={true}
           a11yTitle='Effectuer un calcul de frais' />}
-          emptyMessage="Vous n'avez aucun dossier pour le moment, sauvegarder un calcul de frais pour en créer un."
-          unfilteredTotal={this.state.cases.length}
-          filteredTotal={1} />
+          emptyMessage="Vous n'avez aucun dossier pour le moment, sauvegardez un calcul de frais pour en créer un."
+          unfilteredTotal={this.state.unfilteredTotal}
+          filteredTotal={this.state.filteredTotal} />
         <Tiles fill={true}
                flush={false}
                responsive={false}

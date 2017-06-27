@@ -150,3 +150,7 @@ html{
     cursor: pointer;
   }
 }
+
+.annotated-meter-value--small > div > span {
+    font-size: 2rem;
+}
