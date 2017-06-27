@@ -161,8 +161,10 @@ export default class MiniAppContainer extends Component {
     }
 
     sharer.create(share)
-    .then((s)=>{
+    .then(()=>{
       this.props.msg.success('Partage réussi!');
+    }).catch((e)=>{
+      console.log(e);
     })
   }
 

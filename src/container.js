@@ -27,6 +27,7 @@ import Cases from './screen/cases';
 import Admin from './screen/admin'
 import UsersAdmin from './screen/users_admin'
 import SettingsAdmin from './screen/settings'
+import Breakdown from './screen/breakdown';
 
 
 import {Switch, Route, withRouter, Redirect} from 'react-router-dom'
@@ -274,6 +275,7 @@ class Container extends Component {
             <FadingRoute path="/app/admin" component={Admin}/>
             <FadingRoute path="/app/users" component={UsersAdmin}/>
             <FadingRoute path="/app/settings" component={SettingsAdmin}/>
+            <FadingRoute path="/app/breakdown" component={Breakdown}/>
             <Redirect to='/app'/>
           </Switch>
           {modal}

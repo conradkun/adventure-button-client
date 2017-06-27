@@ -44,6 +44,7 @@
     "react-router-transition": "0.0.6",
     "react-scripts": "^1.0.0",
     "react-select": "^1.0.0-rc.5",
+    "react-sortable-hoc": "^0.6.3",
     "react-spinkit": "^2.0.0",
     "sass-loader": "^6.0.5",
     "socket.io-client": "^2.0.1",
