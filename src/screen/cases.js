@@ -13,7 +13,7 @@ import LinkPrevious from 'grommet/components/icons/base/LinkPrevious';
 import Tiles from 'grommet/components/Tiles';
 import Tile from 'grommet/components/Tile';
 import Card from 'grommet/components/Card';
-import ListPlaceholder from 'grommet-addons/components/ListPlaceholder';
+import ListPlaceholder from '../components/common/list_placeholder';
 
 import AppSettings from '../utils/app_settings';
 import CaseCard from '../components/cases/case_card';
@@ -147,7 +147,7 @@ class Cases extends Component {
   _onRequestForExpand(code, value, result){
     const miniApp = this._getMiniApp(code);
     const computedResult = miniApp.compute(this.props.client.get('organisation').settings, value);
-    const equal = this._checkResult(result, computedResult);
+    const equal = this._checkIfResultOfSaveIsEqual(result, computedResult);
     this.setState({
       expand: true,
       expandDBResult: result,
@@ -165,7 +165,7 @@ class Cases extends Component {
     })
   }
 
-  _checkResult(result, DBResult){
+  _checkIfResultOfSaveIsEqual(result, DBResult){
     let resultValueArray = [];
     let DBResultValueArray=  [];
     result.forEach((r)=>{
@@ -182,7 +182,7 @@ class Cases extends Component {
   _onRequestForEdit(id, code, value, result){
     const miniApp = this._getMiniApp(code);
     const computedResult = miniApp.compute(this.props.client.get('organisation').settings, value);
-    const equal = this._checkResult(result, computedResult);
+    const equal = this._checkIfResultOfSaveIsEqual(result, computedResult);
     if(!equal){
       this.setState({
         warn: true,
@@ -351,6 +351,7 @@ class Cases extends Component {
           primary={true}
           a11yTitle='Effectuer un calcul de frais' />}
           emptyMessage="Vous n'avez aucun dossier pour le moment, sauvegardez un calcul de frais pour en créer un."
+          noMatchesMessage="Aucun résultat"
           unfilteredTotal={this.state.unfilteredTotal}
           filteredTotal={this.state.filteredTotal} />
         <Tiles fill={true}
