@@ -1,1 +1,2 @@
 http://github.hubspot.com/pace/docs/welcome/
+https://www.npmjs.com/package/react-snapshot
