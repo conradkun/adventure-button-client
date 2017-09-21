@@ -7,17 +7,30 @@ import Image from "grommet/components/Image";
 import Logo from "../components/common/logo";
 import Fade from "react-fade";
 import backgroundImg from "../ressources/background.jpeg";
+import Responsive from "grommet/utils/Responsive";
 
 class LoginPage extends Component {
   constructor(props) {
     super(props);
+    this._onResponsive = this._onResponsive.bind(this);
     this.state = {
-      errors: []
+      errors: [],
+      mobile: false
     };
     this._handleSubmit = this._handleSubmit.bind(this);
   }
 
+  componentWillUnmount() {
+    this._onResponsive.stop();
+  }
+
+  _onResponsive(mobile) {
+    this.setState({ mobile });
+  }
+
   componentDidMount() {
+    this._onResponsive = Responsive.start(this._onResponsive);
+
     if (this.props.offline) {
       this.setState({
         errors: [
@@ -95,19 +108,27 @@ class LoginPage extends Component {
         flex={true}
         justify="between"
       >
-        <Box direction="row" basis="2/3" className="no-margin">
-          <Image
-            style={{
-              width: "auto",
-              height: "auto",
-              minWidth: "100%",
-              minHeight: "100%",
-              objectFit: "cover"
-            }}
-            src={backgroundImg}
-          />
-        </Box>
-        <Box direction="row" basis="1/3" className="no-margin" pad={{vertical: 'large'}} justify='center'>
+        {!this.state.mobile ? (
+          <Box direction="row" basis="2/3" className="no-margin">
+            <Image
+              style={{
+                width: "auto",
+                height: "auto",
+                minWidth: "100%",
+                minHeight: "100%",
+                objectFit: "cover"
+              }}
+              src={backgroundImg}
+            />
+          </Box>
+        ) : null}
+        <Box
+          direction="row"
+          basis="1/3"
+          className="no-margin"
+          justify="center"
+          align="center"
+        >
           <LoginForm
             logo={<Logo multiplier={0.5} text={true} />}
             align="center"
