@@ -1,16 +1,17 @@
 <!doctype html>
 <html lang="fr">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <meta name="theme-color" content="#0A64A0">
-    <!--
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#0A64A0">
+  <!--
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-    <!--
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+  <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
@@ -19,9 +20,9 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>Baremio</title>
-    <!-- Loader Style -->
-    <style>
+  <title>Baremio</title>
+  <!-- Loader Style -->
+  <style>
     @font-face {
       font-family: 'Work Sans';
       font-style: normal;
@@ -29,9 +30,13 @@
       src: local("Work Sans Light"), local("WorkSans-Light"), url("https://fonts.gstatic.com/s/worksans/v2/FD_Udbezj8EHXbdsqLUplxampu5_7CjHW5spxoeN3Vs.woff2") format("woff2");
     }
 
-    html, body, #root, .loader-container {
+    html,
+    body,
+    #root,
+    .loader-container {
       height: 100%;
     }
+
     .loader-container {
       overflow-y: hidden;
       overflow-x: hidden;
@@ -49,11 +54,14 @@
       align-items: center;
       justify-content: center;
     }
-    </style>
-  </head>
-  <body class="grommet">
-    <div id="root"><div class="loader-container">BAREMIO</div></div>
-    <!--
+  </style>
+</head>
+
+<body class="grommet">
+  <div id="root">
+    <div class="loader-container">EASY SCALE</div>
+  </div>
+  <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
 
@@ -63,5 +71,6 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-  </body>
+</body>
+
 </html>

@@ -137,7 +137,7 @@ export default class LoginForm extends Component {
     const login = <FormattedMessage id="Log In" defaultMessage="Se connecter" />;
 
     return (
-      <Layer align="center">
+
       <Form className={classes} pad="medium" onSubmit={this._onSubmit}>
         <Box align={align}>
           {logo}
@@ -166,7 +166,6 @@ export default class LoginForm extends Component {
           {forgotPassword}
         </Footer>
       </Form>
-    </Layer>
     );
   }
 

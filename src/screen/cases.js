@@ -1,72 +1,73 @@
-import React, {Component} from 'react';
-import currencyFormatter from 'currency-formatter';
-import Box from 'grommet/components/Box';
-import Button from 'grommet/components/Button';
-import Search from 'grommet/components/Search';
-import Header from 'grommet/components/Header';
-import Anchor from 'grommet/components/Anchor';
-import Title from 'grommet/components/Title';
-import Add from 'grommet/components/icons/base/Add';
-import Close from 'grommet/components/icons/base/Close';
-import MenuIcon from 'grommet/components/icons/base/Menu';
-import LinkPrevious from 'grommet/components/icons/base/LinkPrevious';
-import Tiles from 'grommet/components/Tiles';
-import Tile from 'grommet/components/Tile';
-import Card from 'grommet/components/Card';
-import ListPlaceholder from '../components/common/list_placeholder';
+import React, { Component } from "react";
+import currencyFormatter from "currency-formatter";
+import Box from "grommet/components/Box";
+import Button from "grommet/components/Button";
+import Search from "grommet/components/Search";
+import Header from "grommet/components/Header";
+import Anchor from "grommet/components/Anchor";
+import Title from "grommet/components/Title";
+import Add from "grommet/components/icons/base/Add";
+import Close from "grommet/components/icons/base/Close";
+import MenuIcon from "grommet/components/icons/base/Menu";
+import LinkPrevious from "grommet/components/icons/base/LinkPrevious";
+import Tiles from "grommet/components/Tiles";
+import Tile from "grommet/components/Tile";
+import Card from "grommet/components/Card";
+import ListPlaceholder from "../components/common/list_placeholder";
 
-import AppSettings from '../utils/app_settings';
-import CaseCard from '../components/cases/case_card';
-import ExpandModal from '../components/cases/expand_modal';
-import WarnModal from '../components/cases/warn_modal';
-import EditModal from '../components/cases/edit_modal';
-import DeleteModal from '../components/cases/delete_modal';
-import ShareModal from '../components/miniApps/modals/share_modal';
-import {miniApps} from '../miniApps';
-import Spinner from 'react-spinkit';
+import AppSettings from "../utils/app_settings";
+import CaseCard from "../components/cases/case_card";
+import ExpandModal from "../components/cases/expand_modal";
+import WarnModal from "../components/cases/warn_modal";
+import EditModal from "../components/cases/edit_modal";
+import DeleteModal from "../components/cases/delete_modal";
+import ShareModal from "../components/miniApps/modals/share_modal";
+import { miniApps } from "../miniApps";
+import Spinner from "react-spinkit";
 //import {sleep} from 'wait-promise';
 
 class Cases extends Component {
-
   constructor(props) {
     super(props);
     /**
     * Event Listeners
     **/
     const client = props.client;
-    const cases = client.service('cases');
-    const saves = client.service('saves');
-    cases.on('patched', cas => {
-      const newCasesList = this.state.cases.filter((c) => {return c._id !== cas._id});
+    const cases = client.service("cases");
+    const saves = client.service("saves");
+    cases.on("patched", cas => {
+      const newCasesList = this.state.cases.filter(c => {
+        return c._id !== cas._id;
+      });
       newCasesList.push(cas);
       this.setState({
         cases: newCasesList
-      })
+      });
     });
-    cases.on('created', cas => {
-        if(cas.saves){
-          this.setState({
-            cases:  [...this.state.cases, cas]
-          })
-        }
+    cases.on("created", cas => {
+      if (cas.saves) {
+        this.setState({
+          cases: [...this.state.cases, cas]
+        });
       }
-    )
-    cases.on('removed', cas => {
-      const newCasesList = this.state.cases.filter((c) => {return c._id !== cas._id});
+    });
+    cases.on("removed", cas => {
+      const newCasesList = this.state.cases.filter(c => {
+        return c._id !== cas._id;
+      });
       this.setState({
         cases: newCasesList
-      })
+      });
     });
-    saves.on('patched',  save => {
+    saves.on("patched", save => {
       this._load();
     });
-    saves.on('created', save => {
+    saves.on("created", save => {
       this._load();
     });
-    saves.on('removed', save => {
+    saves.on("removed", save => {
       this._load();
     });
-
 
     this._onSearch = this._onSearch.bind(this);
     this._getCases = this._getCases.bind(this);
@@ -92,7 +93,7 @@ class Cases extends Component {
       warn: false,
       edit: false,
       share: false
-    }
+    };
   }
 
   componentDidMount() {
@@ -102,7 +103,7 @@ class Cases extends Component {
 
   _getMiniApp(code) {
     let miniApp = undefined;
-    miniApps.forEach((ma) => {
+    miniApps.forEach(ma => {
       if (ma.code === code) {
         miniApp = ma;
       }
@@ -110,259 +111,319 @@ class Cases extends Component {
     return miniApp;
   }
 
-  _getCases(query={
-    query: {
-      $limit: 10,
-      $sort: {
-        createdAt: -1
+  _getCases(
+    query = {
+      query: {
+        $limit: 10,
+        $sort: {
+          createdAt: -1
+        }
       }
     }
-  }){
-    return new Promise((resolve,reject)=>{
+  ) {
+    return new Promise((resolve, reject) => {
       const client = this.props.client;
-      const cases = client.service('cases');
+      const cases = client.service("cases");
       let casesList = [];
-      Promise.all([cases.find(query)])
-      .then((data)=>{
-        data[0].data.forEach((data)=>{
+      Promise.all([cases.find(query)]).then(data => {
+        data[0].data.forEach(data => {
           casesList.push(data);
         });
         resolve(casesList);
-      })
+      });
     });
   }
 
   _load() {
-    this._getCases()
-    .then((cl)=>{
+    this._getCases().then(cl => {
       this.setState({
         isLoading: false,
         unfilteredTotal: cl.length,
         filteredTotal: cl.length,
         cases: cl
-      })
-    })
+      });
+    });
   }
 
-  _onRequestForExpand(code, value, result){
+  _onRequestForExpand(code, value, result) {
     const miniApp = this._getMiniApp(code);
-    const computedResult = miniApp.compute(this.props.client.get('organisation').settings, value);
+    const computedResult = miniApp.compute(
+      this.props.client.get("organisation").settings,
+      value
+    );
     const equal = this._checkIfResultOfSaveIsEqual(result, computedResult);
     this.setState({
       expand: true,
       expandDBResult: result,
       expandResult: computedResult,
       expandEqual: equal
-    })
+    });
   }
 
-  _onRequestForExpandClose(){
+  _onRequestForExpandClose() {
     this.setState({
       expand: false,
       expandDBResult: undefined,
-      expandResult : undefined,
+      expandResult: undefined,
       expandEqual: undefined
-    })
+    });
   }
 
-  _checkIfResultOfSaveIsEqual(result, DBResult){
+  _checkIfResultOfSaveIsEqual(result, DBResult) {
     let resultValueArray = [];
-    let DBResultValueArray=  [];
-    result.forEach((r)=>{
+    let DBResultValueArray = [];
+    result.forEach(r => {
       resultValueArray.push(r.value);
-    })
+    });
     resultValueArray.sort();
-    DBResult.forEach((r)=>{
+    DBResult.forEach(r => {
       DBResultValueArray.push(r.value);
-    })
+    });
     DBResultValueArray.sort();
-    return JSON.stringify(resultValueArray) === JSON.stringify(DBResultValueArray);
+    return (
+      JSON.stringify(resultValueArray) === JSON.stringify(DBResultValueArray)
+    );
   }
 
-  _onRequestForEdit(id, code, value, result){
+  _onRequestForEdit(id, code, value, result) {
     const miniApp = this._getMiniApp(code);
-    const computedResult = miniApp.compute(this.props.client.get('organisation').settings, value);
+    const computedResult = miniApp.compute(
+      this.props.client.get("organisation").settings,
+      value
+    );
     const equal = this._checkIfResultOfSaveIsEqual(result, computedResult);
-    if(!equal){
+    if (!equal) {
       this.setState({
         warn: true,
         editId: id,
         editCode: code,
         editValue: value
-      })
-    }
-    else {
+      });
+    } else {
       this.setState({
         edit: true,
         editId: id,
         editCode: code,
         editValue: value
-      })
+      });
     }
   }
 
-  _onRequestForEditClose(){
+  _onRequestForEditClose() {
     this.setState({
       edit: false,
       editId: undefined,
       editCode: undefined,
       editValue: undefined
-    })
-  }
-  _onRequestForDeleteCase(id){
-    this.setState({
-      delete: true,
-      deleteId:id
     });
   }
-  _onDeleteCase(){
-    const client = this.props.client
-    const cases = client.service('cases');
-    cases.remove(this.state.deleteId)
-    .then(()=>{
+  _onRequestForDeleteCase(id) {
+    this.setState({
+      delete: true,
+      deleteId: id
+    });
+  }
+  _onDeleteCase() {
+    const client = this.props.client;
+    const cases = client.service("cases");
+    cases.remove(this.state.deleteId).then(() => {
       this.setState({
         delete: false
       });
-      this.props.msg.success("Supprimé!")
-    })
+      this.props.msg.success("Supprimé!");
+    });
   }
 
-  _onRequestForShare(shareMiniAppName, shareResult){
+  _onRequestForShare(shareMiniAppName, shareResult) {
     this.setState({
       share: true,
       shareResult: shareResult,
       shareMiniAppName: shareMiniAppName
-    })
+    });
   }
-  _onRequestForShareClose(){
+  _onRequestForShareClose() {
     this.setState({
       share: false,
       shareResult: undefined
-    })
+    });
   }
 
-  _onShare(emailList){
+  _onShare(emailList) {
     this.setState({
       share: false
     });
 
-    let emails = emailList.map((email)=>{
-      return email.value
+    let emails = emailList.map(email => {
+      return email.value;
     });
 
     this.props.msg.info("Envoi en cours...");
     const client = this.props.client;
-    const sharer = client.service('sharer');
+    const sharer = client.service("sharer");
     let series = [];
     let total = 0;
 
-    this.state.shareResult.forEach((s)=>{
-      total += s.value
+    this.state.shareResult.forEach(s => {
+      total += s.value;
     });
 
-    this.state.shareResult.forEach((s)=>{
+    this.state.shareResult.forEach(s => {
       let serie = {
         label: s.label,
-        value: currencyFormatter.format(s.value, AppSettings.currencyOptionFormater) + '€'
-      }
+        value:
+          currencyFormatter.format(
+            s.value,
+            AppSettings.currencyOptionFormater
+          ) + "€"
+      };
       series.push(serie);
     });
 
     const data = {
-      organisation: this.props.client.get('organisation').name,
-      total: currencyFormatter.format(total, AppSettings.currencyOptionFormater) + '€',
+      organisation: this.props.client.get("organisation").name,
+      total:
+        currencyFormatter.format(total, AppSettings.currencyOptionFormater) +
+        "€",
       miniAppName: this.state.shareMiniAppName,
       series: series
-    }
+    };
 
     const share = {
       emails: emails,
       data: data
-    }
+    };
 
-    sharer.create(share)
-    .then((s)=>{
-      this.props.msg.success('Partage réussi!');
-    })
+    sharer.create(share).then(s => {
+      this.props.msg.success("Partage réussi!");
+    });
   }
 
   _compareWithCreatedAt(a, b) {
     return new Date(a.createdAt) < new Date(b.createdAt);
   }
 
-  _onSearch(e){
-    if(e.target.value === ''){
-      this._getCases()
-      .then((cl)=>{
+  _onSearch(e) {
+    if (e.target.value === "") {
+      this._getCases().then(cl => {
         this.setState({
           cases: cl,
           filteredTotal: cl.length
-        })
-      })
-    }
-    else {
-      let query={
-        query:{
-          name:{
+        });
+      });
+    } else {
+      let query = {
+        query: {
+          name: {
             $search: e.target.value
           },
           $limit: 10
         }
-      }
-      this._getCases(query)
-      .then((cl)=>{
+      };
+      this._getCases(query).then(cl => {
         this.setState({
           cases: cl,
           filteredTotal: cl.length
-        })
-      })
+        });
+      });
     }
   }
 
   _renderContent() {
     let cards;
     let cases = this.state.cases;
-    cards = cases.map((c) => {
+    cards = cases.map(c => {
       return (
-        <CaseCard key={c._id} client={this.props.client} msg={this.props.msg} onExpand={this._onRequestForExpand} onEdit={this._onRequestForEdit} onShare={this._onRequestForShare} onDeleteCase={this._onRequestForDeleteCase} responsive={this.props.responsive} cas={c}/>
-      )
+        <CaseCard
+          key={c._id}
+          client={this.props.client}
+          msg={this.props.msg}
+          onExpand={this._onRequestForExpand}
+          onEdit={this._onRequestForEdit}
+          onShare={this._onRequestForShare}
+          onDeleteCase={this._onRequestForDeleteCase}
+          responsive={this.props.responsive}
+          cas={c}
+        />
+      );
     });
 
     let modal;
-    if(this.state.expand){
-      modal = <ExpandModal result={this.state.expandResult} DBResult={this.state.expandDBResult} equal={this.state.expandEqual} onClose={this._onRequestForExpandClose}/>
-    }
-    else if(this.state.warn){
-      modal = <WarnModal onSubmit={()=>{ this.setState({warn: false, edit: true})}} onClose={()=>{this.setState({warn: false}); this._onRequestForEditClose()}}/>
-    }
-    else if(this.state.edit){
-      modal = <EditModal code={this.state.editCode} id={this.state.editId} value={this.state.editValue} client={this.props.client} responsive={this.props.responsive} onClose={this._onRequestForEditClose}
-        msg={this.props.msg}/>
-    } else if(this.state.delete){
-      modal = <DeleteModal onClose={()=>{this.setState({delete: false})}} onSubmit={()=>{ this._onDeleteCase()}}/>
-    } else if(this.state.share){
-      modal = <ShareModal onClose={this._onRequestForShareClose} msg={this.props.msg} onSubmit={this._onShare}/>;
+    if (this.state.expand) {
+      modal = (
+        <ExpandModal
+          result={this.state.expandResult}
+          DBResult={this.state.expandDBResult}
+          equal={this.state.expandEqual}
+          onClose={this._onRequestForExpandClose}
+        />
+      );
+    } else if (this.state.warn) {
+      modal = (
+        <WarnModal
+          onSubmit={() => {
+            this.setState({ warn: false, edit: true });
+          }}
+          onClose={() => {
+            this.setState({ warn: false });
+            this._onRequestForEditClose();
+          }}
+        />
+      );
+    } else if (this.state.edit) {
+      modal = (
+        <EditModal
+          code={this.state.editCode}
+          id={this.state.editId}
+          value={this.state.editValue}
+          client={this.props.client}
+          responsive={this.props.responsive}
+          onClose={this._onRequestForEditClose}
+          msg={this.props.msg}
+        />
+      );
+    } else if (this.state.delete) {
+      modal = (
+        <DeleteModal
+          onClose={() => {
+            this.setState({ delete: false });
+          }}
+          onSubmit={() => {
+            this._onDeleteCase();
+          }}
+        />
+      );
+    } else if (this.state.share) {
+      modal = (
+        <ShareModal
+          onClose={this._onRequestForShareClose}
+          msg={this.props.msg}
+          onSubmit={this._onShare}
+        />
+      );
     }
     return (
-      <Box colorIndex={AppSettings.backgroundColor} margin='large'>
-        <ListPlaceholder addControl={<Button icon={<Add style={{stroke :'#FFF'}}/>}
-          label='Effectuer un calcul de frais'
-          path='/app'
-          primary={true}
-          a11yTitle='Effectuer un calcul de frais' />}
+      <Box colorIndex={AppSettings.backgroundColor} margin="large">
+        <ListPlaceholder
+          addControl={
+            <Button
+              icon={<Add style={{ stroke: "#FFF" }} />}
+              label="Effectuer un calcul de frais"
+              path="/app"
+              primary={true}
+              a11yTitle="Effectuer un calcul de frais"
+            />
+          }
           emptyMessage="Vous n'avez aucun dossier pour le moment, sauvegardez un calcul de frais pour en créer un."
           noMatchesMessage="Aucun résultat"
           unfilteredTotal={this.state.unfilteredTotal}
-          filteredTotal={this.state.filteredTotal} />
-        <Tiles fill={true}
-               flush={false}
-               responsive={false}
-               >
+          filteredTotal={this.state.filteredTotal}
+        />
+        <Tiles fill={true} flush={false} responsive={false}>
           {cards}
         </Tiles>
         {modal}
       </Box>
-    )
+    );
   }
 
   _renderHeader() {
@@ -371,31 +432,52 @@ class Cases extends Component {
          */
     let appLogo;
     let title = (
-      <Title pad='small' responsive={true}>
-        <Box align='center' direction='row'>
+      <Title pad="small" responsive={true}>
+        <Box align="center" direction="row">
           <span>Dossiers</span>
         </Box>
       </Title>
     );
     let mobileButton;
     let search;
-    let colorIndex = 'light-1';
-    let justify = 'between';
-    if ('single' === this.props.responsive) {
-      justify = 'end';
+    let colorIndex = "light-1";
+    let justify = "between";
+    if ("single" === this.props.responsive) {
+      justify = "end";
       appLogo = this.props.renderAppLogo();
       colorIndex = AppSettings.mainColor;
       mobileButton = (
-        <Anchor icon={< MenuIcon />} onClick={this.props.onMenuOpen}></Anchor>
+        <Anchor icon={<MenuIcon />} onClick={this.props.onMenuOpen} />
       );
     }
-    search = (<Search inline={true} fill={true} size='medium' placeHolder='Rechercher' defaultValue={this.state.searchString} dropAlign={{
-      "right": "right"
-    }} onDOMChange={this._onSearch} />);
+    search = (
+      <Search
+        inline={true}
+        fill={true}
+        size="medium"
+        placeHolder="Rechercher"
+        defaultValue={this.state.searchString}
+        dropAlign={{
+          right: "right"
+        }}
+        onDOMChange={this._onSearch}
+      />
+    );
     return (
-      <Header size='small' className="drop-shadow-bottom" colorIndex={colorIndex} fixed={true}>
+      <Header
+        size="small"
+        className="drop-shadow-bottom"
+        colorIndex={colorIndex}
+        fixed={true}
+      >
         {appLogo}
-        <Box flex={true} justify={justify} pad="small" direction='row' responsive={false}>
+        <Box
+          flex={true}
+          justify={justify}
+          pad="small"
+          direction="row"
+          responsive={false}
+        >
           {title}
           {search}
           {mobileButton}
@@ -406,19 +488,23 @@ class Cases extends Component {
 
   render() {
     let loader = (
-      <Box margin='large' direction='column' align='center' justify='center' alignContent='center'>
-        <Spinner spinnerName="double-bounce"/>
+      <Box
+        margin="large"
+        direction="column"
+        align="center"
+        justify="center"
+        alignContent="center"
+      >
+        <Spinner spinnerName="double-bounce" />
       </Box>
     );
     return (
-      <Box full='vertical' colorIndex={AppSettings.backgroundColor}>
+      <Box full="vertical" colorIndex={AppSettings.backgroundColor}>
         {this._renderHeader()}
-        {this.state.isLoading
-          ? loader
-          : this._renderContent()}
+        {this.state.isLoading ? loader : this._renderContent()}
       </Box>
-    )
+    );
   }
 }
 
-export default Cases
+export default Cases;
