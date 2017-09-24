@@ -18,7 +18,7 @@ export default class Logo extends Component {
     let text = this.props.text || false;
     let title = undefined;
     if(text) {
-      title = "Baremio"
+      title = "Easy Scale"
     }
     let color = this.props.color || "#0A64A0";
     let margin = this.props.margin || "20px";

@@ -418,7 +418,7 @@ class Cases extends Component {
           unfilteredTotal={this.state.unfilteredTotal}
           filteredTotal={this.state.filteredTotal}
         />
-        <Tiles fill={true} flush={false} responsive={false}>
+        <Tiles fill={true} responsive={false}>
           {cards}
         </Tiles>
         {modal}
