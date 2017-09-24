@@ -119,7 +119,7 @@ class Container extends Component {
       <Box align="center" direction="row" responsive={false}>
         <Logo multiplier={0.1} margin="40px" color="#FFF" />
         <Title pad="small" responsive={true}>
-          Baremio
+          Easy Scale
         </Title>
       </Box>
     );

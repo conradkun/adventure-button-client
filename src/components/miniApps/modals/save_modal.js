@@ -58,7 +58,7 @@ export default class SaveModal extends Component {
                     <Form onSubmit={this._onSubmit}>
                         <header><h1>Ajouter à un dossier</h1></header>
                         <Box margin='small'>
-                          <Label>Pour ajouter ce calcul de frais à un dossier, veuillez choisir un dossier dans la liste ci dessous (ou en créer un)</Label>
+                          <Label>Pour ajouter ce calcul de frais à un dossier, veuillez choisir un dossier dans la liste ci dessous (ou en créer un nouveau)</Label>
                         </Box>
                         <SelectCase client={this.props.client} msg={this.props.msg} onChange={
                             (value, id)=>{
