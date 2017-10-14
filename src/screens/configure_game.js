@@ -78,7 +78,8 @@ export default class comfigureGame extends Component {
             this.props.sendAction( {
               name: 'configure',
               
-              date: this.state.fromDate,
+              fromDate: this.state.fromDate,
+              toDate: this.state.toDate,
               budget: this.state.budget + 1,
             })
           }}
