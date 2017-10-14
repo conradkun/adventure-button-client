@@ -11,7 +11,7 @@ export default class joinGame extends Component {
     super();
     this.timer = this.timer.bind(this);
     this.state = {
-      currentCount: 20
+      currentCount: 5
     }
   }
   componentDidMount() {

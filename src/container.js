@@ -45,11 +45,13 @@ class Container extends Component {
     this._sendAction = this._sendAction.bind(this);
     this._getState = this._getState.bind(this);
     
-    const socket = io('http://30c2513d.ngrok.io');
+    const socket = io('http://localhost:3030', {
+      transports: ['polling']
+    });
     this.io = socket;
 
     socket.on('state', (state)=>{
-      console.log(state);
+      console.log('got an update over socketio', state);
       this.setState({
         serverState: state
       })
@@ -162,11 +164,9 @@ class Container extends Component {
   _navigateToMode(){
 
     let location = this.props.history.location;
-    console.log(location);
     switch (this.state.serverState.mode) {
       case undefined: 
         {
-          console.log('undefined state')
           this._register();
           break;
         }
@@ -200,7 +200,7 @@ class Container extends Component {
         }
         break;
         }
-      case 'QuestionGame':
+      case 'Question':
       {
         if(location.pathname !== "/app/question-game"){
           this.props.history.push('/app/question-game')
