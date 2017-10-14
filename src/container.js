@@ -18,7 +18,8 @@ import Notification from "grommet/components/Notification";
 import ReactJson from 'react-json-view';
 import joinGame from './screens/join_game';
 import configureGame from './screens/configure_game'; 
-import questionGame from './screens/question_game.js';
+import questionGame from './screens/question_game';
+import gameResolution from './screens/game_resolution';
 
 import { Switch, Route, withRouter, Redirect } from "react-router-dom";
 import AlertContainer from "react-alert";
