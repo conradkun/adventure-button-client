@@ -147,7 +147,7 @@ $brand-color: #865CD6;
 /*------------------------------------*    #BUTTONS | Base
 \*------------------------------------*/
 .mfb-component__button, .mfb-component__button--main, .mfb-component__button--child {
-  background-color: #0A64A0;
+  background-color: #d32f2f;
   display: inline-block;
   position: relative;
   border: none;

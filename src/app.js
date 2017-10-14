@@ -36,8 +36,8 @@ class App extends Component {
       content = (
         <GrommetApp inline={true} centered={false}>
           <Switch>
-            <Route exact path='/app' render={(props) => (<Container {...props} client={this.state.client} offline={this.state.offline}/>)}/>
-            <Redirect to="/app"/>
+            <Route path='/app' render={(props) => (<Container {...props} client={this.state.client} offline={this.state.offline}/>)}/>
+            <Redirect to="/app"/>            
           </Switch>
         </GrommetApp>
       )

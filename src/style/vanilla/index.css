@@ -7964,8 +7964,8 @@ html.rtl .right-left-icon--right {
 
 .grommetux-pulse {
   display: inline-block;
-  height: 48px;
-  width: 48px;
+  height: 200px;
+  width: 200px;
   position: relative;
   line-height: 0;
   transition: transform 0.25s ease-out;
@@ -7979,17 +7979,17 @@ html.rtl .right-left-icon--right {
     animation: none; }
 
 .grommetux-pulse__icon svg {
-  width: 48px;
-  height: 48px;
-  border-radius: 48px;
-  padding: 12px;
+  width: 200px;
+  height: 200px;
+  border-radius: 200px;
+  padding: 36px;
   background-color: #00CCEB;
   stroke: #000001; }
 
 .grommetux-pulse__icon-anim {
   display: block;
-  width: 48px;
-  height: 48px;
+  width: 200px;
+  height: 200px;
   position: absolute;
   top: 0;
   left: 0;
@@ -7997,7 +7997,7 @@ html.rtl .right-left-icon--right {
   transform-origin: center;
   border: 1px solid;
   border-color: #00CCEB;
-  border-radius: 48px;
+  border-radius: 200px;
   -webkit-animation-name: scale-up-fade-out;
   -webkit-animation-duration: 1.5s;
   -webkit-animation-iteration-count: infinite;

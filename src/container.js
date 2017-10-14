@@ -17,7 +17,7 @@ import User from "grommet/components/icons/base/User";
 import Notification from "grommet/components/Notification";
 import ReactJson from 'react-json-view';
 import createGame from './screens/create_game';
-
+import configureGame from './screens/configure_game';
 
 
 import { Switch, Route, withRouter, Redirect } from "react-router-dom";
@@ -217,6 +217,7 @@ class Container extends Component {
           <AlertContainer ref={a => (this.msg = a)} {...this.alertOptions} />
           <Switch>
             <FadingRoute exact path="/app" component={createGame} />
+            <FadingRoute exact path="/app/configure" component={configureGame} />
             
           </Switch>
         </div>
