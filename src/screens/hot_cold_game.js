@@ -55,8 +55,9 @@ export default class hotColdGame extends Component {
             full = {false}
             colorIndex='accent-1'
             onClick={ () => this.handleHotChange()}>
+            <br/>
             <Image src={Fire} size='small'/>
-
+            <br/>
         </Box>
         <Box justify='center'
             align='center'
@@ -68,7 +69,7 @@ export default class hotColdGame extends Component {
             <Image src={Ice} size='small'/>
         </Box>
         <Heading align = 'center'>
-                {Math.floor(this.state.temp)}
+                {Math.floor(this.state.temp)}ºC
         </Heading>
       </div>
     )
