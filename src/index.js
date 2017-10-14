@@ -12,11 +12,6 @@ const render = (Component) => {
         document.getElementById('root')
     );
 };
-/**
-Raven
-    .config('https://2317581d9de14a25a777c94f1280ab9a@sentry.io/178364')
-    .install();
-**/
 render(Routes);
 
 

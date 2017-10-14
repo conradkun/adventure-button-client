@@ -1,16 +1,11 @@
 import React, {Component} from 'react';
-import feathers from 'feathers/client';
-import socketio from 'feathers-socketio/client';
-import hooks from 'feathers-hooks';
 //import errors from 'feathers-errors'; // An object with all of the custom error types.
-import auth from 'feathers-authentication-client';
 import io from 'socket.io-client/dist/socket.io';
 
 import {Switch, Route, withRouter} from 'react-router-dom';
 
 //Component
 import Container from './container';
-import LoginPage from './screen/login_page';
 import GrommetApp from 'grommet/components/App';
 import Box from 'grommet/components/Box';
 import Spinner from 'react-spinkit';
@@ -24,8 +19,7 @@ class App extends Component {
 
    
     this.state = {
-      isLoading: true,
-      client: client,
+      isLoading: false,
       offline: false
     }
   }
@@ -42,7 +36,7 @@ class App extends Component {
       content = (
         <GrommetApp inline={true} centered={false}>
           <Switch>
-            <Route exact path='/' render={(props) => (<LoginPage {...props} client={this.state.client} offline={this.state.offline}/>)}/>
+            <Route exact path='/app' render={(props) => (<Container {...props} client={this.state.client} offline={this.state.offline}/>)}/>
             </Switch>
         </GrommetApp>
       )

@@ -16,17 +16,9 @@ import Footer from "grommet/components/Footer";
 import User from "grommet/components/icons/base/User";
 import Notification from "grommet/components/Notification";
 
-import AppSettings from "./utils/app_settings";
-import EditProfileModal from "./components/common/edit_profile_modal";
-import Logo from "./components/common/logo";
+import createGame from './screens/create_game';
 
-import miniAppList from "./screen/mini_app_list";
-import MiniAppContainer from "./screen/mini_app";
-import Cases from "./screen/cases";
-import Admin from "./screen/admin";
-import UsersAdmin from "./screen/users_admin";
-import SettingsAdmin from "./screen/settings";
-import Breakdown from "./screen/breakdown";
+
 
 import { Switch, Route, withRouter, Redirect } from "react-router-dom";
 import AlertContainer from "react-alert";
@@ -34,8 +26,7 @@ import AlertContainer from "react-alert";
 class Container extends Component {
   constructor(props) {
     super(props);
-    const { t } = props;
-    this.t = t;
+
     this.alertOptions = {
       offset: 20,
       position: "top right",
@@ -45,47 +36,13 @@ class Container extends Component {
     };
 
     this._onResponsive = this._onResponsive.bind(this);
-    this._onMenuOpen = this._onMenuOpen.bind(this);
-    this._onMenuClick = this._onMenuClick.bind(this);
     this._logout = this._logout.bind(this);
-    this._onRequestForEditProfile = this._onRequestForEditProfile.bind(this);
-    this._onRequestForEditProfileClose = this._onRequestForEditProfileClose.bind(
-      this
-    );
-
-    /**
-        * Listen to Settings:Patched
-        **/
-    const client = this.props.client;
-    const settings = client.service("settings");
-    const organisation = client.service("organisation");
-    if (!this.props.offline) {
-      settings.on("patched", () => {
-        //We need to reload the organisation and change the settings
-        organisation.get(client.get("user").organisation).then(o => {
-          client.set("organisation", o);
-          //Save organisation to localStorage
-          let organisationParsed = JSON.stringify(o);
-          window.localStorage.setItem("organisation", organisationParsed);
-        });
-      });
-    }
-
+    
     this.state = {
-      editProfile: false,
-      isLoading: true,
-      showMenu: true,
-      responsive: "multiple",
-      searchString: "",
-      me: props.client.get("user")
+      isLoading: false,
     };
   }
   _logout() {
-    const client = this.props.client;
-    client.logout();
-    //Now we have to destroy the localStorage items
-    window.localStorage.removeItem("user");
-    window.localStorage.removeItem("organisation");
     this.props.history.push("/");
   }
 
@@ -98,26 +55,10 @@ class Container extends Component {
       this.setState({ showMenu: false });
     }
   }
-  _onRequestForEditProfile() {
-    this.setState({ editProfile: true });
-  }
-  _onRequestForEditProfileClose() {
-    this.setState({ editProfile: false });
-  }
-  _onMenuOpen() {
-    this.setState({ showMenu: true });
-  }
-
-  _onMenuClick() {
-    if ("single" === this.state.responsive) {
-      this.setState({ showMenu: false });
-    }
-  }
 
   _renderTitle() {
     return (
       <Box align="center" direction="row" responsive={false}>
-        <Logo multiplier={0.1} margin="40px" color="#FFF" />
         <Title pad="small" responsive={true}>
           Easy Scale
         </Title>
@@ -129,7 +70,7 @@ class Container extends Component {
     return (
       <Title pad="small" responsive={false}>
         <Box align="center" pad="small" direction="row">
-          <Logo multiplier={0.1} margin="40px" color="#FFF" />
+          AB
         </Box>
       </Title>
     );
@@ -146,11 +87,6 @@ class Container extends Component {
          </Anchor>
          );
          **/
-    let baremeLink = (
-      <Anchor path="/app" onClick={this._onMenuClick}>
-        {this.t("navLinkCalculator")}
-      </Anchor>
-    );
     let casesLink;
     let settingsLink;
     let usersLink;
@@ -159,38 +95,12 @@ class Container extends Component {
     if ("single" === this.state.responsive) {
       closer = <Button icon={<CloseIcon />} onClick={this._onMenuClick} />;
     }
-    casesLink = (
-      <Anchor path="/app/cases" onClick={this._onMenuClick}>
-        Dossiers
-      </Anchor>
-    );
-    breakdownLink = (
-      <Anchor path="/app/breakdown" onClick={this._onMenuClick}>
-        Décompte
-      </Anchor>
-    );
-    adminLink = (
-      <Anchor path="/app/admin" onClick={this._onMenuClick}>
-        {this.t("navLinkAdmin")}
-      </Anchor>
-    );
-    usersLink = (
-      <Anchor path="/app/users" onClick={this._onMenuClick}>
-        {this.t("navLinkUsers")}
-      </Anchor>
-    );
-    settingsLink = (
-      <Anchor path="/app/settings" onClick={this._onMenuClick}>
-        {this.t("navLinkSettings")}
-      </Anchor>
-    );
 
     return (
       <Sidebar
         ref="sidebar"
         size="small"
         separator="right"
-        colorIndex={AppSettings.mainColor}
         fixed={true}
       >
         <Header
@@ -205,32 +115,7 @@ class Container extends Component {
         </Header>
         <Box flex="grow" justify="start" align="center" alignContent="center">
           <Menu primary={true}>
-            {this.state.me.role !== "admin" ? baremeLink : undefined}
-            {this.state.me.role !== "admin" && !this.props.offline ? (
-              casesLink
-            ) : (
-              undefined
-            )}
-            {this.state.me.role !== "admin" && !this.props.offline ? (
-              breakdownLink
-            ) : (
-              undefined
-            )}
-            {this.state.me.role === "admin" && !this.props.offline ? (
-              adminLink
-            ) : (
-              undefined
-            )}
-            {this.state.me.role === "manager" && !this.props.offline ? (
-              usersLink
-            ) : (
-              undefined
-            )}
-            {this.state.me.role === "manager" && !this.props.offline ? (
-              settingsLink
-            ) : (
-              undefined
-            )}
+          
           </Menu>
         </Box>
         <Footer pad="medium">
@@ -240,13 +125,6 @@ class Container extends Component {
               bottom: "bottom"
             }}
           >
-            <Anchor onClick={this._logout}>
-              {this.t("navUserMenuLogout")}
-            </Anchor>
-            <Anchor onClick={this._onRequestForEditProfile}>
-              {this.t("navUserMenuMyProfile")}
-            </Anchor>
-            <Anchor href="#">{this.t("navUserMenuHelp")}</Anchor>
           </Menu>
         </Footer>
       </Sidebar>
@@ -282,18 +160,7 @@ class Container extends Component {
         )}
       />
     );
-    let modal;
-    if (this.state.editProfile) {
-      modal = (
-        <EditProfileModal
-          offline={this.props.offline}
-          client={this.props.client}
-          msg={this.msg}
-          onClose={this._onRequestForEditProfileClose}
-          onSubmit={this._onRequestForEditProfileClose}
-        />
-      );
-    }
+
     return (
       <Split
         flex="right"
@@ -303,33 +170,13 @@ class Container extends Component {
       >
         {this._renderNav()}
         <div>
-          {this.props.offline ? (
-            <Notification
-              message="Vous êtes offline"
-              status="warning"
-              size="medium"
-            />
-          ) : (
-            undefined
-          )}
           <AlertContainer ref={a => (this.msg = a)} {...this.alertOptions} />
           <Switch>
-            <FadingRoute exact path="/app" component={miniAppList} />
-            <FadingRoute
-              path="/app/b/:miniAppCode"
-              component={MiniAppContainer}
-            />
-            <FadingRoute path="/app/cases" component={Cases} />
-            <FadingRoute path="/app/admin" component={Admin} />
-            <FadingRoute path="/app/users" component={UsersAdmin} />
-            <FadingRoute path="/app/settings" component={SettingsAdmin} />
-            <FadingRoute path="/app/breakdown" component={Breakdown} />
-            <Redirect to="/app" />
+            <FadingRoute exact path="/app" component={createGame} />
           </Switch>
-          {modal}
         </div>
       </Split>
     );
   }
 }
-export default translate()(withRouter(Container));
+export default (withRouter(Container));
