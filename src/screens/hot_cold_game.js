@@ -18,7 +18,7 @@ export default class hotColdGame extends Component {
     this.state={
       hots: 1, 
       colds: 1,
-      temp: 0.5
+      temp: 15
     };
     this.handleHotChange = this.handleHotChange.bind(this);
     this.handleColdChange = this.handleColdChange.bind(this);
@@ -36,8 +36,12 @@ export default class hotColdGame extends Component {
   }
 
   handleTempChange(){
-    const newTemp = this.state.hots / (this.state.colds + this.state.hots);
-    this.setState({temp: newTemp});
+    const newTemp = -20 + (this.state.hots / (this.state.colds + this.state.hots))*70;
+    if (newTemp < -20) this.setState({temp: -20})
+    else {
+        if (newTemp > 50) this.setState({temp: 50})
+        else this.setState({temp: newTemp})
+    }
   }
 
   render() {
@@ -64,6 +68,7 @@ export default class hotColdGame extends Component {
 
 
       </Box>
+      <h1>{this.state.temp}</h1>
       </div>
     )
   }
