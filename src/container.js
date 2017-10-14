@@ -15,14 +15,14 @@ import Anchor from "grommet/components/Anchor";
 import Footer from "grommet/components/Footer";
 import User from "grommet/components/icons/base/User";
 import Notification from "grommet/components/Notification";
-
+import ReactJson from 'react-json-view';
 import createGame from './screens/create_game';
 
 
 
 import { Switch, Route, withRouter, Redirect } from "react-router-dom";
 import AlertContainer from "react-alert";
-import {register} from './api'
+import {register, getState} from './api'
 
 class Container extends Component {
   constructor(props) {
@@ -41,6 +41,7 @@ class Container extends Component {
     this._navigateToMode = this._navigateToMode.bind(this);
     this._register = this._register.bind(this);
     this._sendAction = this._sendAction.bind(this);
+    this._getState = this._getState.bind(this);
     
     const socket = io('http://localhost:3030');
     this.io = socket;
@@ -94,23 +95,6 @@ class Container extends Component {
 
   _renderNav() {
     const title = this._renderTitle(true);
-    let closer;
-    /**
-         * When grommet will be updated
-         let baremeLink = (
-         <Anchor path={{ path: '/app', index: true }} onClick={this._onMenuClick}>
-         Calcul de Barème
-         </Anchor>
-         );
-         **/
-    let casesLink;
-    let settingsLink;
-    let usersLink;
-    let adminLink;
-    let breakdownLink;
-    if ("single" === this.state.responsive) {
-      closer = <Button icon={<CloseIcon />} onClick={this._onMenuClick} />;
-    }
 
     return (
       <Sidebar
@@ -127,22 +111,10 @@ class Container extends Component {
           }}
         >
           {title}
-          {closer}
         </Header>
         <Box flex="grow" justify="start" align="center" alignContent="center">
-          <Menu primary={true}>
-          
-          </Menu>
+          <ReactJson src={this.state.serverState} />
         </Box>
-        <Footer pad="medium">
-          <Menu
-            icon={<User />}
-            dropAlign={{
-              bottom: "bottom"
-            }}
-          >
-          </Menu>
-        </Footer>
       </Sidebar>
     );
   }
@@ -150,16 +122,30 @@ class Container extends Component {
   _register(){
     register()
     .then((id)=>{
+      console.log('registered')
       this.setState(
         {
           userId: id,
           serverState: {
-            mode: 'wating'
+            mode: 'waiting'
           }
         }
       )
     })
+    .then(()=>{
+      this._getState()
+    })
     console.log(this.state)
+  }
+
+  _getState(){
+    getState()
+    .then((state)=>{
+      console.log(state)
+      this.setState({
+        serverState: state
+      })
+    })
   }
 
   _sendAction(name, payload){
@@ -173,8 +159,9 @@ class Container extends Component {
 
   _navigateToMode(){
     switch (this.state.serverState.mode) {
-      case undefined:
+      case undefined: 
         {
+          console.log('undefined state')
           this._register();
           break;
         }
