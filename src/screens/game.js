@@ -10,67 +10,77 @@ import DateTime from 'grommet/components/DateTime';
 import NumberInput from 'grommet/components/NumberInput';
 import Image from 'grommet/components/Image';
 import Heading from 'grommet/components/Heading';
-import Fire from '../assets/fire.png';
-import Ice from '../assets/ice.png';
+import SendIcon from 'grommet/components/icons/base/Send';
 
 export default class hotColdGame extends Component {
   constructor(props){
     super(props);
     this.state={
-      hots: 1, 
-      colds: 1,
-      temp: 15
+      city: undefined,
+      counter: 0,
+      timer: 20
     };
-    this.handleHotChange = this.handleHotChange.bind(this);
-    this.handleColdChange = this.handleColdChange.bind(this);
-    this.handleTempChange = this.handleTempChange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
   
-  handleHotChange(){
-      this.setState({hots: this.state.hots + 1});
-      this.handleTempChange();
-  }
-  
-  handleColdChange(){
-    this.setState({colds: this.state.colds + 1});
-    this.handleTempChange();
+  handleChange(){
+      this.setState({counter: this.state.counter + 1});
   }
 
-  handleTempChange(){
-    const newTemp = -20 + (this.state.hots / (this.state.colds + this.state.hots))*70;
-    if (newTemp < -20) this.setState({temp: -20})
-    else {
-        if (newTemp > 50) this.setState({temp: 50})
-        else this.setState({temp: newTemp})
-    }
+  componentDidMount() {
+    var intervalId = setInterval(this.timer, 1000);
+    // store intervalId in the state so it can be accessed later:
+    this.setState({ intervalId: intervalId});
   }
+
+  componentWillUnmount() {
+    // use intervalId from the state to clear the interval
+    clearInterval(this.state.intervalId);
+  }
+
+  timer() {
+    // setState method is used to update the state
+    if(this.state.currentCount <= 0){
+      this.props.sendAction({
+        name: 'endGame',
+        counter: this.state.counter,
+        city: this.state.city
+      })
+    }
+    this.setState({ timer: this.state.timer - 1 });
+  }
+
 
   render() {
+    let component = (
+      <Pulse
+      icon={<SendIcon colorIndex="light-1" />}
+      onClick={() => {
+        this.handleChange()
+      }}
+    />
+    )
+    if (this.state.city === undefined){
+      component = this.props.serverState.locations.map((location)=>{
+        return (
+          <Button label={location.name} onClick={()=>{
+            this.setState({
+              city: location
+            })
+          }}/>
+        );
+      })
+    }
     return (
         <div>
         <Box justify='center'
             align='center'
             wrap={false}
             margin='medium'
-            full = {false}
-            colorIndex='accent-1'
-            onClick={ () => this.handleHotChange()}>
-            <br/>
-            <Image src={Fire} size='small'/>
-            <br/>
+            full = {true}
+            colorIndex='accent-1'>
+          {component}
         </Box>
-        <Box justify='center'
-            align='center'
-            wrap={false}
-            margin='medium'
-            full = {false}
-            colorIndex='#00FFFF'
-            onClick={ () => this.handleColdChange()}>
-            <Image src={Ice} size='small'/>
-        </Box>
-        <Heading align = 'center'>
-                {Math.floor(this.state.temp)}ºC
-        </Heading>
       </div>
     )
   }

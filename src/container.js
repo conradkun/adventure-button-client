@@ -17,10 +17,8 @@ import User from "grommet/components/icons/base/User";
 import Notification from "grommet/components/Notification";
 import ReactJson from 'react-json-view';
 import joinGame from './screens/join_game';
-import configureGame from './screens/configure_game'; 
-import questionGame from './screens/question_game';
-import gameResolution from './screens/game_resolution';
-import hotColdGame from './screens/hot_cold_game';
+import configureGame from './screens/configure_game';
+import game from './screens/game';
 
 import { Switch, Route, withRouter, Redirect } from "react-router-dom";
 import AlertContainer from "react-alert";
@@ -255,9 +253,7 @@ class Container extends Component {
           <Switch>
             <FadingRoute exact path="/app/join" component={joinGame} />
             <FadingRoute exact path="/app/configure" component={configureGame} />
-            <FadingRoute exact path="/app/resolution" component={gameResolution} />
-            <FadingRoute exact path="/app/hot-cold-game" component={hotColdGame} />
-            <FadingRoute exact path="/app/question-game" component={questionGame} />
+            <FadingRoute exact path="/app/game" component={game} />
           </Switch>
         </div>
       </Split>
