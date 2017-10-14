@@ -1,0 +1,69 @@
+import React, { Component } from 'react'
+import Button from 'grommet/components/Button';
+import Box from 'grommet/components/Box';
+import Pulse from 'grommet/components/icons/Pulse';
+import DeployIcon from 'grommet/components/icons/base/Cube';
+import {withRouter} from 'react-router';
+import Form from 'grommet/components/Form';
+import FormField from 'grommet/components/FormField';
+import DateTime from 'grommet/components/DateTime';
+import NumberInput from 'grommet/components/NumberInput';
+import Image from 'grommet/components/Image';
+
+
+export default class hotColdGame extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      hots: 1, 
+      colds: 1,
+      temp: 0.5
+    };
+    this.handleHotChange = this.handleHotChange.bind(this);
+    this.handleColdChange = this.handleColdChange.bind(this);
+    this.handleTempChange = this.handleTempChange.bind(this);
+  }
+  
+  handleHotChange(){
+      this.setState({hots: this.state.hots + 1});
+      this.handleTempChange();
+  }
+  
+  handleColdChange(){
+    this.setState({colds: this.state.colds + 1});
+    this.handleTempChange();
+  }
+
+  handleTempChange(){
+    const newTemp = this.state.hots / (this.state.colds + this.state.hots);
+    this.setState({temp: newTemp});
+  }
+
+  render() {
+    return (
+        <div>
+        <Box justify='center'
+            align='center'
+            wrap={false}
+            margin='medium'
+            full = {false}
+            colorIndex='accent-1'
+            onClick={ () => this.handleHotChange()}>
+            <Image src='/assets/fire.png'/>
+
+        </Box>
+        <Box justify='center'
+            align='center'
+            wrap={false}
+            margin='medium'
+            full = {false}
+            colorIndex='#00FFFF'
+            onClick={ () => this.handleColdChange()}>
+            <Image src='/assets/fire.png'/>
+
+
+      </Box>
+      </div>
+    )
+  }
+}

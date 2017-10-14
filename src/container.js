@@ -19,6 +19,7 @@ import ReactJson from 'react-json-view';
 import joinGame from './screens/join_game';
 import configureGame from './screens/configure_game'; 
 import gameResolution from './screens/game_resolution';
+import hotColdGame from './screens/hot_cold_game';
 
 import { Switch, Route, withRouter, Redirect } from "react-router-dom";
 import AlertContainer from "react-alert";
@@ -191,6 +192,13 @@ class Container extends Component {
         }
         break;
         }
+      case 'HotColdGame':
+        {
+          if(location.pathname !== "/app/hot-cold-game"){
+            this.props.history.push('/app/hot-cold-game')
+        }
+        break;
+        }
       default:
         break;
     }
@@ -240,6 +248,7 @@ class Container extends Component {
             <FadingRoute exact path="/app/join" component={joinGame} />
             <FadingRoute exact path="/app/configure" component={configureGame} />
             <FadingRoute exact path="/app/resolution" component={gameResolution} />
+            <FadingRoute exact path="/app/hot-cold-game" component={hotColdGame} />
           </Switch>
         </div>
       </Split>

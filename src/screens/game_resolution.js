@@ -12,8 +12,7 @@ import GamepadIcon from 'grommet/components/icons/base/Gamepad';
 
 
 export default class gameResolution extends Component {
-  
-  
+    
     constructor(props){
     super(props);
     this.state={
