@@ -22,7 +22,7 @@ import createGame from './screens/create_game';
 
 import { Switch, Route, withRouter, Redirect } from "react-router-dom";
 import AlertContainer from "react-alert";
-import {register} from './api'
+import {register, getState} from './api'
 
 class Container extends Component {
   constructor(props) {
@@ -41,6 +41,7 @@ class Container extends Component {
     this._navigateToMode = this._navigateToMode.bind(this);
     this._register = this._register.bind(this);
     this._sendAction = this._sendAction.bind(this);
+    this._getState = this._getState.bind(this);
     
     const socket = io('http://localhost:3030');
     this.io = socket;
@@ -126,12 +127,25 @@ class Container extends Component {
         {
           userId: id,
           serverState: {
-            mode: 'wating'
+            mode: 'waiting'
           }
         }
       )
     })
+    .then(()=>{
+      this._getState()
+    })
     console.log(this.state)
+  }
+
+  _getState(){
+    getState()
+    .then((state)=>{
+      console.log(state)
+      this.setState({
+        serverState: state
+      })
+    })
   }
 
   _sendAction(name, payload){

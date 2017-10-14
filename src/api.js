@@ -24,4 +24,24 @@ function register(){
     })
 }
 
-export {register}
+function getState(){
+    return new Promise((resolve, reject) => {
+        console.log('getting state (GET)')
+        fetch(serverEndpoint + '/state',{
+            method: "GET",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        })
+        .then((resp) => resp.json())
+        .then((data)=>{
+            console.log(data)
+            resolve(data)
+        }).catch((err)=>{
+            console.log(err)
+        })
+    })
+}
+
+export {register, getState}
