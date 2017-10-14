@@ -23,7 +23,9 @@ export default class comfigureGame extends Component {
   }
   
   handleBudgetChange(event){
-    this.setState({budget: event.value});
+    this.setState({budget: event.target.valueAsNumber});
+    console.log(event)
+    console.log(this.state)
   }
 
   handleFromChange(event){
@@ -77,8 +79,9 @@ export default class comfigureGame extends Component {
             this.props.sendAction( {
               name: 'configure',
               
-              date: this.state.fromDate,
-              budget: 4,
+              fromDate: this.state.fromDate,
+              toDate: this.state.toDate,
+              budget: this.state.budget + 1,
             })
           }}
           href='#' />

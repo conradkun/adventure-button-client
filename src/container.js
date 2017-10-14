@@ -18,6 +18,7 @@ import Notification from "grommet/components/Notification";
 import ReactJson from 'react-json-view';
 import joinGame from './screens/join_game';
 import configureGame from './screens/configure_game'; 
+import questionGame from './screens/question_game';
 import gameResolution from './screens/game_resolution';
 import hotColdGame from './screens/hot_cold_game';
 
@@ -192,6 +193,7 @@ class Container extends Component {
         }
         break;
         }
+<<<<<<< HEAD
       case 'HotColdGame':
         {
           if(location.pathname !== "/app/hot-cold-game"){
@@ -199,6 +201,15 @@ class Container extends Component {
         }
         break;
         }
+=======
+      case 'QuestionGame':
+      {
+        if(location.pathname !== "/app/question-game"){
+          this.props.history.push('/app/question-game')
+      }
+      break;
+      }
+>>>>>>> 1310360ea632481886d7b08dda1bb3a9c56d24cb
       default:
         break;
     }
@@ -247,8 +258,13 @@ class Container extends Component {
           <Switch>
             <FadingRoute exact path="/app/join" component={joinGame} />
             <FadingRoute exact path="/app/configure" component={configureGame} />
+<<<<<<< HEAD
             <FadingRoute exact path="/app/resolution" component={gameResolution} />
             <FadingRoute exact path="/app/hot-cold-game" component={hotColdGame} />
+=======
+            <FadingRoute exact path="/app/resolution" component={configureGame} />
+            <FadingRoute exact path="/app/question-game" component={questionGame} />
+>>>>>>> 1310360ea632481886d7b08dda1bb3a9c56d24cb
           </Switch>
         </div>
       </Split>
