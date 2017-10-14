@@ -3,6 +3,7 @@ const serverEndpoint = 'http://localhost:3030'
 
 function register(){
     return new Promise((resolve, reject) => {
+        console.log('trying to register')
         fetch(serverEndpoint + '/register',{
             method: "POST",
             body: JSON.stringify({

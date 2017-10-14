@@ -15,7 +15,7 @@ import Anchor from "grommet/components/Anchor";
 import Footer from "grommet/components/Footer";
 import User from "grommet/components/icons/base/User";
 import Notification from "grommet/components/Notification";
-
+import ReactJson from 'react-json-view';
 import createGame from './screens/create_game';
 
 
@@ -94,23 +94,6 @@ class Container extends Component {
 
   _renderNav() {
     const title = this._renderTitle(true);
-    let closer;
-    /**
-         * When grommet will be updated
-         let baremeLink = (
-         <Anchor path={{ path: '/app', index: true }} onClick={this._onMenuClick}>
-         Calcul de Barème
-         </Anchor>
-         );
-         **/
-    let casesLink;
-    let settingsLink;
-    let usersLink;
-    let adminLink;
-    let breakdownLink;
-    if ("single" === this.state.responsive) {
-      closer = <Button icon={<CloseIcon />} onClick={this._onMenuClick} />;
-    }
 
     return (
       <Sidebar
@@ -127,22 +110,10 @@ class Container extends Component {
           }}
         >
           {title}
-          {closer}
         </Header>
         <Box flex="grow" justify="start" align="center" alignContent="center">
-          <Menu primary={true}>
-          
-          </Menu>
+          <ReactJson src={this.state.serverState} />
         </Box>
-        <Footer pad="medium">
-          <Menu
-            icon={<User />}
-            dropAlign={{
-              bottom: "bottom"
-            }}
-          >
-          </Menu>
-        </Footer>
       </Sidebar>
     );
   }
@@ -150,6 +121,7 @@ class Container extends Component {
   _register(){
     register()
     .then((id)=>{
+      console.log('registered')
       this.setState(
         {
           userId: id,
@@ -173,8 +145,9 @@ class Container extends Component {
 
   _navigateToMode(){
     switch (this.state.serverState.mode) {
-      case undefined:
+      case undefined: 
         {
+          console.log('undefined state')
           this._register();
           break;
         }
