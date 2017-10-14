@@ -37,20 +37,6 @@ export default class comfigureGame extends Component {
 
     return (
       <Box justify='center'
-<<<<<<< HEAD
-      align='center'
-      wrap={false}
-      pad='medium'
-      full = {true}
-      margin='small'
-      colorIndex='accent-6'>
-      {console.log('configure')}
-      <Button label='test' onClick={()=>{
-
-        this.props.sendAction('configure',{budget: 100, date: new Date()})
-        
-        }}/>
-=======
         align='center'
         wrap={false}
         margin='medium'
@@ -85,8 +71,16 @@ export default class comfigureGame extends Component {
             name='budget'
             onChange={this.handleBudgetChange} />
         </Form>
-
->>>>>>> 03a721bb908f30e30712be7dcf1c1a212e356b12
+        <Button label='Start the adventure'
+          onClick={()=>{
+            this.props.sendAction( {
+              name: 'configure',
+              
+              date: this.state.fromDate,
+              budget: 4,
+            })
+          }}
+          href='#' />
       </Box>
     )
   }

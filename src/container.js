@@ -16,9 +16,8 @@ import Footer from "grommet/components/Footer";
 import User from "grommet/components/icons/base/User";
 import Notification from "grommet/components/Notification";
 import ReactJson from 'react-json-view';
-import createGame from './screens/create_game';
 import joinGame from './screens/join_game';
-import waiting from './screens/waiting';
+import configureGame from './screens/configure_game'; 
 
 import { Switch, Route, withRouter, Redirect } from "react-router-dom";
 import AlertContainer from "react-alert";
@@ -149,13 +148,10 @@ class Container extends Component {
     })
   }
 
-  _sendAction(name, payload){
+  _sendAction(payload){
     this.io.emit('action', {
       userId: this.state.userId,
-      payload: {
-        ...payload,
-        name: name
-      }
+      payload: payload
     });
   }
 
