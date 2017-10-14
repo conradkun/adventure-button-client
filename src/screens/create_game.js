@@ -4,7 +4,7 @@ export default class createGame extends Component {
   render() {
     return (
       <div>
-        Hello
+        Hello {this.props.userId}
       </div>
     )
   }

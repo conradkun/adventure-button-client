@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 //import errors from 'feathers-errors'; // An object with all of the custom error types.
 import io from 'socket.io-client/dist/socket.io';
 
-import {Switch, Route, withRouter} from 'react-router-dom';
+import {Switch, Route, withRouter, Redirect} from 'react-router-dom';
 
 //Component
 import Container from './container';
@@ -37,7 +37,8 @@ class App extends Component {
         <GrommetApp inline={true} centered={false}>
           <Switch>
             <Route exact path='/app' render={(props) => (<Container {...props} client={this.state.client} offline={this.state.offline}/>)}/>
-            </Switch>
+            <Redirect to="/app"/>
+          </Switch>
         </GrommetApp>
       )
     }

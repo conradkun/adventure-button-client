@@ -22,6 +22,7 @@ import createGame from './screens/create_game';
 
 import { Switch, Route, withRouter, Redirect } from "react-router-dom";
 import AlertContainer from "react-alert";
+import {register} from './api'
 
 class Container extends Component {
   constructor(props) {
@@ -37,9 +38,13 @@ class Container extends Component {
 
     this._onResponsive = this._onResponsive.bind(this);
     this._logout = this._logout.bind(this);
-    
+    this._navigateToMode = this._navigateToMode.bind(this);
+    this._register = this._register.bind(this);
+
     this.state = {
       isLoading: false,
+      serverState: {},
+      userId: undefined,
     };
   }
   _logout() {
@@ -131,15 +136,47 @@ class Container extends Component {
     );
   }
 
+  _register(){
+    register()
+    .then((id)=>{
+      this.setState(
+        {
+          userId: id,
+          serverState: {
+            mode: 'wating'
+          }
+        }
+      )
+    })
+    console.log(this.state)
+  }
+
+
+  _navigateToMode(){
+    switch (this.state.serverState.mode) {
+      case undefined:
+        {
+          this._register();
+          break;
+        }
+      case 'notCreated':
+      {
+        this.props.history.push('/app/configure')
+        break;
+      }
+      default:
+        break;
+    }
+  }
+
+
   render() {
     let routeProps = {
       responsive: this.state.responsive,
-      onMenuOpen: this._onMenuOpen,
-      onLogout: this._logout,
-      client: this.props.client,
-      renderAppLogo: this._renderAppLogo,
-      msg: this.msg,
-      offline: this.props.offline
+      sendAction: this._sendAction,
+      serverState: this.state.serverState,
+      userId: this.state.userId
+
     };
     let fadeDuration = 0.5;
     if (this.state.responsive === "single") {
@@ -160,8 +197,9 @@ class Container extends Component {
         )}
       />
     );
-
+    this._navigateToMode();
     return (
+
       <Split
         flex="right"
         priority={priority}
@@ -173,6 +211,7 @@ class Container extends Component {
           <AlertContainer ref={a => (this.msg = a)} {...this.alertOptions} />
           <Switch>
             <FadingRoute exact path="/app" component={createGame} />
+            
           </Switch>
         </div>
       </Split>
