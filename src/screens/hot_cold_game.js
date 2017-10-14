@@ -9,6 +9,7 @@ import FormField from 'grommet/components/FormField';
 import DateTime from 'grommet/components/DateTime';
 import NumberInput from 'grommet/components/NumberInput';
 import Image from 'grommet/components/Image';
+import Heading from 'grommet/components/Heading';
 import Fire from '../assets/fire.png';
 import Ice from '../assets/ice.png';
 
@@ -54,7 +55,7 @@ export default class hotColdGame extends Component {
             full = {false}
             colorIndex='accent-1'
             onClick={ () => this.handleHotChange()}>
-            <Image src={Fire}/>
+            <Image src={Fire} size='small'/>
 
         </Box>
         <Box justify='center'
@@ -64,11 +65,11 @@ export default class hotColdGame extends Component {
             full = {false}
             colorIndex='#00FFFF'
             onClick={ () => this.handleColdChange()}>
-            <Image src={Ice}/>
-
-
-      </Box>
-      <h1>{this.state.temp}</h1>
+            <Image src={Ice} size='small'/>
+        </Box>
+        <Heading align = 'center'>
+                {Math.floor(this.state.temp)}
+        </Heading>
       </div>
     )
   }
