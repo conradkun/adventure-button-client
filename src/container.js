@@ -42,7 +42,7 @@ class Container extends Component {
     this._sendAction = this._sendAction.bind(this);
     this._getState = this._getState.bind(this);
     
-    const socket = io('http://localhost:3030');
+    const socket = io('http://30c2513d.ngrok.io');
     this.io = socket;
 
     socket.on('state', (state)=>{
@@ -183,6 +183,13 @@ class Container extends Component {
         }
         break;
         }
+      case 'Resolution':
+        {
+          if(location.pathname !== "/app/resolution"){
+            this.props.history.push('/app/resolution')
+        }
+        break;
+        }
       default:
         break;
     }
@@ -231,6 +238,7 @@ class Container extends Component {
           <Switch>
             <FadingRoute exact path="/app/join" component={joinGame} />
             <FadingRoute exact path="/app/configure" component={configureGame} />
+            <FadingRoute exact path="/app/resolution" component={gameResolution} />
           </Switch>
         </div>
       </Split>
