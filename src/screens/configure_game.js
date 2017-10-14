@@ -15,8 +15,12 @@ export default class comfigureGame extends Component {
       full = {true}
       margin='small'
       colorIndex='accent-6'>
-      {console.log('test')}
-      <Button/>
+      {console.log('configure')}
+      <Button label='test' onClick={()=>{
+
+        this.props.sendAction('configure',{budget: 100, date: new Date()})
+        
+        }}/>
       </Box>
     )
   }

@@ -17,8 +17,8 @@ import User from "grommet/components/icons/base/User";
 import Notification from "grommet/components/Notification";
 import ReactJson from 'react-json-view';
 import createGame from './screens/create_game';
-import configureGame from './screens/configure_game';
-
+import joinGame from './screens/join_game';
+import waiting from './screens/waiting';
 
 import { Switch, Route, withRouter, Redirect } from "react-router-dom";
 import AlertContainer from "react-alert";
@@ -113,6 +113,7 @@ class Container extends Component {
           {title}
         </Header>
         <Box flex="grow" justify="start" align="center" alignContent="center">
+          {this.state.userId}
           <ReactJson src={this.state.serverState} />
         </Box>
       </Sidebar>
@@ -127,7 +128,7 @@ class Container extends Component {
         {
           userId: id,
           serverState: {
-            mode: 'waiting'
+            mode: 'Configure'
           }
         }
       )
@@ -141,7 +142,7 @@ class Container extends Component {
   _getState(){
     getState()
     .then((state)=>{
-      console.log(state)
+      console.log('')
       this.setState({
         serverState: state
       })
@@ -151,13 +152,18 @@ class Container extends Component {
   _sendAction(name, payload){
     this.io.emit('action', {
       userId: this.state.userId,
-      name: name,
-      payload: payload
+      payload: {
+        ...payload,
+        name: name
+      }
     });
   }
 
 
   _navigateToMode(){
+
+    let location = this.props.history.location;
+    console.log(location);
     switch (this.state.serverState.mode) {
       case undefined: 
         {
@@ -165,11 +171,22 @@ class Container extends Component {
           this._register();
           break;
         }
-      case 'notCreated':
-      {
-        this.props.history.push('/app/configure')
+      
+      case 'Configure':
+        {
+          if(location.pathname !== "/app/configure"){
+            this.props.history.push('/app/configure')
+          }
+          break;
+        }
+
+      case 'Join':
+        {
+          if(location.pathname !== "/app/join"){
+            this.props.history.push('/app/join')
+        }
         break;
-      }
+        }
       default:
         break;
     }
@@ -216,9 +233,8 @@ class Container extends Component {
         <div>
           <AlertContainer ref={a => (this.msg = a)} {...this.alertOptions} />
           <Switch>
-            <FadingRoute exact path="/app" component={createGame} />
+            <FadingRoute exact path="/app/join" component={joinGame} />
             <FadingRoute exact path="/app/configure" component={configureGame} />
-            
           </Switch>
         </div>
       </Split>
