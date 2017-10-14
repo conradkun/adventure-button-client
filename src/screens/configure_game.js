@@ -71,6 +71,7 @@ export default class comfigureGame extends Component {
           <h1>How much are you willing to spend?</h1>
           <NumberInput value={this.state.budget}
             name='budget'
+            step={50}
             onChange={this.handleBudgetChange} />
         </Form>
         <br/>
