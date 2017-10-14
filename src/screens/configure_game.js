@@ -71,6 +71,7 @@ export default class comfigureGame extends Component {
             name='budget'
             onChange={this.handleBudgetChange} />
         </Form>
+        <br/>
         <Button label='Start the adventure'
           onClick={()=>{
             this.props.sendAction( {
