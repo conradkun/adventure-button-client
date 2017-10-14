@@ -1,3 +1,4 @@
+import io from 'socket.io-client';
 const serverEndpoint = 'http://localhost:3030'
 
 function register(){
@@ -20,7 +21,6 @@ function register(){
             console.log(err)
         })
     })
-    
 }
 
 export {register}

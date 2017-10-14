@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import Fade from "react-fade";
 import { translate } from "react-i18next";
-
+import io from 'socket.io-client'
 import Split from "grommet/components/Split";
 import Sidebar from "grommet/components/Sidebar";
 import Header from "grommet/components/Header";
@@ -40,6 +40,17 @@ class Container extends Component {
     this._logout = this._logout.bind(this);
     this._navigateToMode = this._navigateToMode.bind(this);
     this._register = this._register.bind(this);
+    this._sendAction = this._sendAction.bind(this);
+    
+    const socket = io('http://localhost:3030');
+    this.io = socket;
+
+    socket.on('state', (state)=>{
+      console.log(state);
+      this.setState({
+        serverState: state
+      })
+    });
 
     this.state = {
       isLoading: false,
@@ -149,6 +160,14 @@ class Container extends Component {
       )
     })
     console.log(this.state)
+  }
+
+  _sendAction(name, payload){
+    this.io.emit('action', {
+      userId: this.state.userId,
+      name: name,
+      payload: payload
+    });
   }
 
 
