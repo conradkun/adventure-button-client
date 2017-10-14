@@ -18,6 +18,7 @@ import Notification from "grommet/components/Notification";
 import ReactJson from 'react-json-view';
 import joinGame from './screens/join_game';
 import configureGame from './screens/configure_game'; 
+import questionGame from './screens/question_game.js';
 
 import { Switch, Route, withRouter, Redirect } from "react-router-dom";
 import AlertContainer from "react-alert";
@@ -190,6 +191,13 @@ class Container extends Component {
         }
         break;
         }
+      case 'QuestionGame':
+      {
+        if(location.pathname !== "/app/question-game"){
+          this.props.history.push('/app/question-game')
+      }
+      break;
+      }
       default:
         break;
     }
@@ -238,7 +246,8 @@ class Container extends Component {
           <Switch>
             <FadingRoute exact path="/app/join" component={joinGame} />
             <FadingRoute exact path="/app/configure" component={configureGame} />
-            <FadingRoute exact path="/app/resolution" component={gameResolution} />
+            <FadingRoute exact path="/app/resolution" component={configureGame} />
+            <FadingRoute exact path="/app/question-game" component={questionGame} />
           </Switch>
         </div>
       </Split>
