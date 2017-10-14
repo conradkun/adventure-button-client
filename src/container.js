@@ -257,7 +257,6 @@ class Container extends Component {
             <FadingRoute exact path="/app/configure" component={configureGame} />
             <FadingRoute exact path="/app/resolution" component={gameResolution} />
             <FadingRoute exact path="/app/hot-cold-game" component={hotColdGame} />
-            <FadingRoute exact path="/app/resolution" component={configureGame} />
             <FadingRoute exact path="/app/question-game" component={questionGame} />
           </Switch>
         </div>
