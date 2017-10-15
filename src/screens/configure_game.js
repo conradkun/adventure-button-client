@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Button from "grommet/components/Button";
 import Box from "grommet/components/Box";
 import Pulse from "grommet/components/icons/Pulse";
-import DeployIcon from "grommet/components/icons/base/Alert";
+import DeployIcon from "grommet/components/icons/base/Launch";
 import { withRouter } from "react-router";
 import Form from "grommet/components/Form";
 import FormField from "grommet/components/FormField";
