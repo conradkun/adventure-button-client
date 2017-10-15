@@ -7985,8 +7985,8 @@ html.rtl .right-left-icon--right {
 .grommetux-pulse__icon svg {
   width: 200px;
   height: 200px;
-  border-radius: 200px;
-  padding: 36px;
+  border-radius: 50px;
+  padding: 48px;
   background-color: #d32f2f;
   stroke: #000001; }
 
@@ -8001,7 +8001,7 @@ html.rtl .right-left-icon--right {
   transform-origin: center;
   border: 1px solid;
   border-color: #d32f2f;
-  border-radius: 200px;
+  border-radius: 50px;
   -webkit-animation-name: scale-up-fade-out;
   -webkit-animation-duration: 1.5s;
   -webkit-animation-iteration-count: infinite;

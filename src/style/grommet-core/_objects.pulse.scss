@@ -55,8 +55,8 @@ $base-size: 200px;
   svg {
     width: $base-size;
     height: $base-size;
-    border-radius: $base-size;
-    padding: $inuit-base-spacing-unit * 1.5;
+    border-radius: $base-size / 4;
+    padding: $inuit-base-spacing-unit * 2;
     background-color: nth($brand-accent-colors, 1);
     stroke: nth($brand-grey-colors, 1);
   }
@@ -73,6 +73,6 @@ $base-size: 200px;
   transform-origin: center;
   border: 1px solid;
   border-color: nth($brand-accent-colors, 1);
-  border-radius: $base-size;
+  border-radius: $base-size / 4;
   @include scale-up-fade-out(1.5s, 0.2s);
 }
