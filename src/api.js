@@ -1,5 +1,5 @@
 import io from 'socket.io-client';
-const serverEndpoint = 'http://localhost:3030'
+const serverEndpoint = 'http://46.101.29.63/'
 
 function register(){
     return new Promise((resolve, reject) => {
