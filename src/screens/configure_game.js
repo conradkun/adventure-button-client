@@ -29,11 +29,11 @@ export default class comfigureGame extends Component {
   }
 
   handleFromChange(event){
-    if (this.state.untilDate === undefined || event < this.state.untilDate) this.setState({fromDate: event});
+    this.setState({fromDate: event});
   }
 
   handleUntilChange(event){
-    if (this.state.fromDate === undefined || this.state.fromDate < event) this.setState({untilDate: event});
+    this.setState({untilDate: event});
   }
   render() {
 
@@ -57,7 +57,7 @@ export default class comfigureGame extends Component {
         </Form>
         <br/>
         <Form>
-          <h1>...Until...</h1>
+          <h1>...To...</h1>
           <FormField>
             <DateTime id='id'
               name='until'
@@ -77,11 +77,12 @@ export default class comfigureGame extends Component {
         <br/>
         <Button label='Start the adventure'
           onClick={()=>{
+            console.log(this.state.untilDate);
             this.props.sendAction( {
               name: 'configure',
               
               fromDate: this.state.fromDate,
-              toDate: this.state.toDate,
+              toDate: this.state.untilDate,
               budget: this.state.budget + 1,
             })
           }}

@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import io from 'socket.io-client/dist/socket.io';
 
 import {Switch, Route, withRouter, Redirect} from 'react-router-dom';
+import {StripeProvider} from 'react-stripe-elements';
 
 //Component
 import Container from './container';
@@ -34,12 +35,14 @@ class App extends Component {
       );
     } else {
       content = (
+      <StripeProvider apiKey="pk_test_Px7zcIjKuIG2Drzb7D5pLU4z">
         <GrommetApp inline={true} centered={false}>
           <Switch>
             <Route path='/app' render={(props) => (<Container {...props} client={this.state.client} offline={this.state.offline}/>)}/>
             <Redirect to="/app"/>            
           </Switch>
         </GrommetApp>
+      </StripeProvider>
       )
     }
     return content;

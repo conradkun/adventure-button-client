@@ -2,37 +2,28 @@ import React, { Component } from "react";
 import Button from "grommet/components/Button";
 import Box from "grommet/components/Box";
 import Pulse from "grommet/components/icons/Pulse";
-import DeployIcon from "grommet/components/icons/base/Cube";
+import DeployIcon from "grommet/components/icons/base/Globe";
 import { withRouter } from "react-router";
 import Value from "grommet/components/Value";
-
-export default class joinGame extends Component {
-  constructor(){
+import {Elements} from 'react-stripe-elements';
+import {injectStripe} from 'react-stripe-elements';
+import {CardElement} from 'react-stripe-elements';
+import Checkout from '../components/checkout';
+class joinGame extends Component {
+  constructor() {
     super();
-    this.timer = this.timer.bind(this);
-    this.state = {
-      currentCount: 5
-    }
   }
-  componentDidMount() {
-    var intervalId = setInterval(this.timer, 1000);
-    // store intervalId in the state so it can be accessed later:
-    this.setState({ intervalId: intervalId});
-  }
+  handleSubmit = () => {
+    // We don't want to let default form submission happen here, which would refresh the page.
 
-  componentWillUnmount() {
-    // use intervalId from the state to clear the interval
-    clearInterval(this.state.intervalId);
-  }
+    // Within the context of `Elements`, this call to createToken knows which Element to
+    // tokenize, since there's only one in this group.
+    this.props.stripe.createToken({name: 'Jenny Rosen'}).then(({token}) => {
+      console.log('Received Stripe token:', token);
+    });
 
-  timer() {
-    // setState method is used to update the state
-    if(this.state.currentCount <= 0){
-      this.props.sendAction({
-        name: 'startGame'
-      })
-    }
-    this.setState({ currentCount: this.state.currentCount - 1 });
+    // However, this line of code will do the same thing:
+    // this.props.stripe.createToken({type: 'card', name: 'Jenny Rosen'});
   }
   render() {
     let alreadyJoined = false;
@@ -46,14 +37,14 @@ export default class joinGame extends Component {
     }
     return (
       <Box
-        justify="center"
-        align="center"
-        wrap={false}
-        pad="medium"
         full={true}
+        align='center'
+        justify="center"
+        pad="medium"
         margin="small"
       >
         {!alreadyJoined && (
+          <Box margin={{vertical: 'large'}}>
           <Pulse
             icon={<DeployIcon colorIndex="light-1" />}
             onClick={() => {
@@ -62,7 +53,14 @@ export default class joinGame extends Component {
               });
             }}
           />
+          </Box>
         )}
+        {!alreadyJoined && (
+          <Elements>
+          <Checkout/>
+        </Elements>
+        )}
+        
         <Value
           value={
             this.props.serverState.players
@@ -71,14 +69,21 @@ export default class joinGame extends Component {
           }
           label="Adventurers in the room"
         />
-        {this.props.serverState.players && this.props.serverState.players[0]._id === this.props.userId ? <Value
-          value={
-            this.state.currentCount
-          }
-          label="Seconds before starting"
-        /> : <b>Waiting...</b>}
-        
+        {this.props.serverState.players &&
+        this.props.serverState.players[0]._id === this.props.userId ? (
+          <Button
+            label="Start the Game"
+            onClick={() => {
+              this.props.sendAction({
+                name: "startGame"
+              });
+            }}
+          />
+        ) : (
+          <b>Waiting...</b>
+        )}
       </Box>
     );
   }
 }
+export default joinGame;

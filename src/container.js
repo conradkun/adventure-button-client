@@ -19,7 +19,7 @@ import ReactJson from 'react-json-view';
 import joinGame from './screens/join_game';
 import configureGame from './screens/configure_game';
 import game from './screens/game';
-
+import result from './screens/result';
 import { Switch, Route, withRouter, Redirect } from "react-router-dom";
 import AlertContainer from "react-alert";
 import {register, getState} from './api'
@@ -44,7 +44,7 @@ class Container extends Component {
     this._getState = this._getState.bind(this);
     
     const socket = io('http://localhost:3030', {
-      transports: ['polling']
+      transports: ['websocket']
     });
     this.io = socket;
 
@@ -79,7 +79,7 @@ class Container extends Component {
     return (
       <Box align="center" direction="row" responsive={false}>
         <Title pad="small" responsive={true}>
-          Easy Scale
+          AB
         </Title>
       </Box>
     );
@@ -184,27 +184,20 @@ class Container extends Component {
         }
         break;
         }
-      case 'Resolution':
+      case 'Game':
         {
-          if(location.pathname !== "/app/resolution"){
-            this.props.history.push('/app/resolution')
+          if(location.pathname !== "/app/game"){
+            this.props.history.push('/app/game')
         }
         break;
         }
-      case 'HotColdGame':
+        case 'Result':
         {
-          if(location.pathname !== "/app/hot-cold-game"){
-            this.props.history.push('/app/hot-cold-game')
+          if(location.pathname !== "/app/result"){
+            this.props.history.push('/app/result')
         }
         break;
         }
-      case 'Question':
-      {
-        if(location.pathname !== "/app/question-game"){
-          this.props.history.push('/app/question-game')
-      }
-      break;
-      }
       default:
         break;
     }
@@ -254,6 +247,7 @@ class Container extends Component {
             <FadingRoute exact path="/app/join" component={joinGame} />
             <FadingRoute exact path="/app/configure" component={configureGame} />
             <FadingRoute exact path="/app/game" component={game} />
+            <FadingRoute exact path="/app/result" component={result} />
           </Switch>
         </div>
       </Split>

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "bcrypt": "^1.0.2",
+    "bodymovin": "^4.11.1",
     "classnames": "^2.2.5",
     "currency-formatter": "^1.0.8",
     "events": "^1.1.1",
@@ -38,6 +39,7 @@
     "react-flip-move": "^2.9.14",
     "react-i18next": "^4.1.0",
     "react-json-view": "^1.13.0",
+    "react-lottie": "^0.2.2",
     "react-mailto": "^0.4.0",
     "react-mfb": "^0.5.0",
     "react-number-format": "^1.0.2",
@@ -49,6 +51,7 @@
     "react-slick": "^0.14.11",
     "react-sortable-hoc": "^0.6.3",
     "react-spinkit": "^2.0.0",
+    "react-stripe-elements": "^1.2.0",
     "sass-loader": "^6.0.5",
     "slick-carousel": "^1.6.0",
     "socket.io-client": "^2.0.1",

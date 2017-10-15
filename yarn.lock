@@ -1125,6 +1125,10 @@ bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.1.1, bn.js@^4.4.0:
   version "4.11.6"
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-4.11.6.tgz#53344adb14617a13f6e8dd2ce28905d1c0ba3215"
 
+bodymovin@^4.11.1, bodymovin@^4.7.1:
+  version "4.11.1"
+  resolved "https://registry.yarnpkg.com/bodymovin/-/bodymovin-4.11.1.tgz#c59a88fc25b025cf680603d22a0ae9e59fa4315e"
+
 boolbase@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
@@ -6684,6 +6688,13 @@ react-json-view@^1.13.0:
     react-base16-styling "^0.5.3"
     react-textarea-autosize "^5.1.0"
 
+react-lottie@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/react-lottie/-/react-lottie-0.2.2.tgz#046b66ac734d17d60e4f8ee17560c2748a1fad33"
+  dependencies:
+    babel-runtime "^6.11.6"
+    bodymovin "^4.7.1"
+
 react-mailto@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/react-mailto/-/react-mailto-0.4.0.tgz#2229cb60fca3552273f82e4de96c83f2d12c0d5f"
@@ -6829,6 +6840,12 @@ react-spinkit@^2.0.0:
     classnames "^2.2.3"
     object-assign "^4.1.0"
     prop-types "^15.5.8"
+
+react-stripe-elements@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-stripe-elements/-/react-stripe-elements-1.2.0.tgz#06665f0e0c01c336ca4a7d30fb95adb9c6375725"
+  dependencies:
+    prop-types "^15.5.10"
 
 react-textarea-autosize@^5.1.0:
   version "5.1.0"
