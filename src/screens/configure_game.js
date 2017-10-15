@@ -8,6 +8,7 @@ import Form from 'grommet/components/Form';
 import FormField from 'grommet/components/FormField';
 import DateTime from 'grommet/components/DateTime';
 import NumberInput from 'grommet/components/NumberInput';
+import Heading from 'grommet/components/Heading';
 
 export default class comfigureGame extends Component {
   constructor(props){
@@ -43,7 +44,7 @@ export default class comfigureGame extends Component {
         wrap={false}
         full = {true}
         colorIndex='accent-1'>
-      
+        <Heading margin='large' uppercase={true}>ADVENTURE BUTTON</Heading>
         <Form>
           <h1>Travel from...</h1>
           <FormField>
@@ -74,7 +75,8 @@ export default class comfigureGame extends Component {
             onChange={this.handleBudgetChange} />
         </Form>
         <br/>
-        <Button label='Start the adventure'
+        <Button 
+          label='Start the adventure'
           onClick={()=>{
             console.log(this.state.untilDate);
             this.props.sendAction( {
