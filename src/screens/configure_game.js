@@ -41,7 +41,6 @@ export default class comfigureGame extends Component {
       <Box justify='center'
         align='center'
         wrap={false}
-        margin='medium'
         full = {true}
         colorIndex='accent-1'>
       

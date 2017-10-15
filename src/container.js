@@ -233,14 +233,7 @@ class Container extends Component {
     return (
       <Box>
         {modal}
-      <Split
-        flex="right"
-        priority={priority}
-        fixed={true}
-        onResponsive={this._onResponsive}
-      >
-        
-        {this._renderNav()}
+
         <div>
           <AlertContainer ref={a => (this.msg = a)} {...this.alertOptions} />
           <Switch>
@@ -254,7 +247,6 @@ class Container extends Component {
             <FadingRoute exact path="/app/result" component={result} />
           </Switch>
         </div>
-      </Split>
       </Box>
     );
   }

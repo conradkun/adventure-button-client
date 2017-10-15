@@ -99,7 +99,6 @@ export default class hotColdGame extends Component {
           justify="center"
           align="center"
           wrap={false}
-          margin="medium"
           full={true}
           colorIndex={this.state.city === undefined ? 'brand' : 'light-1'}
         >
