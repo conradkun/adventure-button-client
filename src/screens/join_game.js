@@ -10,6 +10,10 @@ import {injectStripe} from 'react-stripe-elements';
 import {CardElement} from 'react-stripe-elements';
 import Checkout from '../components/checkout';
 import Anchor from 'grommet/components/Anchor';
+import Image from 'grommet/components/Image';
+import Logo from '../assets/logo.png';
+import * as animationData from './loader.json';
+import Lottie from 'react-lottie';
 class joinGame extends Component {
   constructor() {
     super();
@@ -27,6 +31,11 @@ class joinGame extends Component {
     // this.props.stripe.createToken({type: 'card', name: 'Jenny Rosen'});
   }
   render() {
+    const defaultOptions = {
+      loop: true,
+      autoplay: true,
+      animationData: animationData
+    };
     let alreadyJoined = false;
     if (
       this.props.serverState.players &&
@@ -44,6 +53,13 @@ class joinGame extends Component {
         pad="medium"
         margin="small"
       >
+      {alreadyJoined && <Lottie
+          options={defaultOptions}
+          height={400}
+          width={400}
+          isStopped={false}
+          isPaused={false}
+        />}
         {!alreadyJoined && (
           <Box margin={{vertical: 'large'}}>
           <Pulse
