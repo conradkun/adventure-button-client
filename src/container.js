@@ -43,7 +43,7 @@ class Container extends Component {
     this._sendAction = this._sendAction.bind(this);
     this._getState = this._getState.bind(this);
     
-    const socket = io('http://46.101.29.63/', {
+    const socket = io('http://46.101.29.63', {
       transports: ['websocket']
     });
     this.io = socket;
