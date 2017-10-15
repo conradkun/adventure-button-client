@@ -9,6 +9,7 @@ import {Elements} from 'react-stripe-elements';
 import {injectStripe} from 'react-stripe-elements';
 import {CardElement} from 'react-stripe-elements';
 import Checkout from '../components/checkout';
+import Anchor from 'grommet/components/Anchor';
 class joinGame extends Component {
   constructor() {
     super();
@@ -82,6 +83,16 @@ class joinGame extends Component {
         ) : (
           <b>Waiting...</b>
         )}
+        <Anchor
+            label="Reset"
+            href="#"
+            primary={false}
+            onClick={()=>{
+                this.props.sendAction({
+                    name: 'reset'
+                })
+            }}
+          />
       </Box>
     );
   }

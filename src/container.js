@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import Fade from "react-fade";
 import { translate } from "react-i18next";
-import io from 'socket.io-client'
+import io from "socket.io-client";
 import Split from "grommet/components/Split";
 import Sidebar from "grommet/components/Sidebar";
 import Header from "grommet/components/Header";
@@ -15,15 +15,18 @@ import Anchor from "grommet/components/Anchor";
 import Footer from "grommet/components/Footer";
 import User from "grommet/components/icons/base/User";
 import Notification from "grommet/components/Notification";
-import ReactJson from 'react-json-view';
-import joinGame from './screens/join_game';
-import configureGame from './screens/configure_game';
-import game from './screens/game';
-import result from './screens/result';
+import ReactJson from "react-json-view";
+import joinGame from "./screens/join_game";
+import configureGame from "./screens/configure_game";
+import game from "./screens/game";
+import result from "./screens/result";
 import { Switch, Route, withRouter, Redirect } from "react-router-dom";
 import AlertContainer from "react-alert";
-import {register, getState} from './api'
-
+import { register, getState } from "./api";
+import Layer from 'grommet/components/Layer';
+import Image from 'grommet/components/Image';
+import Logo from './assets/logo.png';
+import Label from 'grommet/components/Label';
 class Container extends Component {
   constructor(props) {
     super(props);
@@ -42,23 +45,24 @@ class Container extends Component {
     this._register = this._register.bind(this);
     this._sendAction = this._sendAction.bind(this);
     this._getState = this._getState.bind(this);
-    
-    const socket = io('http://46.101.29.63', {
-      transports: ['websocket']
+
+    const socket = io("http://46.101.29.63", {
+      transports: ["websocket"]
     });
     this.io = socket;
 
-    socket.on('state', (state)=>{
-      console.log('got an update over socketio', state);
+    socket.on("state", state => {
+      console.log("got an update over socketio", state);
       this.setState({
         serverState: state
-      })
+      });
     });
 
     this.state = {
       isLoading: false,
       serverState: {},
       userId: undefined,
+      modal: true
     };
   }
   _logout() {
@@ -99,12 +103,7 @@ class Container extends Component {
     const title = this._renderTitle(true);
 
     return (
-      <Sidebar
-        ref="sidebar"
-        size="small"
-        separator="right"
-        fixed={true}
-      >
+      <Sidebar ref="sidebar" size="small" separator="right" fixed={true}>
         <Header
           justify="between"
           size="large"
@@ -122,95 +121,94 @@ class Container extends Component {
     );
   }
 
-  _register(){
+  _register() {
     register()
-    .then((id)=>{
-      console.log('registered')
-      this.setState(
-        {
+      .then(id => {
+        console.log("registered");
+        this.setState({
           userId: id,
           serverState: {
-            mode: 'Configure'
+            mode: "Configure"
           }
-        }
-      )
-    })
-    .then(()=>{
-      this._getState()
-    })
-    console.log(this.state)
+        });
+      })
+      .then(() => {
+        this._getState();
+      });
+    console.log(this.state);
   }
 
-  _getState(){
-    getState()
-    .then((state)=>{
-      console.log('')
+  _getState() {
+    getState().then(state => {
+      console.log("");
       this.setState({
         serverState: state
-      })
-    })
+      });
+    });
   }
 
-  _sendAction(payload){
-    this.io.emit('action', {
+  _sendAction(payload) {
+    this.io.emit("action", {
       userId: this.state.userId,
       payload: payload
     });
   }
 
-
-  _navigateToMode(){
-
+  _navigateToMode() {
     let location = this.props.history.location;
     switch (this.state.serverState.mode) {
-      case undefined: 
-        {
-          this._register();
-          break;
-        }
-      
-      case 'Configure':
-        {
-          if(location.pathname !== "/app/configure"){
-            this.props.history.push('/app/configure')
-          }
-          break;
-        }
+      case undefined: {
+        this._register();
+        break;
+      }
 
-      case 'Join':
-        {
-          if(location.pathname !== "/app/join"){
-            this.props.history.push('/app/join')
+      case "Configure": {
+        if (location.pathname !== "/app/configure") {
+          this.props.history.push("/app/configure");
         }
         break;
-        }
-      case 'Game':
-        {
-          if(location.pathname !== "/app/game"){
-            this.props.history.push('/app/game')
-        }
-        break;
-        }
-        case 'Result':
-        {
-          if(location.pathname !== "/app/result"){
-            this.props.history.push('/app/result')
+      }
+
+      case "Join": {
+        if (location.pathname !== "/app/join") {
+          this.props.history.push("/app/join");
         }
         break;
+      }
+      case "Game": {
+        if (location.pathname !== "/app/game") {
+          this.props.history.push("/app/game");
         }
+        break;
+      }
+      case "Result": {
+        if (location.pathname !== "/app/result") {
+          this.props.history.push("/app/result");
+        }
+        break;
+      }
       default:
         break;
     }
   }
 
-
   render() {
+    let modal;
+    if (this.state.modal) {
+      modal = (
+        <Layer onClose={()=>{this.setState({modal: false})}} closer={true} align="center">
+          <Box justify='center' align='center' pad={{vertical: 'large', horizontal: 'small'}}>
+            <Image size='large' src={Logo} />
+            <Label>Go have an adventure</Label>
+          </Box>
+        </Layer>
+      )
+    }
     let routeProps = {
       responsive: this.state.responsive,
       sendAction: this._sendAction,
       serverState: this.state.serverState,
       userId: this.state.userId
-
     };
     let fadeDuration = 0.5;
     if (this.state.responsive === "single") {
@@ -233,25 +231,32 @@ class Container extends Component {
     );
     this._navigateToMode();
     return (
-
+      <Box>
+        {modal}
       <Split
         flex="right"
         priority={priority}
         fixed={true}
         onResponsive={this._onResponsive}
       >
+        
         {this._renderNav()}
         <div>
           <AlertContainer ref={a => (this.msg = a)} {...this.alertOptions} />
           <Switch>
             <FadingRoute exact path="/app/join" component={joinGame} />
-            <FadingRoute exact path="/app/configure" component={configureGame} />
+            <FadingRoute
+              exact
+              path="/app/configure"
+              component={configureGame}
+            />
             <FadingRoute exact path="/app/game" component={game} />
             <FadingRoute exact path="/app/result" component={result} />
           </Switch>
         </div>
       </Split>
+      </Box>
     );
   }
 }
-export default (withRouter(Container));
+export default withRouter(Container);
